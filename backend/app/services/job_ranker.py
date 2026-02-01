@@ -279,3 +279,8 @@ def reorder_queue(job_ids: List[str]) -> List[Dict[str, Any]]:
                 
         _write_apply_queue(new_queue)
         return new_queue
+
+def clear_apply_queue() -> bool:
+    """Clear all jobs from the apply queue."""
+    with _queue_lock:
+        return _write_apply_queue([])

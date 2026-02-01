@@ -33,9 +33,13 @@ export default function JobSearchPage() {
         fetchProfile();
         fetchPolicy();
         fetchDiscoveryStatus();
+        fetchQueueCount();
 
         // Poll status every 5s
-        const interval = setInterval(fetchDiscoveryStatus, 5000);
+        const interval = setInterval(() => {
+            fetchDiscoveryStatus();
+            fetchQueueCount();
+        }, 5000);
         return () => clearInterval(interval);
     }, []);
 
@@ -57,6 +61,17 @@ export default function JobSearchPage() {
             setDiscoveryStatus(res.data);
         } catch (err) {
             console.error('Failed to load discovery status', err);
+        }
+    };
+
+    const fetchQueueCount = async () => {
+        try {
+            const res = await axios.get(`${JOBS_API}/queue/stats`);
+            if (res.data && typeof res.data.count === 'number') {
+                setQueueCount(res.data.count);
+            }
+        } catch (err) {
+            console.error('Failed to load queue count', err);
         }
     };
 
@@ -96,6 +111,17 @@ export default function JobSearchPage() {
             }
         } catch (err) {
             console.error('Failed to load profile', err);
+        }
+    };
+
+    const handleDeleteQueue = async () => {
+        if (!confirm('Are you sure you want to delete ALL currently queued jobs? This cannot be undone.')) return;
+        try {
+            await axios.delete(`${JOBS_API}/queue`);
+            setQueueCount(0);
+        } catch (err) {
+            console.error('Failed to clear queue', err);
+            alert('Failed to clear queue.');
         }
     };
 
@@ -191,6 +217,12 @@ export default function JobSearchPage() {
                                         type="number"
                                         defaultValue={policy?.discovery_min_match_score || 60}
                                         onBlur={(e) => updateThreshold(e.target.value)}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                updateThreshold(e.currentTarget.value);
+                                                e.currentTarget.blur();
+                                            }
+                                        }}
                                         className="w-full pl-2 pr-6 py-1 border rounded-md text-sm"
                                     />
                                     <span className="absolute right-2 top-1 text-gray-500 text-xs">%</span>
@@ -204,8 +236,8 @@ export default function JobSearchPage() {
                         <div className="flex items-center gap-2">
                             <span className="font-semibold">Status:</span>
                             <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${!policy?.auto_discovery_enabled ? 'bg-gray-100 text-gray-600' :
-                                    discoveryStatus?.last_run_status?.includes('running') ? 'bg-blue-100 text-blue-700 animate-pulse' :
-                                        'bg-green-100 text-green-700'
+                                discoveryStatus?.last_run_status?.includes('running') ? 'bg-blue-100 text-blue-700 animate-pulse' :
+                                    'bg-green-100 text-green-700'
                                 }`}>
                                 {policy?.auto_discovery_enabled ? (discoveryStatus?.last_run_status || 'Active') : 'Paused'}
                             </span>
@@ -232,6 +264,18 @@ export default function JobSearchPage() {
                             <span className="font-medium">Queued Jobs</span>
                             <span className="bg-blue-200 px-2 py-0.5 rounded-full text-sm font-bold">{queueCount}</span>
                         </div>
+
+                        {queueCount > 0 && (
+                            <button
+                                onClick={handleDeleteQueue}
+                                className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-red-200"
+                                title="Delete All Queued Jobs"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+                                </svg>
+                            </button>
+                        )}
 
                         <button
                             onClick={handleSearch}
@@ -275,47 +319,49 @@ export default function JobSearchPage() {
                     )}
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {searchResults.map((job) => (
-                            <div key={job.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 transition-colors flex flex-col h-full">
-                                <div className="flex justify-between items-start mb-4">
-                                    <div>
-                                        <h2 className="text-lg font-bold text-gray-900 line-clamp-1" title={job.title}>
-                                            {job.title}
-                                        </h2>
-                                        <p className="text-gray-600 font-medium text-sm">{job.company}</p>
+                        {searchResults
+                            .filter(job => !policy?.auto_discovery_enabled || (job.match_score >= (policy?.discovery_min_match_score || 0)))
+                            .map((job) => (
+                                <div key={job.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 transition-colors flex flex-col h-full">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div>
+                                            <h2 className="text-lg font-bold text-gray-900 line-clamp-1" title={job.title}>
+                                                {job.title}
+                                            </h2>
+                                            <p className="text-gray-600 font-medium text-sm">{job.company}</p>
+                                        </div>
+                                        <div className="flex flex-col items-end">
+                                            <div className="text-xl font-bold text-blue-600">{job.match_score}%</div>
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col items-end">
-                                        <div className="text-xl font-bold text-blue-600">{job.match_score}%</div>
+
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {job.is_remote && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> Remote</span>}
+                                        {job.location && !job.is_remote && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.location}</span>}
+                                        {job.salary_range && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><DollarSign className="w-3 h-3" /> {job.salary_range}</span>}
+                                    </div>
+
+                                    {/* AI Reasoning */}
+                                    {job.match_reasoning && (
+                                        <div className="bg-indigo-50 p-3 rounded-lg mb-4 text-xs text-indigo-800 border-l-4 border-indigo-200 flex-grow">
+                                            <p className="font-semibold mb-1 flex items-center gap-1">
+                                                ✨ AI Analysis
+                                            </p>
+                                            {job.match_reasoning}
+                                        </div>
+                                    )}
+
+                                    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
+                                        <button className="flex-1 px-3 py-2 text-gray-500 hover:bg-gray-100 rounded-lg text-sm font-medium">Skip</button>
+                                        <button
+                                            onClick={() => addToQueue(job)}
+                                            className="flex-1 px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 flex items-center justify-center gap-2"
+                                        >
+                                            <CheckCircle className="w-4 h-4" /> Queue
+                                        </button>
                                     </div>
                                 </div>
-
-                                <div className="flex flex-wrap gap-2 mb-4">
-                                    {job.is_remote && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> Remote</span>}
-                                    {job.location && !job.is_remote && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.location}</span>}
-                                    {job.salary_range && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><DollarSign className="w-3 h-3" /> {job.salary_range}</span>}
-                                </div>
-
-                                {/* AI Reasoning */}
-                                {job.match_reasoning && (
-                                    <div className="bg-indigo-50 p-3 rounded-lg mb-4 text-xs text-indigo-800 border-l-4 border-indigo-200 flex-grow">
-                                        <p className="font-semibold mb-1 flex items-center gap-1">
-                                            ✨ AI Analysis
-                                        </p>
-                                        {job.match_reasoning}
-                                    </div>
-                                )}
-
-                                <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
-                                    <button className="flex-1 px-3 py-2 text-gray-500 hover:bg-gray-100 rounded-lg text-sm font-medium">Skip</button>
-                                    <button
-                                        onClick={() => addToQueue(job)}
-                                        className="flex-1 px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 flex items-center justify-center gap-2"
-                                    >
-                                        <CheckCircle className="w-4 h-4" /> Queue
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
+                            ))}
                     </div>
                 </div>
             </div>

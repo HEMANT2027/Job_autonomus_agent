@@ -8,6 +8,7 @@ and adds high-scoring matches to the apply queue.
 import threading
 import time
 import asyncio
+from pathlib import Path
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
@@ -88,6 +89,11 @@ def _discovery_worker():
     
     while not _stop_event.is_set():
         try:
+            # DEBUG: Log start of loop
+            debug_path = Path(__file__).parent.parent.parent / "data/debug_discovery.log"
+            with open(debug_path, "a") as f:
+                f.write(f"{datetime.utcnow().isoformat()} - Loop Start\n")
+            
             # 1. Check Policy
             policy = get_policy()
             if not policy.get("auto_discovery_enabled"):
@@ -152,18 +158,25 @@ def _discovery_worker():
                 
                 # 6. Filter by Threshold
                 threshold = policy.get("discovery_min_match_score", 60)
+                logger.info(f"Auto discovery: Filtering with threshold {threshold} (Type: {type(threshold)})")
                 
                 to_queue = []
                 for job in ranked_jobs:
                     score = job.get("match_score", 0)
+                    logger.info(f"Job {job.get('id')} Score: {score}")
+                    
                     if score >= threshold:
                         to_queue.append(job)
+                    else:
+                        logger.info(f"Skipping {job.get('id')} - Score {score} < {threshold}")
                         
                 # 7. Add to Queue
                 if to_queue:
                     added = add_to_apply_queue(to_queue)
                     queued_count = added
                     logger.info(f"Auto discovery: Queued {added} jobs (Threshold {threshold})")
+                else:
+                    logger.info("Auto discovery: No jobs met the threshold.")
             
             # 8. Update State
             with _lock:
@@ -172,9 +185,17 @@ def _discovery_worker():
                 _state.total_jobs_queued += queued_count
                 _state.last_run_status = "sleeping"
             
-            # Sleep Interval (e.g. 60 seconds)
-            # Maybe configurable?
-            for _ in range(60):
+            # DEBUG: Write status to file
+            try:
+                debug_path = Path("data/debug_discovery.log") # Use relative since cwd is backend
+                with open(debug_path, "a") as f:
+                    top_scores = [f"{j.get('match_score')}" for j in ranked_jobs[:3]] if candidate_jobs else []
+                    f.write(f"{datetime.utcnow().isoformat()} - Found: {len(candidate_jobs)}, Threshold: {threshold}, Queued: {queued_count}, TopScores: {top_scores}\n")
+            except Exception as ex:
+                pass
+
+            # Sleep Interval (fast poll for testing)
+            for _ in range(10):
                 if _stop_event.is_set(): break
                 time.sleep(1)
                 
@@ -182,6 +203,14 @@ def _discovery_worker():
             logger.error(f"Auto discovery error: {e}")
             with _lock:
                 _state.last_run_status = f"error: {str(e)}"
-            time.sleep(60)
+            
+            # DEBUG LOG ERROR
+            try:
+                with open("data/debug_discovery.log", "a") as f:
+                    f.write(f"{datetime.utcnow().isoformat()} - ERROR: {str(e)}\n")
+            except:
+                pass
+
+            time.sleep(10)
             
     loop.close()

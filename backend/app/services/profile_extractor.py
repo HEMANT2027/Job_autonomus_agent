@@ -26,7 +26,8 @@ Extract the following information from the resume text and return as valid JSON:
       "degree": "exact degree name",
       "institution": "exact institution name", 
       "year": "graduation year or year range",
-      "gpa": "GPA if mentioned, null otherwise"
+      "gpa": "numerical GPA if explicitly stated (e.g. 3.8)",
+      "score": "Exact grade/percentage/CGPA string (e.g. '85%', '9.0/10', 'A')"
     }
   ],
   "projects": [
@@ -67,6 +68,8 @@ CRITICAL RULES:
 4. For skills, extract ONLY technical skills (programming languages, frameworks, tools)
 5. Do NOT add generic skills not mentioned in the text
 6. Return valid JSON only, no additional text
+7. LIST EDUCATION IN REVERSE CHRONOLOGICAL ORDER (MOST RECENT FIRST).
+8. Capture any grades, percentages, or CGPA in the 'score' field exactly as written.
 
 Resume Text:
 """

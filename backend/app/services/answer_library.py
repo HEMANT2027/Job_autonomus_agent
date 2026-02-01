@@ -101,6 +101,9 @@ Profile Data:
 Additional Constraints (if provided):
 {constraints}
 
+User Preferences:
+{preferences}
+
 Generate answers for these questions:
 {questions}
 
@@ -189,10 +192,19 @@ def generate_answers(
         constraints_text = json.dumps(constraints, indent=2)
     
     try:
-        prompt = ANSWER_GENERATION_PROMPT.format(
-            profile_data=json.dumps(profile_for_prompt, indent=2),
-            constraints=constraints_text,
-            questions=questions_text,
+        # Extract preferences
+        preferences = profile_data.get("preferences", {})
+        prefs_text = json.dumps(preferences, indent=2) if preferences else "None provided"
+
+        # Use replace() for robust formatting
+        prompt = ANSWER_GENERATION_PROMPT.replace(
+            "{profile_data}", json.dumps(profile_for_prompt, indent=2)
+        ).replace(
+            "{constraints}", constraints_text
+        ).replace(
+            "{questions}", questions_text
+        ).replace(
+            "{preferences}", prefs_text
         )
         
         # Call Gemini API via llm_client

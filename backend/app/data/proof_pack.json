@@ -299,6 +299,448 @@
           "created_at": "2026-02-01T06:31:51.428486"
         }
       ]
+    },
+    {
+      "id": "8fb265ed-9e72-4b18-9bc3-70e06b347d9a",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:06:19.024209",
+      "items": [
+        {
+          "id": "a51a41a7-3b76-451f-a58c-aac73828d8ea",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Hemant's GitHub repository, showcasing his projects and contributions.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "PyTorch",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "Docker",
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:06:19.012666"
+        }
+      ]
+    },
+    {
+      "id": "c9d6e3c2-142b-4a82-b006-1421f6a36d8e",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:30:12.725711",
+      "items": [
+        {
+          "id": "b3b8f393-dd27-4f4d-b74d-f0d6035119df",
+          "title": "Apparent Energy Solutions Pvt. Ltd. Internship",
+          "url": "null",
+          "category": "Experience",
+          "description": "Lead Software Engineer Intern at Apparent Energy Solutions Pvt. Ltd., where I worked on mapping India's electrical grid infrastructure, integrating computer vision techniques, and establishing a digital twin of the grid topology.",
+          "related_skills": [
+            "Python",
+            "Google Cloud APIs",
+            "Nanonets",
+            "LangChain",
+            "LangGraph",
+            "AWS SageMaker",
+            "computer vision",
+            "document understanding",
+            "YoloV10",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas"
+          ],
+          "related_project_name": "null",
+          "created_at": "2026-02-01T10:30:12.703689"
+        },
+        {
+          "id": "9113f005-6635-415a-ab19-04c6bc255976",
+          "title": "Aeroqube Inc. Internship",
+          "url": "null",
+          "category": "Experience",
+          "description": "Software Engineering Intern at Aeroqube Inc., where I worked on AI-assisted medical workflow, reduced diagnostic turnaround time, and implemented multimodal reasoning pipelines using LangChain and LangGraph.",
+          "related_skills": [
+            "Python",
+            "Nanonets",
+            "Google Cloud APIs",
+            "LangChain",
+            "LangGraph",
+            "AWS SageMaker",
+            "computer vision",
+            "document understanding",
+            "Retrieval Augmented Generation (RAG)"
+          ],
+          "related_project_name": "null",
+          "created_at": "2026-02-01T10:30:12.703731"
+        },
+        {
+          "id": "416027a3-5b09-4335-94c5-1c870d74e288",
+          "title": "Technod8.ai Internship",
+          "url": "null",
+          "category": "Experience",
+          "description": "Generative AI Intern at Technod8.ai, where I developed a computer vision pipeline for document understanding and trained and fine-tuned a YOLOv10 model.",
+          "related_skills": [
+            "Python",
+            "Open CV",
+            "YOLOv10",
+            "computer vision",
+            "document understanding"
+          ],
+          "related_project_name": "null",
+          "created_at": "2026-02-01T10:30:12.703750"
+        },
+        {
+          "id": "977e9d4a-519e-4815-bcca-5e1950618c4d",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Personal GitHub repository, where I host my projects and contributions.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL",
+            "PyTorch",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "LangGraph",
+            "LangChain",
+            "Docker",
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": "null",
+          "created_at": "2026-02-01T10:30:12.703763"
+        }
+      ]
+    },
+    {
+      "id": "815435d4-2adb-4ce4-aecf-9147148f0956",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:30:36.672579",
+      "items": [
+        {
+          "id": "af91eb5c-3051-488b-8abb-53defc1a2dc2",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "A GitHub repository containing Hemant's projects and contributions.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL",
+            "PyTorch",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "LangGraph",
+            "LangChain",
+            "Docker",
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:30:36.668929"
+        }
+      ]
+    },
+    {
+      "id": "8ab70144-4c02-433b-ab25-d071b4ae7ae1",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:31:02.494340",
+      "items": [
+        {
+          "id": "58e7a411-9594-496c-80ed-83211789436f",
+          "title": "Google Street View and satellite imagery integration",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Integration of computer vision techniques on Google Street View and satellite imagery for mapping India's electrical grid infrastructure.",
+          "related_skills": [
+            "Google Cloud APIs",
+            "Nanonets",
+            "LangChain",
+            "LangGraph",
+            "computer vision",
+            "document understanding",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas"
+          ],
+          "related_project_name": "Apparent Energy Solutions Pvt. Ltd.",
+          "created_at": "2026-02-01T10:31:02.493067"
+        },
+        {
+          "id": "38241d16-d4af-4515-b5ab-99aea5678b3e",
+          "title": "AI-assisted medical workflow",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "LinkedIn Profile",
+          "description": "Implementation of AI-assisted medical workflow, reducing diagnostic turnaround time, and achieving over 90% extraction accuracy.",
+          "related_skills": [
+            "MED-SAM 2",
+            "lesion segmentation",
+            "Nanonets",
+            "Google Cloud APIs",
+            "LangChain",
+            "LangGraph",
+            "multimodal reasoning",
+            "AWS SageMaker"
+          ],
+          "related_project_name": "Aeroqube Inc.",
+          "created_at": "2026-02-01T10:31:02.493126"
+        },
+        {
+          "id": "2946bb08-8295-4098-bf89-0a7a950a33ab",
+          "title": "Computer vision pipeline for document understanding",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Development of a computer vision pipeline for document understanding, trained and fine-tuned a YOLOv10 model.",
+          "related_skills": [
+            "computer vision",
+            "document understanding",
+            "YOLOv10",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas"
+          ],
+          "related_project_name": "Technod8.ai",
+          "created_at": "2026-02-01T10:31:02.493144"
+        },
+        {
+          "id": "d32ba13c-5c1a-4a52-8080-b2f9951f2b35",
+          "title": "Hybrid segmentation and detection pipelines",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Implementation of hybrid segmentation and detection pipelines for mapping India's electrical grid infrastructure.",
+          "related_skills": [
+            "Google Street View",
+            "satellite imagery",
+            "YOLOv11",
+            "hybrid segmentation and detection pipelines",
+            "spatial analysis",
+            "Google Cloud APIs",
+            "Nanonets",
+            "LangChain",
+            "LangGraph"
+          ],
+          "related_project_name": "Apparent Energy Solutions Pvt. Ltd.",
+          "created_at": "2026-02-01T10:31:02.493159"
+        },
+        {
+          "id": "0d03aade-1232-4288-b50b-1e902c880956",
+          "title": "i-MedRAG-inspired retrieval pipeline",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "LinkedIn Profile",
+          "description": "Implementation of an i-MedRAG-inspired retrieval pipeline for AI-assisted medical workflow.",
+          "related_skills": [
+            "i-MedRAG",
+            "retrieval pipeline",
+            "multimodal reasoning",
+            "AWS SageMaker"
+          ],
+          "related_project_name": "Aeroqube Inc.",
+          "created_at": "2026-02-01T10:31:02.493175"
+        },
+        {
+          "id": "34093bd3-5955-445b-802b-a8f35c56c7b7",
+          "title": "YOLOv11 model training",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Training of a custom YOLOv11 model for mapping India's electrical grid infrastructure.",
+          "related_skills": [
+            "YOLOv11",
+            "computer vision",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas"
+          ],
+          "related_project_name": "Apparent Energy Solutions Pvt. Ltd.",
+          "created_at": "2026-02-01T10:31:02.493189"
+        }
+      ]
+    },
+    {
+      "id": "b7db5c71-a63d-42f2-ac60-dc41e2a6310b",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:33:32.305164",
+      "items": [
+        {
+          "id": "719c7da6-fa9c-45e1-b20e-0687be3d5c75",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Personal GitHub repository showcasing various projects and contributions.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL",
+            "PyTorch",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "LangGraph",
+            "LangChain",
+            "Docker",
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:33:32.295878"
+        }
+      ]
+    },
+    {
+      "id": "d4a26a56-02b9-4892-930f-f5d3025312d9",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:45:19.516192",
+      "items": [
+        {
+          "id": "5e4845d7-17da-4413-b7a4-de63ce4e5b80",
+          "title": "AI-assisted medical workflow",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Developed an AI-assisted medical workflow as a Software Engineering Intern at Aeroqube Inc.",
+          "related_skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning"
+          ],
+          "related_project_name": "Aeroqube Inc.",
+          "created_at": "2026-02-01T10:45:19.511464"
+        },
+        {
+          "id": "f54e2340-66dc-4ac3-9b09-0aa89079731e",
+          "title": "Computer Vision Pipeline for Document Understanding",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Designed a computer vision pipeline for document understanding as a Generative AI Intern at Technod8.ai",
+          "related_skills": [
+            "Python",
+            "Open CV",
+            "Deep Learning"
+          ],
+          "related_project_name": "Technod8.ai",
+          "created_at": "2026-02-01T10:45:19.511496"
+        },
+        {
+          "id": "188f9610-80fb-4218-809f-aa5698bef58b",
+          "title": "Hybrid Segmentation and Detection Pipelines",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Implemented hybrid segmentation and detection pipelines using Google Street View and satellite imagery",
+          "related_skills": [
+            "Python",
+            "Google Cloud APIs",
+            "Machine Learning"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:45:19.511513"
+        },
+        {
+          "id": "fa22889d-0f90-4dbb-8a01-dc41cc320f13",
+          "title": "Custom YOLOv11 Model",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Trained a custom YOLOv11 model for object detection as a Lead Software Engineer Intern at Apparent Energy Solutions Pvt. Ltd.",
+          "related_skills": [
+            "Python",
+            "YOLOv11",
+            "Machine Learning"
+          ],
+          "related_project_name": "Apparent Energy Solutions Pvt. Ltd.",
+          "created_at": "2026-02-01T10:45:19.511528"
+        },
+        {
+          "id": "19d8f77c-e1a7-4fd5-adb8-4fd051651665",
+          "title": "Lesion Segmentation on CT/X-ray Images",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Developed a lesion segmentation model on CT/X-ray images as a Software Engineering Intern at Aeroqube Inc.",
+          "related_skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning"
+          ],
+          "related_project_name": "Aeroqube Inc.",
+          "created_at": "2026-02-01T10:45:19.511542"
+        },
+        {
+          "id": "f5dadca7-7555-478d-b7a6-db3e34d9fdc1",
+          "title": "Inference Workflows on AWS SageMaker",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Designed inference workflows on AWS SageMaker as a Software Engineering Intern at Aeroqube Inc.",
+          "related_skills": [
+            "Python",
+            "AWS Sagemaker",
+            "Machine Learning"
+          ],
+          "related_project_name": "Aeroqube Inc.",
+          "created_at": "2026-02-01T10:45:19.511555"
+        },
+        {
+          "id": "ea00189d-a130-4425-b59a-e50d83f61add",
+          "title": "NCIIPC Startup India AI Grand Challenge",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "Experience",
+          "description": "Participated in the NCIIPC Startup India AI Grand Challenge as a Generative AI Intern at Technod8.ai",
+          "related_skills": [
+            "Python",
+            "Machine Learning",
+            "Deep Learning"
+          ],
+          "related_project_name": "Technod8.ai",
+          "created_at": "2026-02-01T10:45:19.511568"
+        }
+      ]
+    },
+    {
+      "id": "d85e0f81-a8e1-4030-87d9-5e5717c38e03",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:52:39.771446",
+      "items": [
+        {
+          "id": "28fcc8cd-6be4-4f3b-bbf6-8087fbc9fb26",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Hemant's GitHub repository, showcasing his projects and contributions.",
+          "related_skills": [
+            "Python",
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:52:39.768509"
+        },
+        {
+          "id": "6f7b7fc6-0ace-423f-ab48-c55544db809f",
+          "title": "linkedin/hemant-pathak1411",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "LinkedIn Profile",
+          "description": "Hemant's LinkedIn profile, highlighting his experience and skills.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:52:39.768557"
+        }
+      ]
     }
   ]
 }
