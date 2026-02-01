@@ -1,7 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import api from '../services/api';
-import { Search, MapPin, DollarSign, CheckCircle } from 'lucide-react';
+import {
+    MagnifyingGlassIcon,
+    MapPinIcon,
+    CurrencyDollarIcon,
+    CheckCircleIcon,
+    CpuChipIcon,
+    ExclamationTriangleIcon,
+    SparklesIcon,
+    ArrowLeftIcon
+} from '@heroicons/react/24/outline';
 
 export default function JobSearchPage() {
     const [profile, setProfile] = useState<any>(null);
@@ -173,36 +183,46 @@ export default function JobSearchPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 p-8">
-            <div className="max-w-7xl mx-auto space-y-6">
+        <div className="min-h-screen bg-slate-50">
+            <header className="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 sm:px-6 lg:px-8 py-5 mb-8">
+                <div className="max-w-7xl mx-auto flex flex-col">
+                    <Link to="/dashboard" className="group flex items-center gap-1 text-xs font-bold text-slate-400 hover:text-slate-900 transition-colors uppercase tracking-widest mb-1">
+                        <ArrowLeftIcon className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+                        Back to Dashboard
+                    </Link>
+                    <h1 className="text-3xl font-black text-slate-900 tracking-tight">Job Discovery</h1>
+                </div>
+            </header>
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8 pb-12">
 
                 {/* Autonomous Control Panel */}
-                <div className="bg-white p-6 rounded-xl shadow-sm border border-blue-100 bg-gradient-to-r from-white to-blue-50">
+                <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                         <div>
-                            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-                                <span className="text-2xl">🤖</span> Autonomous Job Discovery
+                            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                <CpuChipIcon className="w-6 h-6 text-slate-900" /> Autonomous Job Discovery
                             </h2>
-                            <p className="text-gray-600 text-sm mt-1">
+                            <p className="text-slate-500 text-sm mt-1">
                                 Automatically finds and queues relevant jobs in the background.
                             </p>
                         </div>
 
-                        <div className="flex items-center gap-6 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                        <div className="flex items-center gap-6 bg-slate-50 p-4 rounded-lg border border-slate-100">
                             {/* Toggle */}
                             <div className="flex items-center gap-3">
-                                <div className="text-sm font-medium text-gray-700">Autonomous Mode</div>
+                                <div className="text-sm font-medium text-slate-700">Autonomous Mode</div>
                                 <button
                                     onClick={toggleAutonomous}
-                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 ${policy?.auto_discovery_enabled ? 'bg-green-500' : 'bg-gray-200'}`}
+                                    className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 ${policy?.auto_discovery_enabled ? 'bg-slate-900' : 'bg-slate-300'}`}
                                 >
                                     <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${policy?.auto_discovery_enabled ? 'translate-x-6' : 'translate-x-1'}`} />
                                 </button>
                             </div>
 
                             {/* Threshold Input */}
-                            <div className="flex items-center gap-2 border-l pl-6 border-gray-200">
-                                <label className="text-sm font-medium text-gray-700">Min Score to Queue:</label>
+                            <div className="flex items-center gap-2 border-l pl-6 border-slate-200">
+                                <label className="text-sm font-medium text-slate-700">Min Score to Queue:</label>
                                 <div className="relative w-20">
                                     <input
                                         type="number"
@@ -214,46 +234,46 @@ export default function JobSearchPage() {
                                                 e.currentTarget.blur();
                                             }
                                         }}
-                                        className="w-full pl-2 pr-6 py-1 border rounded-md text-sm"
+                                        className="w-full pl-2 pr-6 py-1 border border-slate-300 rounded-md text-sm focus:border-slate-900 focus:ring-1 focus:ring-slate-900 outline-none transition-colors"
                                     />
-                                    <span className="absolute right-2 top-1 text-gray-500 text-xs">%</span>
+                                    <span className="absolute right-2 top-1 text-slate-400 text-xs">%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Status Bar */}
-                    <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-600 border-t border-gray-100 pt-4">
+                    <div className="mt-6 flex flex-wrap gap-4 text-sm text-slate-600 border-t border-slate-100 pt-4">
                         <div className="flex items-center gap-2">
                             <span className="font-semibold">Status:</span>
-                            <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${!policy?.auto_discovery_enabled ? 'bg-gray-100 text-gray-600' :
-                                discoveryStatus?.last_run_status?.includes('running') ? 'bg-blue-100 text-blue-700 animate-pulse' :
-                                    'bg-green-100 text-green-700'
+                            <span className={`px-2 py-0.5 rounded-full text-xs font-bold border ${!policy?.auto_discovery_enabled ? 'bg-slate-100 text-slate-500 border-slate-200' :
+                                discoveryStatus?.last_run_status?.includes('running') ? 'bg-slate-900 text-white border-slate-900 animate-pulse' :
+                                    'bg-green-50 text-green-700 border-green-100'
                                 }`}>
                                 {policy?.auto_discovery_enabled ? (discoveryStatus?.last_run_status || 'Active') : 'Paused'}
                             </span>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="font-semibold">Last Run:</span>
-                            <span>{discoveryStatus?.last_run_time ? new Date(discoveryStatus.last_run_time).toLocaleTimeString() : 'Never'}</span>
+                            <span className="font-mono">{discoveryStatus?.last_run_time ? new Date(discoveryStatus.last_run_time).toLocaleTimeString() : 'Never'}</span>
                         </div>
                         <div className="flex items-center gap-2">
                             <span className="font-semibold">Jobs Queued (This Session):</span>
-                            <span className="font-mono bg-gray-100 px-2 rounded">{discoveryStatus?.total_jobs_queued || 0}</span>
+                            <span className="font-mono bg-slate-100 px-2 rounded">{discoveryStatus?.total_jobs_queued || 0}</span>
                         </div>
                     </div>
                 </div>
 
                 {/* Manual Search Header (Secondary) */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
-                    <h1 className="text-2xl font-bold text-gray-900">
+                    <h1 className="text-2xl font-bold text-slate-900">
                         {searchResults.length > 0 ? `Manual Results (${searchResults.length})` : 'Job Browser'}
                     </h1>
 
                     <div className="flex items-center gap-4">
-                        <div className="flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-700 rounded-lg">
-                            <span className="font-medium">Queued Jobs</span>
-                            <span className="bg-blue-200 px-2 py-0.5 rounded-full text-sm font-bold">{queueCount}</span>
+                        <div className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-lg shadow-sm">
+                            <span className="font-medium text-slate-700">Queued Jobs</span>
+                            <span className="bg-slate-900 text-white px-2 py-0.5 rounded-full text-sm font-bold">{queueCount}</span>
                         </div>
 
                         {queueCount > 0 && (
@@ -271,13 +291,13 @@ export default function JobSearchPage() {
                         <button
                             onClick={handleSearch}
                             disabled={loading}
-                            className="px-6 py-2 bg-white border border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors flex items-center gap-2 shadow-sm"
+                            className="px-6 py-2 bg-slate-900 text-white rounded-lg font-medium hover:bg-black transition-all shadow-md active:scale-95 flex items-center gap-2"
                         >
                             {loading ? (
                                 ranking ? 'Ranking...' : 'Searching...'
                             ) : (
                                 <>
-                                    <Search className="w-4 h-4" /> Manual Refresh
+                                    <MagnifyingGlassIcon className="w-4 h-4" /> Manual Refresh
                                 </>
                             )}
                         </button>
@@ -287,23 +307,28 @@ export default function JobSearchPage() {
                 {/* Main Content */}
                 <div className="space-y-6">
                     {!profile && !loading && (
-                        <div className="bg-yellow-50 border border-yellow-200 p-4 rounded-lg text-yellow-800">
-                            Note: No profile found. <a href="/artifact-pack" className="underline font-bold">Please extract your profile first</a> for accurate ranking.
+                        <div className="bg-amber-50 border border-amber-200 p-4 rounded-lg text-amber-800 flex items-center gap-3">
+                            <div className="p-2 bg-amber-100 rounded-lg">
+                                <ExclamationTriangleIcon className="w-5 h-5 text-amber-600" />
+                            </div>
+                            <div>
+                                <span className="font-bold">Missing Profile:</span> <a href="/artifact-pack" className="underline hover:text-amber-900">Please extract your profile first</a> for accurate ranking.
+                            </div>
                         </div>
                     )}
 
                     {loading && (
-                        <div className="flex flex-col items-center justify-center p-12 text-gray-500">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mb-4"></div>
-                            <p>{ranking ? 'AI is analyzing matches...' : 'Fetching jobs from sandbox...'}</p>
+                        <div className="flex flex-col items-center justify-center p-12 text-slate-500">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900 mb-4"></div>
+                            <p className="animate-pulse">{ranking ? 'AI is analyzing matches...' : 'Fetching jobs from sandbox...'}</p>
                         </div>
                     )}
 
                     {searchResults.length === 0 && !loading && (
-                        <div className="bg-white p-12 rounded-xl border border-dashed border-gray-300 text-center">
-                            <Search className="w-12 h-12 text-gray-300 mx-auto mb-4" />
-                            <h3 className="text-lg font-medium text-gray-900">Broaden your reach</h3>
-                            <p className="text-gray-500 max-w-sm mx-auto mt-2">
+                        <div className="bg-white p-12 rounded-xl border border-dashed border-slate-300 text-center">
+                            <MagnifyingGlassIcon className="w-12 h-12 text-slate-300 mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-slate-900">Broaden your reach</h3>
+                            <p className="text-slate-500 max-w-sm mx-auto mt-2">
                                 Turn on Autonomous Discovery to automatically find matches, or click Manual Refresh.
                             </p>
                         </div>
@@ -313,42 +338,42 @@ export default function JobSearchPage() {
                         {searchResults
                             .filter(job => !policy?.auto_discovery_enabled || (job.match_score >= (policy?.discovery_min_match_score || 0)))
                             .map((job) => (
-                                <div key={job.id} className="bg-white p-6 rounded-xl shadow-sm border border-gray-100 hover:border-blue-200 transition-colors flex flex-col h-full">
+                                <div key={job.id} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-slate-400 hover:shadow-md transition-all flex flex-col h-full group">
                                     <div className="flex justify-between items-start mb-4">
                                         <div>
-                                            <h2 className="text-lg font-bold text-gray-900 line-clamp-1" title={job.title}>
+                                            <h2 className="text-lg font-bold text-slate-900 line-clamp-1 group-hover:text-slate-700 transition-colors" title={job.title}>
                                                 {job.title}
                                             </h2>
-                                            <p className="text-gray-600 font-medium text-sm">{job.company}</p>
+                                            <p className="text-slate-600 font-medium text-sm">{job.company}</p>
                                         </div>
                                         <div className="flex flex-col items-end">
-                                            <div className="text-xl font-bold text-blue-600">{job.match_score}%</div>
+                                            <div className="text-xl font-bold text-slate-900">{job.match_score}%</div>
                                         </div>
                                     </div>
 
                                     <div className="flex flex-wrap gap-2 mb-4">
-                                        {job.is_remote && <span className="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> Remote</span>}
-                                        {job.location && !job.is_remote && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><MapPin className="w-3 h-3" /> {job.location}</span>}
-                                        {job.salary_range && <span className="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded-full flex items-center gap-1"><DollarSign className="w-3 h-3" /> {job.salary_range}</span>}
+                                        {job.is_remote && <span className="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-lg flex items-center gap-1 border border-slate-200"><MapPinIcon className="w-3 h-3" /> Remote</span>}
+                                        {job.location && !job.is_remote && <span className="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-lg flex items-center gap-1 border border-slate-200"><MapPinIcon className="w-3 h-3" /> {job.location}</span>}
+                                        {job.salary_range && <span className="bg-slate-100 text-slate-700 text-xs px-2 py-0.5 rounded-lg flex items-center gap-1 border border-slate-200"><CurrencyDollarIcon className="w-3 h-3" /> {job.salary_range}</span>}
                                     </div>
 
                                     {/* AI Reasoning */}
                                     {job.match_reasoning && (
-                                        <div className="bg-indigo-50 p-3 rounded-lg mb-4 text-xs text-indigo-800 border-l-4 border-indigo-200 flex-grow">
-                                            <p className="font-semibold mb-1 flex items-center gap-1">
-                                                ✨ AI Analysis
+                                        <div className="bg-slate-50 p-3 rounded-lg mb-4 text-xs text-slate-700 border-l-2 border-slate-400 flex-grow">
+                                            <p className="font-bold mb-1 flex items-center gap-1 text-slate-900">
+                                                <SparklesIcon className="w-4 h-4 text-slate-400" /> AI Analysis
                                             </p>
                                             {job.match_reasoning}
                                         </div>
                                     )}
 
-                                    <div className="mt-auto pt-4 border-t border-gray-100 flex gap-2">
-                                        <button className="flex-1 px-3 py-2 text-gray-500 hover:bg-gray-100 rounded-lg text-sm font-medium">Skip</button>
+                                    <div className="mt-auto pt-4 border-t border-slate-100 flex gap-2">
+                                        <button className="flex-1 px-3 py-2 text-slate-500 hover:bg-slate-100 rounded-lg text-sm font-medium transition-colors">Skip</button>
                                         <button
                                             onClick={() => addToQueue(job)}
-                                            className="flex-1 px-3 py-2 bg-black text-white rounded-lg text-sm font-medium hover:bg-gray-800 flex items-center justify-center gap-2"
+                                            className="flex-1 px-3 py-2 bg-slate-900 text-white rounded-lg text-sm font-medium hover:bg-black transition-colors flex items-center justify-center gap-2 shadow-sm"
                                         >
-                                            <CheckCircle className="w-4 h-4" /> Queue
+                                            <CheckCircleIcon className="w-4 h-4" /> Queue
                                         </button>
                                     </div>
                                 </div>
@@ -362,10 +387,12 @@ export default function JobSearchPage() {
                 <div className="fixed bottom-8 right-8 z-40 animate-bounce-subtle">
                     <button
                         onClick={() => window.location.href = '/apply/queue'}
-                        className="flex items-center gap-3 px-6 py-4 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 hover:scale-105 transition-all font-bold text-lg"
+                        className="flex items-center gap-3 px-8 py-4 bg-slate-900 text-white rounded-full shadow-2xl hover:bg-black hover:scale-105 transition-all font-bold text-lg ring-4 ring-white/50"
                     >
                         View Application Queue ({queueCount})
-                        <CheckCircle className="w-6 h-6" />
+                        <div className="bg-white text-slate-900 rounded-full w-6 h-6 flex items-center justify-center text-xs">
+                            <CheckCircleIcon className="w-4 h-4" />
+                        </div>
                     </button>
                 </div>
             )}
