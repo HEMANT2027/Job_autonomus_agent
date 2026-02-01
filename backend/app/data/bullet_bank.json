@@ -1287,392 +1287,199 @@
       "has_metrics": false,
       "created_at": "2026-02-01T10:37:34.375104",
       "is_grounded": false,
-<<<<<<< HEAD
-      "grounding_warning": "Source 'Personal Project' not found in profile",
-      "saved_at": "2026-02-01T10:44:06.028916"
+      "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
+      "saved_at": "2026-02-01T10:37:34.377694"
     },
     {
-      "id": "98d1cd7f-b7a9-46ce-bffe-612ac536f656",
-      "bullet": "Implemented a hybrid segmentation and detection pipeline for medical image analysis, utilizing Google Cloud APIs and Nanonets.",
+      "id": "fd0da6f2-8975-4b3a-a5f4-33f3da9fc8a8",
+      "bullet": "Developed Machine Learning Algorithms from Scratch using Python and NumPy, resulting in improved understanding of ML concepts.",
       "source_type": "project",
-      "source_name": "Personal Project",
+      "source_name": "Machine Learning Algorithms from Scratch",
       "technologies": [
-        "Google Cloud APIs",
-        "Nanonets"
+        "Python",
+        "NumPy"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T14:12:34.831445",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:12:34.895186"
+    },
+    {
+      "id": "531acb6b-028d-493d-a718-af1f3e613f0b",
+      "bullet": "Implemented Real-time Feedback Sentiment Analysis and Alert System using Python, Transformer, LangChain, FastAPI, NTFY, Selenium, and Scikit-learn, resulting in improved customer satisfaction.",
+      "source_type": "project",
+      "source_name": "Real-time Feedback Sentiment Analysis and Alert System",
+      "technologies": [
+        "Python",
+        "Transformer",
+        "LangChain",
+        "FastAPI",
+        "NTFY",
+        "Selenium",
+        "Scikit-learn"
+      ],
+      "categories": [
+        "ml",
+        "backend"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T14:12:34.832643",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:12:34.895232"
+    },
+    {
+      "id": "3bde0056-59a0-4922-8ae2-4f5f522b202a",
+      "bullet": "Designed Database GPT using Python, LLaMA-38B, Q-LoRA, Transformers, SQL, SQLAlchemy, and NiceGUI, resulting in improved database management.",
+      "source_type": "project",
+      "source_name": "Database GPT",
+      "technologies": [
+        "Python",
+        "LLaMA-38B",
+        "Q-LoRA",
+        "Transformers",
+        "SQL",
+        "SQLAlchemy",
+        "NiceGUI"
       ],
       "categories": [
         "data",
-        "devops",
+        "frontend",
         "backend"
       ],
       "has_metrics": false,
-      "created_at": "2026-02-01T10:44:06.023256",
+      "created_at": "2026-02-01T14:12:34.832827",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:12:34.895244"
+    },
+    {
+      "id": "b0ee764b-ce1a-4daa-85a8-23df52c41dd7",
+      "bullet": "Maintained a high GPA of 8.84/10.00 during Integrated Master of Technology in Mathematics and Computing at Indian Institute of Technology (ISM), Dhanbad.",
+      "source_type": "education",
+      "source_name": "Indian Institute of Technology (ISM), Dhanbad",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T14:12:34.832956",
       "is_grounded": false,
-      "grounding_warning": "Source 'Personal Project' not found in profile",
-      "saved_at": "2026-02-01T10:44:06.028919"
+      "grounding_warning": "Source 'Indian Institute of Technology (ISM), Dhanbad' not found in profile",
+      "saved_at": "2026-02-01T14:12:34.895251"
     },
     {
-      "id": "c66684e2-8a58-4ba5-a113-44123fe835f1",
-      "bullet": "Designed and implemented a computer vision pipeline for document understanding using YOLOv10 and multilingual document layout components.",
-      "source_type": "project",
-      "source_name": "Personal Project",
-      "technologies": [
-        "YOLOv10",
-        "multilingual document layout components"
-      ],
+      "id": "ac82c486-b751-4489-af45-eefe29f2bb11",
+      "bullet": "Completed Secondary & Higher Secondary Education (GBSE) at J.P. Thakkar Higher Secondary School with a strong foundation in mathematics and computing.",
+      "source_type": "education",
+      "source_name": "J.P. Thakkar Higher Secondary School",
+      "technologies": [],
       "categories": [
-        "data",
-        "ml"
+        "general"
       ],
       "has_metrics": false,
-      "created_at": "2026-02-01T10:44:06.023304",
+      "created_at": "2026-02-01T14:12:34.833086",
       "is_grounded": false,
-      "grounding_warning": "Source 'Personal Project' not found in profile",
-      "saved_at": "2026-02-01T10:44:06.028922"
-    },
-    {
-      "id": "3ee84a04-f988-4a64-9e50-1380ca0ef689",
-      "bullet": "Developed a comprehensive digital twin of India's electrical grid topology using computer vision techniques and spatial analysis.",
-      "source_type": "project",
-      "source_name": "Personal Project",
-      "technologies": [
-        "computer vision",
-        "spatial analysis"
-      ],
-      "categories": [
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:44:06.023350",
-      "is_grounded": false,
-      "grounding_warning": "Source 'Personal Project' not found in profile",
-      "saved_at": "2026-02-01T10:44:06.028925"
-    },
-    {
-      "id": "24835249-073d-471a-b176-a716bac0eb2e",
-      "bullet": "Developed AI-assisted medical workflow using MED-SAM 2, Nanonets, Google Cloud APIs, LangChain, LangGraph, Med Gemma 27B, and AWS SageMaker.",
-      "source_type": "project",
-      "source_name": "AI-assisted medical workflow",
-      "technologies": [
-        "MED-SAM 2",
-        "Nanonets",
-        "Google Cloud APIs",
-        "LangChain",
-        "LangGraph",
-        "Med Gemma 27B",
-        "AWS SageMaker"
-      ],
-      "categories": [
-        "ml",
-        "backend",
-        "devops"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.545829",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553600"
-    },
-    {
-      "id": "4441e9df-d610-462c-9f3a-64470c37f059",
-      "bullet": "Improved efficiency of AI-assisted medical workflow by implementing LangChain and LangGraph.",
-      "source_type": "project",
-      "source_name": "AI-assisted medical workflow",
-      "technologies": [
-        "LangChain",
-        "LangGraph"
-      ],
-      "categories": [
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.545926",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553620"
-    },
-    {
-      "id": "7483a621-414e-41e2-a762-1352414eb72a",
-      "bullet": "Designed and implemented computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR.",
-      "source_type": "project",
-      "source_name": "computer vision pipeline for document understanding",
-      "technologies": [
-        "YOLOv10",
-        "Open CV",
-        "OCR"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546002",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553627"
-    },
-    {
-      "id": "1d5aa2aa-3961-4340-8c50-08c58d3df0cf",
-      "bullet": "Developed hybrid segmentation and detection pipelines using YOLOv11, Google Street View, and satellite imagery.",
-      "source_type": "project",
-      "source_name": "hybrid segmentation and detection pipelines",
-      "technologies": [
-        "YOLOv11",
-        "Google Street View",
-        "satellite imagery"
-      ],
-      "categories": [
-        "data"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546079",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553632"
-    },
-    {
-      "id": "f27bc959-2e5b-43e2-9978-ab34b01acf13",
-      "bullet": "Mapped India's electrical grid infrastructure using custom YOLOv11 model and spatial analysis.",
-      "source_type": "experience",
-      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
-      "technologies": [
-        "YOLOv11"
-      ],
-      "categories": [
-        "ml",
-        "devops"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546138",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553636"
-    },
-    {
-      "id": "8c335fdf-0e16-4766-be6f-5e9cd680847f",
-      "bullet": "Designed and implemented hybrid segmentation and detection pipelines for spatial analysis.",
-      "source_type": "experience",
-      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
-      "technologies": [
-        "hybrid segmentation and detection pipelines"
-      ],
-      "categories": [
-        "data"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546201",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553640"
-    },
-    {
-      "id": "0092649e-8105-4474-a78d-e2a63d086a56",
-      "bullet": "Developed i-MedRAG-inspired retrieval pipeline using MED-SAM 2, Nanonets, Google Cloud APIs, LangChain, LangGraph, Med Gemma 27B, and AWS SageMaker.",
-      "source_type": "experience",
-      "source_name": "Aeroqube Inc.",
-      "technologies": [
-        "MED-SAM 2",
-        "Nanonets",
-        "Google Cloud APIs",
-        "LangChain",
-        "LangGraph",
-        "Med Gemma 27B",
-        "AWS SageMaker"
-      ],
-      "categories": [
-        "data",
-        "ml",
-        "backend",
-        "devops"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546271",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553644"
-    },
-    {
-      "id": "fabb8284-9f5b-49d6-a896-c06c97721a71",
-      "bullet": "Improved efficiency of i-MedRAG-inspired retrieval pipeline by implementing LangChain and LangGraph.",
-      "source_type": "experience",
-      "source_name": "Aeroqube Inc.",
-      "technologies": [
-        "LangChain",
-        "LangGraph"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546330",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553647"
-    },
-    {
-      "id": "257d0dcb-4b26-4a7d-863a-21999196e6b7",
-      "bullet": "Designed and implemented computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR.",
-      "source_type": "experience",
-      "source_name": "Technod8.ai",
-      "technologies": [
-        "YOLOv10",
-        "Open CV",
-        "OCR"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:52:16.546394",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:52:16.553651"
-    },
-    {
-      "id": "57e7bcf4-9b93-469f-b2af-9a6438fed1ba",
-      "bullet": "Developed AI-assisted medical workflow using MED-SAM 2, Nanonets, and Google Cloud APIs, resulting in improved efficiency.",
-      "source_type": "project",
-      "source_name": "AI-assisted medical workflow",
-      "technologies": [
-        "MED-SAM 2",
-        "Nanonets",
-        "Google Cloud APIs"
-      ],
-      "categories": [
-        "ml",
-        "backend",
-        "devops"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.214842",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218349"
-    },
-    {
-      "id": "5bd93c85-4c7d-4c52-a82d-5a414a6428a3",
-      "bullet": "Improved computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR, leading to enhanced accuracy.",
-      "source_type": "project",
-      "source_name": "computer vision pipeline for document understanding",
-      "technologies": [
-        "YOLOv10",
-        "Open CV",
-        "OCR"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.214929",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218377"
-    },
-    {
-      "id": "b1945f75-8272-46d6-a75c-fa1e0f2919c1",
-      "bullet": "Designed hybrid segmentation and detection pipelines using YOLOv11, Google Street View, and satellite imagery, resulting in improved detection rates.",
-      "source_type": "project",
-      "source_name": "hybrid segmentation and detection pipelines",
-      "technologies": [
-        "YOLOv11",
-        "Google Street View",
-        "satellite imagery"
-      ],
-      "categories": [
-        "data"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215007",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218384"
-    },
-    {
-      "id": "1748939f-abe2-4c90-bbb5-4ce02dc5c8dd",
-      "bullet": "Led the development of custom YOLOv11 model for mapping India's electrical grid infrastructure, resulting in improved accuracy.",
-      "source_type": "experience",
-      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
-      "technologies": [
-        "YOLOv11"
-      ],
-      "categories": [
-        "ml",
-        "devops",
-        "leadership"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215258",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218389"
-    },
-    {
-      "id": "a8beee53-0a70-4295-ad35-18fc8ea91559",
-      "bullet": "Developed hybrid segmentation and detection pipelines for spatial analysis, utilizing YOLOv11 and Google Street View, resulting in improved detection rates.",
-      "source_type": "experience",
-      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
-      "technologies": [
-        "YOLOv11",
-        "Google Street View"
-      ],
-      "categories": [
-        "data"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215332",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218392"
-    },
-    {
-      "id": "ec12091f-e1ed-48ee-9370-5c953739cf33",
-      "bullet": "Implemented AI-assisted medical workflow using MED-SAM 2, Nanonets, and Google Cloud APIs, resulting in improved efficiency.",
-      "source_type": "experience",
-      "source_name": "Aeroqube Inc.",
-      "technologies": [
-        "MED-SAM 2",
-        "Nanonets",
-        "Google Cloud APIs"
-      ],
-      "categories": [
-        "ml",
-        "backend",
-        "devops"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215385",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218396"
-    },
-    {
-      "id": "799a57f8-7b8d-46fc-acc1-8a6db83d9631",
-      "bullet": "Improved computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR, leading to enhanced accuracy.",
-      "source_type": "experience",
-      "source_name": "Technod8.ai",
-      "technologies": [
-        "YOLOv10",
-        "Open CV",
-        "OCR"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215443",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218400"
-    },
-    {
-      "id": "4c57c654-ee10-4ae1-af05-a068e00d8d05",
-      "bullet": "Developed i-MedRAG-inspired retrieval pipeline using LangChain and LangGraph, resulting in improved retrieval rates.",
-      "source_type": "experience",
-      "source_name": "Aeroqube Inc.",
-      "technologies": [
-        "LangChain",
-        "LangGraph"
-      ],
-      "categories": [
-        "data",
-        "ml"
-      ],
-      "has_metrics": false,
-      "created_at": "2026-02-01T10:59:22.215500",
-      "is_grounded": true,
-      "saved_at": "2026-02-01T10:59:22.218403"
-=======
       "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
-      "saved_at": "2026-02-01T10:37:34.377694"
->>>>>>> 1c4beb4fe261d7c6c97d9cda88d7e187f2ef04d9
+      "saved_at": "2026-02-01T14:12:34.895259"
+    },
+    {
+      "id": "28b53c30-7f6a-44fe-9792-19773f25a044",
+      "bullet": "Developed machine learning algorithms from scratch using Python and NumPy.",
+      "source_type": "project",
+      "source_name": "Machine Learning Algorithms from Scratch",
+      "technologies": [
+        "Python",
+        "NumPy"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T14:22:41.513731",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:22:41.530817"
+    },
+    {
+      "id": "eb52bfe8-2aeb-4088-8700-d31ad8bc2d90",
+      "bullet": "Designed and implemented real-time feedback sentiment analysis and alert system using Python, Transformer, LangChain, FastAPI, NTFY, Selenium, and Scikit-learn.",
+      "source_type": "project",
+      "source_name": "Real-time Feedback Sentiment Analysis and Alert System",
+      "technologies": [
+        "Python",
+        "Transformer",
+        "LangChain",
+        "FastAPI",
+        "NTFY",
+        "Selenium",
+        "Scikit-learn"
+      ],
+      "categories": [
+        "ml",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T14:22:41.513857",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:22:41.530842"
+    },
+    {
+      "id": "7f9754f8-1a65-4296-ac2c-a59252bf72d2",
+      "bullet": "Developed a database GPT using Python, LLaMA-38B, Q-LoRA, Transformers, SQL, SQLAlchemy, and NiceGUI.",
+      "source_type": "project",
+      "source_name": "Database GPT",
+      "technologies": [
+        "Python",
+        "LLaMA-38B",
+        "Q-LoRA",
+        "Transformers",
+        "SQL",
+        "SQLAlchemy",
+        "NiceGUI"
+      ],
+      "categories": [
+        "data",
+        "frontend",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T14:22:41.514767",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T14:22:41.530848"
+    },
+    {
+      "id": "8cd7293f-5ad3-49f5-992c-f5f8ee79b602",
+      "bullet": "Maintained a high GPA of 8.84/10.00 while pursuing Integrated Master of Technology in Mathematics and Computing at Indian Institute of Technology (ISM), Dhanbad.",
+      "source_type": "education",
+      "source_name": "Indian Institute of Technology (ISM), Dhanbad",
+      "technologies": [],
+      "categories": [
+        "ml",
+        "frontend"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T14:22:41.514948",
+      "is_grounded": false,
+      "grounding_warning": "Source 'Indian Institute of Technology (ISM), Dhanbad' not found in profile",
+      "saved_at": "2026-02-01T14:22:41.530853"
+    },
+    {
+      "id": "bf146a69-310c-4b39-8067-aa3acad3ed59",
+      "bullet": "Completed secondary and higher secondary education at J.P. Thakkar Higher Secondary School with a graduation date of Apr 2023.",
+      "source_type": "education",
+      "source_name": "J.P. Thakkar Higher Secondary School",
+      "technologies": [],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T14:22:41.515056",
+      "is_grounded": false,
+      "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
+      "saved_at": "2026-02-01T14:22:41.530861"
     }
   ]
 }

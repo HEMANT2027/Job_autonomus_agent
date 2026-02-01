@@ -372,6 +372,19 @@ export default function ProfilePage() {
                     </a>
                 </div>
             )}
+
+            {/* Next Step CTA */}
+            {(profileData || profile) && (
+                <div className="fixed bottom-8 right-8 z-40 animate-bounce-subtle">
+                    <button
+                        onClick={() => window.location.href = '/job-search'}
+                        className="flex items-center gap-3 px-6 py-4 bg-green-600 text-white rounded-full shadow-xl hover:bg-green-700 hover:scale-105 transition-all font-bold text-lg"
+                    >
+                        Save & Start Job Search
+                        <BriefcaseIcon className="w-6 h-6" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

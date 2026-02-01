@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TrashIcon, ArrowUpIcon, ArrowDownIcon, PlayIcon, StopIcon, Cog6ToothIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, ArrowUpIcon, ArrowDownIcon, PlayIcon, StopIcon, Cog6ToothIcon, NoSymbolIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import api, { QueuedJob, BatchStatus } from '../services/api'
 
 export default function ApplyQueuePage() {
@@ -9,7 +9,6 @@ export default function ApplyQueuePage() {
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [batchStatus, setBatchStatus] = useState<BatchStatus | null>(null)
-    const [batchLimit, setBatchLimit] = useState<number | undefined>(5)
 
     useEffect(() => {
         loadQueue()
@@ -28,7 +27,7 @@ export default function ApplyQueuePage() {
             setLoading(true)
             const res = await api.getApplyQueue()
             setQueue(res.data.queue)
-        } catch (err: any) {
+        } catch (err) {
             console.error('Failed to load queue', err)
             setError('Failed to load application queue')
         } finally {
@@ -56,7 +55,7 @@ export default function ApplyQueuePage() {
 
     const handleStartBatch = async () => {
         try {
-            await api.startBatchProcessing(undefined, batchLimit)
+            await api.startBatchProcessing()
             loadBatchStatus()
         } catch (err) {
             setError('Failed to start batch processing')
@@ -111,7 +110,7 @@ export default function ApplyQueuePage() {
                 {/* Header Card */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 flex items-center justify-between sticky top-8 z-40 backdrop-blur-md bg-white/90">
                     <div className="flex items-center gap-4">
-                        <Link to="/dashboard" className="text-gray-500 hover:text-gray-700 font-medium">← Back</Link>
+                        <Link to="/job-search" className="text-gray-500 hover:text-gray-700 font-medium">← Find Jobs</Link>
                         <h1 className="text-2xl font-bold text-gray-900">Application Queue</h1>
                     </div>
                 </div>
@@ -164,26 +163,7 @@ export default function ApplyQueuePage() {
                             )}
                         </div>
 
-
-
                         <div className="flex flex-col gap-3 min-w-[200px]">
-                            {/* Limit Selector */}
-                            {!batchStatus?.is_running && (
-                                <div className="flex items-center gap-2 bg-gray-50 p-2 rounded-lg border border-gray-200">
-                                    <span className="text-sm font-medium text-gray-700 whitespace-nowrap">Apply to Top:</span>
-                                    <select
-                                        value={batchLimit === undefined ? '' : batchLimit}
-                                        onChange={(e) => setBatchLimit(e.target.value ? Number(e.target.value) : undefined)}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-3 pr-8 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6 bg-white"
-                                    >
-                                        <option value="1">1 Job</option>
-                                        <option value="5">5 Jobs</option>
-                                        <option value="10">10 Jobs</option>
-                                        <option value="">All (Unlimited)</option>
-                                    </select>
-                                </div>
-                            )}
-
                             {batchStatus?.is_running ? (
                                 <button
                                     onClick={handleStopBatch}
@@ -313,7 +293,18 @@ export default function ApplyQueuePage() {
                         </div>
                     )}
                 </div>
-            </main >
-        </div >
+            </main>
+
+            {/* Next Step CTA */}
+            <div className="fixed bottom-8 right-8 z-40 animate-bounce-subtle">
+                <Link
+                    to="/tracker"
+                    className="flex items-center gap-3 px-6 py-4 bg-indigo-600 text-white rounded-full shadow-xl hover:bg-indigo-700 hover:scale-105 transition-all font-bold text-lg"
+                >
+                    Track Progress
+                    <ChartBarIcon className="w-6 h-6" />
+                </Link>
+            </div>
+        </div>
     )
 }
