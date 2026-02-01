@@ -741,6 +741,65 @@
           "created_at": "2026-02-01T10:52:39.768557"
         }
       ]
+    },
+    {
+      "id": "602ed394-074a-4510-8447-80fd4096d36b",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:59:39.417319",
+      "items": [
+        {
+          "id": "1b0b37d2-62b9-4061-9e68-f63a01e80a94",
+          "title": "github/HEMANT2027",
+          "url": "github/HEMANT2027",
+          "category": "GitHub Repository",
+          "description": "Hemant's GitHub repository, showcasing his projects and contributions.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL",
+            "PyTorch",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "LangGraph",
+            "LangChain",
+            "Docker",
+            "Git",
+            "GitHub",
+            "AWS Sagemaker"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:59:39.412491"
+        },
+        {
+          "id": "f786ff80-0b1d-49c8-ab5d-188b8fcf9d5b",
+          "title": "linkedin/hemant-pathak1411",
+          "url": "linkedin/hemant-pathak1411",
+          "category": "LinkedIn Profile",
+          "description": "Hemant's LinkedIn profile, highlighting his experience, skills, and connections.",
+          "related_skills": [
+            "Python",
+            "C++",
+            "C",
+            "MySQL",
+            "PyTorch",
+            "Open CV",
+            "Scikit-Learn",
+            "NumPy",
+            "Pandas",
+            "LangGraph",
+            "LangChain",
+            "Docker",
+            "Git",
+            "GitHub",
+            "AWS Sagemaker"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:59:39.412568"
+        }
+      ]
     }
   ]
 }

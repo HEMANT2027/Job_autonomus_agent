@@ -2562,6 +2562,155 @@
       "created_at": "2026-02-01T10:52:16.546394",
       "is_grounded": true,
       "saved_at": "2026-02-01T10:52:16.553651"
+    },
+    {
+      "id": "57e7bcf4-9b93-469f-b2af-9a6438fed1ba",
+      "bullet": "Developed AI-assisted medical workflow using MED-SAM 2, Nanonets, and Google Cloud APIs, resulting in improved efficiency.",
+      "source_type": "project",
+      "source_name": "AI-assisted medical workflow",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs"
+      ],
+      "categories": [
+        "ml",
+        "backend",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.214842",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218349"
+    },
+    {
+      "id": "5bd93c85-4c7d-4c52-a82d-5a414a6428a3",
+      "bullet": "Improved computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR, leading to enhanced accuracy.",
+      "source_type": "project",
+      "source_name": "computer vision pipeline for document understanding",
+      "technologies": [
+        "YOLOv10",
+        "Open CV",
+        "OCR"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.214929",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218377"
+    },
+    {
+      "id": "b1945f75-8272-46d6-a75c-fa1e0f2919c1",
+      "bullet": "Designed hybrid segmentation and detection pipelines using YOLOv11, Google Street View, and satellite imagery, resulting in improved detection rates.",
+      "source_type": "project",
+      "source_name": "hybrid segmentation and detection pipelines",
+      "technologies": [
+        "YOLOv11",
+        "Google Street View",
+        "satellite imagery"
+      ],
+      "categories": [
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215007",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218384"
+    },
+    {
+      "id": "1748939f-abe2-4c90-bbb5-4ce02dc5c8dd",
+      "bullet": "Led the development of custom YOLOv11 model for mapping India's electrical grid infrastructure, resulting in improved accuracy.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "YOLOv11"
+      ],
+      "categories": [
+        "ml",
+        "devops",
+        "leadership"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215258",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218389"
+    },
+    {
+      "id": "a8beee53-0a70-4295-ad35-18fc8ea91559",
+      "bullet": "Developed hybrid segmentation and detection pipelines for spatial analysis, utilizing YOLOv11 and Google Street View, resulting in improved detection rates.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "YOLOv11",
+        "Google Street View"
+      ],
+      "categories": [
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215332",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218392"
+    },
+    {
+      "id": "ec12091f-e1ed-48ee-9370-5c953739cf33",
+      "bullet": "Implemented AI-assisted medical workflow using MED-SAM 2, Nanonets, and Google Cloud APIs, resulting in improved efficiency.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs"
+      ],
+      "categories": [
+        "ml",
+        "backend",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215385",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218396"
+    },
+    {
+      "id": "799a57f8-7b8d-46fc-acc1-8a6db83d9631",
+      "bullet": "Improved computer vision pipeline for document understanding using YOLOv10, Open CV, and OCR, leading to enhanced accuracy.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10",
+        "Open CV",
+        "OCR"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215443",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218400"
+    },
+    {
+      "id": "4c57c654-ee10-4ae1-af05-a068e00d8d05",
+      "bullet": "Developed i-MedRAG-inspired retrieval pipeline using LangChain and LangGraph, resulting in improved retrieval rates.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "LangChain",
+        "LangGraph"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:59:22.215500",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:59:22.218403"
     }
   ]
 }

@@ -27,6 +27,7 @@ export default function Layout({ children }: LayoutProps) {
         { name: 'Apply Queue', href: '/apply/queue', icon: QueueListIcon },
         { name: 'Tracker', href: '/tracker', icon: ChartBarIcon },
         { name: 'Artifact Pack', href: '/artifact-pack', icon: DocumentDuplicateIcon },
+        { name: 'Profile', href: '/profile', icon: UserCircleIcon },
     ];
 
     return (

@@ -51,6 +51,7 @@ from app.services.proof_pack import (
     save_proof_pack,
     get_latest_proof_pack,
 )
+from app.routers.profile import StudentProfileCreate, StudentProfileResponse
 from app.services.data_store import (
     save_student_profile,
     load_student_profile,
@@ -420,6 +421,26 @@ async def get_profile():
     Get the currently stored student profile.
     """
     return load_student_profile()
+
+
+@router.put("/profile", response_model=StudentProfileResponse)
+async def update_profile(profile: StudentProfileCreate):
+    """
+    Update the student profile data manually.
+    """
+    try:
+        # Convert Pydantic model to dict
+        profile_data = profile.model_dump()
+        
+        # Save to data store
+        save_student_profile(profile_data)
+        
+        logger.info("Profile updated successfully")
+        return profile_data
+        
+    except Exception as e:
+        logger.error(f"Error updating profile: {e}")
+        raise HTTPException(status_code=500, detail="Failed to update profile")
 
 
 @router.post("/generate-bullets", response_model=GenerateBulletsResponse)
