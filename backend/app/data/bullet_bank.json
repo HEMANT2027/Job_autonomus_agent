@@ -324,6 +324,875 @@
       "created_at": "2026-02-01T06:31:38.198567",
       "is_grounded": true,
       "saved_at": "2026-02-01T06:31:38.204251"
+    },
+    {
+      "id": "3b8a4f1c-d434-4cc6-b0e4-aeff735b3864",
+      "bullet": "Built APIs, resulting in improved data exchange",
+      "source_type": "experience",
+      "source_name": "Google",
+      "technologies": [],
+      "categories": [
+        "frontend",
+        "data",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T07:57:56.169996",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T07:57:56.171139"
+    },
+    {
+      "id": "98cb0e90-bd97-4141-a912-3d95af4f438b",
+      "bullet": "Designed and built APIs, utilizing expertise in software development",
+      "source_type": "experience",
+      "source_name": "Google",
+      "technologies": [],
+      "categories": [
+        "frontend",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T07:57:56.170054",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T07:57:56.171150"
+    },
+    {
+      "id": "564f0fb6-d2b1-476d-947a-eb84976705ae",
+      "bullet": "Developed TestApp, using Python and FastAPI, to create a functional test application",
+      "source_type": "project",
+      "source_name": "TestApp",
+      "technologies": [
+        "Python",
+        "FastAPI"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T07:57:56.170091",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T07:57:56.171153"
+    },
+    {
+      "id": "2406c4e9-feaf-4bc2-9eca-e124209f5675",
+      "bullet": "Implemented TestApp features, leveraging Python and FastAPI, to deliver a working prototype",
+      "source_type": "project",
+      "source_name": "TestApp",
+      "technologies": [
+        "Python",
+        "FastAPI"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T07:57:56.170122",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T07:57:56.171155"
+    },
+    {
+      "id": "158706f8-c640-4d8f-9831-99475d477185",
+      "bullet": "Developed a custom YOLOv11 model to detect electrical poles from satellite feeds.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "YOLOv11",
+        "Google Street View",
+        "satellite imagery"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.571993",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573259"
+    },
+    {
+      "id": "99dfc774-192f-41f9-b080-a39fdee7ba02",
+      "bullet": "Implemented hybrid segmentation and detection pipelines to identify overhead wires.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "Google Street View",
+        "satellite imagery"
+      ],
+      "categories": [
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572029",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573266"
+    },
+    {
+      "id": "9972a4ac-fdad-4b6e-94e2-ba5cf679b2d3",
+      "bullet": "Conducted spatial analysis to model pole-to-pole connectivity, establishing a comprehensive digital twin of the grid topology.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572051",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573268"
+    },
+    {
+      "id": "71d9bd93-601e-4038-b9c9-df5947f62d6a",
+      "bullet": "Developed an AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AI",
+        "human-in-the-loop validation"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572072",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573269"
+    },
+    {
+      "id": "6122e1c9-e426-4007-8ce4-b66b6b838580",
+      "bullet": "Achieved over 90% extraction accuracy for downstream diagnosis using MED-SAM 2 for lesion segmentation on CT/X-ray images.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2",
+        "CT/X-ray images"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:32:09.572096",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573271"
+    },
+    {
+      "id": "dcd773e6-851c-4e52-889f-1f5d6b22c3c5",
+      "bullet": "Integrated OCR pipelines using Nanonets and Google Cloud APIs to standardize prescriptions and reports.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "Nanonets",
+        "Google Cloud APIs"
+      ],
+      "categories": [
+        "data",
+        "backend",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572114",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573272"
+    },
+    {
+      "id": "0c8a77e0-09e7-4e0d-a9d9-ab62b2924ed5",
+      "bullet": "Deployed inference workflows on AWS SageMaker to enable low-latency, scalable production serving.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572132",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573273"
+    },
+    {
+      "id": "06251e6b-016d-4d8f-96b5-e41966e66818",
+      "bullet": "Contributed to the NCIIPC Startup India AI Grand Challenge by developing a computer vision pipeline for document understanding.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "computer vision",
+        "document understanding"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572151",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573274"
+    },
+    {
+      "id": "0e2a0d31-65d4-4bb4-92dc-9ac5ebc3d56f",
+      "bullet": "Trained and fine-tuned a YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10",
+        "multilingual document layout components"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:32:09.572173",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:32:09.573275"
+    },
+    {
+      "id": "ab7f32ce-ca4a-4048-acd3-8610f2fe8d00",
+      "bullet": "Developed AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation",
+      "source_type": "project",
+      "source_name": "AI-assisted medical workflow",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs",
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B",
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "devops",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.223510",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227174"
+    },
+    {
+      "id": "c85e22f6-7c4c-426f-a1bd-58ec24a6aa6d",
+      "bullet": "Implemented hybrid segmentation and detection pipelines to identify overhead wires using YOLOv11",
+      "source_type": "project",
+      "source_name": "hybrid segmentation and detection pipelines",
+      "technologies": [
+        "YOLOv11"
+      ],
+      "categories": [
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.223590",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227188"
+    },
+    {
+      "id": "1b7af106-0e42-483c-be38-85a65d03def5",
+      "bullet": "Established comprehensive digital twin of the grid topology by conducting spatial analysis",
+      "source_type": "project",
+      "source_name": "pole-to-pole connectivity",
+      "technologies": [],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.223663",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227194"
+    },
+    {
+      "id": "069cb745-1064-4cb2-b52d-592e3e13f480",
+      "bullet": "Achieved over 90% extraction accuracy for downstream diagnosis using MED-SAM 2 for lesion segmentation on CT/X-ray images",
+      "source_type": "project",
+      "source_name": "lesion segmentation on CT/X-ray images",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:33:19.223756",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227199"
+    },
+    {
+      "id": "406ee214-f33c-47c3-81b0-fa5304f7eeb0",
+      "bullet": "Generated diagnostic and treatment summaries using multimodal reasoning pipelines with LangChain, LangGraph, and Med Gemma 27B",
+      "source_type": "project",
+      "source_name": "multimodal reasoning pipelines",
+      "technologies": [
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.223855",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227203"
+    },
+    {
+      "id": "74ab1cfc-ddf8-470a-a023-c1b0cf7ce359",
+      "bullet": "Enabled low-latency, scalable production serving using inference workflows on AWS SageMaker",
+      "source_type": "project",
+      "source_name": "inference workflows on AWS SageMaker",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "leadership"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.224715",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227207"
+    },
+    {
+      "id": "391878a1-1df9-4209-84ae-6ea367c995a4",
+      "bullet": "Developed computer vision pipeline for document understanding to contribute to the NCIIPC Startup India AI Grand Challenge",
+      "source_type": "project",
+      "source_name": "computer vision pipeline for document understanding",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.224785",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227211"
+    },
+    {
+      "id": "eecec7ac-4039-4cc1-800a-fcea01572d84",
+      "bullet": "Trained and fine-tuned YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks",
+      "source_type": "project",
+      "source_name": "computer vision pipeline for document understanding",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.224841",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227214"
+    },
+    {
+      "id": "873b144a-1ac0-4d93-86f7-cd52d21f7689",
+      "bullet": "Spearheaded the mapping of India's electrical grid infrastructure by integrating computer vision techniques on Google Street View and satellite imagery",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.224899",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227218"
+    },
+    {
+      "id": "83432cf5-96bb-4f99-a660-fceddb755608",
+      "bullet": "Trained custom YOLOv11 model to detect electrical poles from satellite feeds and implemented hybrid segmentation and detection pipelines to identify overhead wires",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.224954",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227222"
+    },
+    {
+      "id": "486726f8-4412-4690-8f07-0b2fc2935268",
+      "bullet": "Conducted spatial analysis to model pole-to-pole connectivity, establishing a comprehensive digital twin of the grid topology",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.225005",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227225"
+    },
+    {
+      "id": "9d4ac4d8-abe3-4a93-b8ee-10c29d406790",
+      "bullet": "Developed AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs",
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B",
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "devops",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.225068",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227229"
+    },
+    {
+      "id": "9a746afa-dd2d-4130-baa6-bfd7c4f32748",
+      "bullet": "Applied MED-SAM 2 for lesion segmentation on CT/X-ray images, achieving over 90% extraction accuracy for downstream diagnosis",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:33:19.225123",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227233"
+    },
+    {
+      "id": "a1786f1b-496c-4f70-9f9c-f0b56f359a75",
+      "bullet": "Deployed inference workflows on AWS SageMaker to enable low-latency, scalable production serving",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.225175",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227236"
+    },
+    {
+      "id": "80c48a20-c653-4745-830e-8962ae43eaed",
+      "bullet": "Contributed to the NCIIPC Startup India AI Grand Challenge by developing a computer vision pipeline for document understanding",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.225223",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227240"
+    },
+    {
+      "id": "1869c0de-a16e-43ef-b047-334b2239f612",
+      "bullet": "Trained and fine-tuned YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:33:19.225274",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:33:19.227244"
+    },
+    {
+      "id": "3a548b44-504c-4411-bf6b-277be80e6ea8",
+      "bullet": "Developed AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation.",
+      "source_type": "project",
+      "source_name": "AI-assisted medical workflow",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs",
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B",
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "devops",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250545",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253586"
+    },
+    {
+      "id": "6d67c489-fee6-4885-9184-12bacbab8f8a",
+      "bullet": "Achieved over 90% extraction accuracy for lesion segmentation on CT/X-ray images using MED-SAM 2.",
+      "source_type": "project",
+      "source_name": "lesion segmentation on CT/X-ray images",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:35:02.250624",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253600"
+    },
+    {
+      "id": "fe288628-a675-4b14-be29-5a723d9d76a9",
+      "bullet": "Generated diagnostic and treatment summaries using multimodal reasoning pipelines with LangChain and LangGraph.",
+      "source_type": "project",
+      "source_name": "multimodal reasoning pipelines",
+      "technologies": [
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250691",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253605"
+    },
+    {
+      "id": "2a25e38a-964d-41c6-8990-dd7daa718763",
+      "bullet": "Enabled low-latency, scalable production serving using inference workflows on AWS SageMaker.",
+      "source_type": "project",
+      "source_name": "inference workflows on AWS SageMaker",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "leadership"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250746",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253609"
+    },
+    {
+      "id": "15b755f2-d2c5-406b-88ac-99873776d008",
+      "bullet": "Contributed to the NCIIPC Startup India AI Grand Challenge by developing a computer vision pipeline for document understanding.",
+      "source_type": "project",
+      "source_name": "computer vision pipeline for document understanding",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250796",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253613"
+    },
+    {
+      "id": "4ec12aa5-5082-4012-aa26-0504dcc26e16",
+      "bullet": "Trained and fine-tuned a YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks.",
+      "source_type": "project",
+      "source_name": "computer vision pipeline for document understanding",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250849",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253616"
+    },
+    {
+      "id": "b1630965-1db4-40be-90aa-b838bb4543c9",
+      "bullet": "Trained a custom YOLOv11 model to detect electrical poles from satellite feeds and implemented hybrid segmentation and detection pipelines to identify overhead wires.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "YOLOv11"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250902",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253620"
+    },
+    {
+      "id": "c39dcf05-a330-4906-aefc-7dd3d2327cf6",
+      "bullet": "Conducted spatial analysis to model pole-to-pole connectivity, establishing a comprehensive digital twin of the grid topology.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.250955",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253624"
+    },
+    {
+      "id": "47ec3b3b-be1c-4c80-beb1-3838922777b8",
+      "bullet": "Spearheaded the mapping of India\u2019s electrical grid infrastructure by integrating computer vision techniques on Google Street View and satellite imagery.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251281",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253627"
+    },
+    {
+      "id": "0e417031-e14a-416b-90be-439b5c5a2935",
+      "bullet": "Developed an AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs",
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B",
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "devops",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251351",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253631"
+    },
+    {
+      "id": "43240d52-f4ce-4b24-a42b-84c855aa7ff3",
+      "bullet": "Applied MED-SAM 2 for lesion segmentation on CT/X-ray images, achieving over 90% extraction accuracy for downstream diagnosis.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:35:02.251405",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253634"
+    },
+    {
+      "id": "cc423632-45d9-4bdd-a531-9f872a0a4a68",
+      "bullet": "Deployed inference workflows on AWS SageMaker to enable low-latency, scalable production serving.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251455",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253638"
+    },
+    {
+      "id": "55afb802-db88-413b-a45e-d70742bccba7",
+      "bullet": "Contributed to the NCIIPC Startup India AI Grand Challenge by developing a computer vision pipeline for document understanding.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251501",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253641"
+    },
+    {
+      "id": "2f494aa9-8865-4185-b894-89e71d1985ad",
+      "bullet": "Trained and fine-tuned a YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251552",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253645"
+    },
+    {
+      "id": "6dc2e6f4-fbaa-4443-9ff4-ea9d72e5c560",
+      "bullet": "Trained a custom YOLOv11 model to detect electrical poles from satellite feeds and implemented hybrid segmentation and detection pipelines to identify overhead wires.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "YOLOv11"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251602",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253648"
+    },
+    {
+      "id": "0de8d2df-e680-4aa1-a9b9-ccda12899d54",
+      "bullet": "Conducted spatial analysis to model pole-to-pole connectivity, establishing a comprehensive digital twin of the grid topology.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251651",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253652"
+    },
+    {
+      "id": "de43b914-5e91-4173-a55a-a0163552b98c",
+      "bullet": "Spearheaded the mapping of India\u2019s electrical grid infrastructure by integrating computer vision techniques on Google Street View and satellite imagery.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [],
+      "categories": [
+        "ml",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251712",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253655"
+    },
+    {
+      "id": "dfeddb48-eb06-448e-a288-13cb1a589e28",
+      "bullet": "Developed an AI-assisted medical workflow to reduce diagnostic turnaround time with human-in-the-loop validation.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2",
+        "Nanonets",
+        "Google Cloud APIs",
+        "LangChain",
+        "LangGraph",
+        "Med Gemma 27B",
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend",
+        "devops",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251771",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253659"
+    },
+    {
+      "id": "058badec-ae65-4a7d-97f8-802ab379b012",
+      "bullet": "Applied MED-SAM 2 for lesion segmentation on CT/X-ray images, achieving over 90% extraction accuracy for downstream diagnosis.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T08:35:02.251825",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253662"
+    },
+    {
+      "id": "04c442f9-df2b-47da-a49d-d6bacbdae95f",
+      "bullet": "Deployed inference workflows on AWS SageMaker to enable low-latency, scalable production serving.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251877",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253666"
+    },
+    {
+      "id": "9c6d1214-7f92-4739-ad81-8c5913f62be2",
+      "bullet": "Contributed to the NCIIPC Startup India AI Grand Challenge by developing a computer vision pipeline for document understanding.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251923",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253669"
+    },
+    {
+      "id": "56303095-823d-4508-ba05-c02320115b00",
+      "bullet": "Trained and fine-tuned a YOLOv10 model to detect multilingual document layout components and extract bounding box coordinates for downstream OCR and parsing tasks.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T08:35:02.251973",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T08:35:02.253673"
     }
   ]
 }

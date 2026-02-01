@@ -1,38 +1,25 @@
-"""Database configuration and session management."""
+"""Database stub - using JSON file storage instead of PostgreSQL.
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import DeclarativeBase, sessionmaker
+This module provides stub implementations for database functions.
+The application uses JSON file storage for all data persistence.
+"""
 
-from app.config import settings
+from typing import Generator, Optional
+from app.logging_config import get_logger
 
-
-# Create SQLAlchemy engine
-engine = create_engine(
-    settings.database_url,
-    echo=settings.db_echo,
-    pool_pre_ping=True,
-    pool_recycle=300,
-)
-
-# Create session factory
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+logger = get_logger(__name__)
 
 
-class Base(DeclarativeBase):
-    """Base class for all SQLAlchemy models."""
-
+class Base:
+    """Stub base class for compatibility with ORM models."""
     pass
 
 
-def get_db():
-    """Dependency to get database session."""
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+def get_db() -> Generator[None, None, None]:
+    """Stub dependency - no database session needed."""
+    yield None
 
 
 def init_db() -> None:
-    """Initialize database tables."""
-    Base.metadata.create_all(bind=engine)
+    """Stub init - using JSON file storage."""
+    logger.info("Using JSON file storage (no PostgreSQL)")

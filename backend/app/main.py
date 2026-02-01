@@ -41,12 +41,20 @@ async def lifespan(app: FastAPI):
         except Exception as e:
             logger.warning(f"Database initialization skipped: {e}")
 
+    # Start Background Services
+    from app.services.auto_discovery import start_auto_discovery_service, stop_auto_discovery_service
+    try:
+        start_auto_discovery_service()
+    except Exception as e:
+        logger.error(f"Failed to start auto discovery: {e}")
+
     yield
 
     # Shutdown
     logger.info("Shutting down application")
     from app.services.batch_processor import stop_batch_processing
     stop_batch_processing()
+    stop_auto_discovery_service()
 
 
 # Create FastAPI application

@@ -34,11 +34,12 @@ _policy_lock = threading.RLock()
 
 # Defaults
 DEFAULT_POLICY = {
-    "daily_limit": 0,
-    "min_match_score": 60,
+    "daily_limit": 0,  # 0 means no limit
+    "min_match_score": 0,  # 0 means no threshold - apply to all jobs
     "blocked_companies": [],
-    "paused": False,
-    "remote_only_enforced": False,
+    "auto_discovery_enabled": False, # Is the autonomous job finder running?
+    "discovery_min_match_score": 60, # Only queue jobs above this score
+    "last_discovery_run": None,
     "updated_at": datetime.utcnow().isoformat()
 }
 
@@ -103,6 +104,10 @@ def set_policy(updates: Dict[str, Any]) -> Dict[str, Any]:
             current["paused"] = bool(updates["paused"])
         if "remote_only_enforced" in updates:
             current["remote_only_enforced"] = bool(updates["remote_only_enforced"])
+        if "auto_discovery_enabled" in updates:
+            current["auto_discovery_enabled"] = bool(updates["auto_discovery_enabled"])
+        if "discovery_min_match_score" in updates:
+            current["discovery_min_match_score"] = float(updates["discovery_min_match_score"])
             
         current["updated_at"] = datetime.utcnow().isoformat()
         
@@ -165,7 +170,8 @@ def check_application_policy(job_id: str) -> Dict[str, Any]:
     match_score = job.get("match_score")
     min_score = policy.get("min_match_score", 0)
     
-    if match_score is not None and match_score < min_score:
+    # Only enforce threshold if min_score > 0 (0 means no threshold)
+    if min_score > 0 and match_score is not None and match_score < min_score:
          return {
             "allowed": False,
             "reason": f"Match score {match_score} below threshold {min_score}",

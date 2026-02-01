@@ -22,7 +22,7 @@ DATA_DIR = Path(__file__).parent.parent.parent / "data"
 
 # File paths
 STUDENT_PROFILE_FILE = DATA_DIR / "student_profile.json"
-JOBS_FILE = DATA_DIR / "jobs.json"
+JOBS_FILE = DATA_DIR / "job_listings.json"
 APPLICATIONS_FILE = DATA_DIR / "applications.json"
 
 # Thread locks for concurrent access

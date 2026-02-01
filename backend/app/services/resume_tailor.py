@@ -99,9 +99,13 @@ def tailor_resume(job_id: str, profile_data: Optional[Dict[str, Any]] = None) ->
                 
             relevant_bullets = []
             for bullet in all_bullets:
-                # Check if bullet belongs to this experience
+                # Check if bullet belongs to this experience and has content
+                bullet_content = bullet.get("content", "")
+                if not bullet_content:
+                    continue  # Skip bullets without content
+                    
                 if exp.get("company", "").lower() in bullet.get("source_name", "").lower():
-                    score = _calculate_relevance(bullet.get("content", ""), keywords_list)
+                    score = _calculate_relevance(bullet_content, keywords_list)
                     relevant_bullets.append({"bullet": bullet, "score": score})
             
             # Sort by relevance
@@ -109,7 +113,12 @@ def tailor_resume(job_id: str, profile_data: Optional[Dict[str, Any]] = None) ->
             
             # Take top 3-4 most relevant
             selected_bullets_data = relevant_bullets[:4]
-            selected_bullets_text = [item["bullet"]["content"] for item in selected_bullets_data]
+            # Safely extract content from bullets
+            selected_bullets_text = []
+            for item in selected_bullets_data:
+                content = item.get("bullet", {}).get("content", "")
+                if content:
+                    selected_bullets_text.append(content)
             
             # If no bullets in bank, keep original matched ones from profile?
             if not selected_bullets_text:

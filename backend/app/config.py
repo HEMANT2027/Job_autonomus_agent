@@ -1,16 +1,19 @@
 """Application configuration using Pydantic Settings."""
 
-from functools import lru_cache
+from pathlib import Path
 from typing import List
 
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+# Get absolute path to .env file (in backend directory)
+ENV_FILE_PATH = Path(__file__).parent.parent / ".env"
 
 
 class Settings(BaseSettings):
     """Application settings loaded from environment variables."""
 
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(ENV_FILE_PATH),
         env_file_encoding="utf-8",
         case_sensitive=False,
         extra="ignore",  # Ignore extra env vars not defined in model
@@ -49,10 +52,6 @@ class Settings(BaseSettings):
         return [origin.strip() for origin in self.cors_origins.split(",")]
 
 
-@lru_cache
-def get_settings() -> Settings:
-    """Get cached settings instance."""
-    return Settings()
+# Create settings instance on module load
+settings = Settings()
 
-
-settings = get_settings()

@@ -24,6 +24,8 @@ class PolicyUpdateRequest(BaseModel):
     blocked_companies: Optional[List[str]] = None
     paused: Optional[bool] = None
     remote_only_enforced: Optional[bool] = None
+    auto_discovery_enabled: Optional[bool] = None
+    discovery_min_match_score: Optional[float] = None
 
 class PolicyCheckResponse(BaseModel):
     """Response for policy check."""

@@ -1,6 +1,6 @@
 """Jobs API endpoints."""
 
-from typing import List, Optional
+from typing import List, Optional, Union
 
 from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
@@ -25,22 +25,31 @@ router = APIRouter(prefix="/jobs", tags=["Jobs"])
 
 class JobBase(BaseModel):
     """Base job schema."""
+    model_config = {"extra": "allow"}  # Allow extra fields from job_listings.json
+    
     title: str = Field(..., min_length=1, max_length=255)
     company: str = Field(..., min_length=1, max_length=255)
     location: Optional[str] = Field(None, max_length=255)
     description: Optional[str] = None
-    requirements: Optional[str] = None
+    requirements: Optional[Union[str, List[str]]] = None
     url: Optional[str] = None
     salary_min: Optional[int] = Field(None, ge=0)
     salary_max: Optional[int] = Field(None, ge=0)
     job_type: Optional[str] = None  # full-time, part-time, contract, internship
-    remote: bool = False
+    remote: Optional[bool] = None
     posted_at: Optional[str] = None
     deadline: Optional[str] = None
     source: Optional[str] = None  # linkedin, indeed, company website, etc.
-    tags: list[str] = []
+    tags: Optional[list[str]] = None
     notes: Optional[str] = None
-    is_favorite: bool = False
+    is_favorite: Optional[bool] = None
+    # Additional fields from job_listings.json
+    skills: Optional[list[str]] = None
+    visa_sponsorship: Optional[bool] = None
+    experience_required: Optional[str] = None
+    match_score: Optional[float] = None
+    stored_at: Optional[str] = None
+    status: Optional[str] = None
 
 
 class JobCreate(JobBase):
@@ -84,7 +93,7 @@ class JobListResponse(BaseModel):
 # API Endpoints
 # ============================================================
 
-@router.get("", response_model=JobListResponse)
+@router.get("")
 async def list_jobs(
     search: Optional[str] = Query(None, description="Search in title and company"),
     company: Optional[str] = Query(None, description="Filter by company"),
@@ -120,7 +129,7 @@ async def list_jobs(
     if is_favorite is not None:
         jobs = [j for j in jobs if j.get("is_favorite") == is_favorite]
     
-    return JobListResponse(jobs=jobs, total=len(jobs))
+    return {"jobs": jobs, "total": len(jobs)}
 
 
 @router.post("", response_model=JobResponse, status_code=201)
@@ -276,6 +285,13 @@ async def search_jobs(request: JobSearchRequest):
     )
     
     return result
+
+
+@router.get("/discovery/status")
+async def discovery_status():
+    """Get status of autonomous discovery agent."""
+    from app.services.auto_discovery import get_discovery_status
+    return get_discovery_status()
 
 
 # ============================================================

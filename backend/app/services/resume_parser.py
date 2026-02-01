@@ -60,84 +60,85 @@ def extract_text_from_pdf(file_content: bytes) -> str:
         # Create a file-like object from bytes
         pdf_stream = io.BytesIO(file_content)
         
-    # Track errors for debugging
-    errors = []
+        # Track errors for debugging
+        errors = []
+        extracted_text = []
+        
+        # ---------------------------------------------------------
+        # Attempt 1: pdfplumber (Best for layout)
+        # ---------------------------------------------------------
+        try:
+            with pdfplumber.open(pdf_stream) as pdf:
+                if len(pdf.pages) == 0:
+                    errors.append("pdfplumber: PDF has no pages")
+                else:
+                    for page in pdf.pages:
+                        text = page.extract_text()
+                        if text:
+                            extracted_text.append(text)
+                    if extracted_text:
+                        logger.info("Successfully extracted text using pdfplumber")
+        except Exception as e:
+            logger.warning(f"pdfplumber extraction failed: {e}")
+            errors.append(f"pdfplumber: {str(e)}")
     
-    # ---------------------------------------------------------
-    # Attempt 1: pdfplumber (Best for layout)
-    # ---------------------------------------------------------
-    try:
-        with pdfplumber.open(pdf_stream) as pdf:
-            if len(pdf.pages) == 0:
-                errors.append("pdfplumber: PDF has no pages")
-            else:
-                for page in pdf.pages:
+        # ---------------------------------------------------------
+        # Attempt 2: pypdf (Best for resilience)
+        # ---------------------------------------------------------
+        if not extracted_text:
+            try:
+                import pypdf
+                pdf_stream.seek(0)
+                reader = pypdf.PdfReader(pdf_stream)
+                pypdf_text = []
+                for page in reader.pages:
                     text = page.extract_text()
                     if text:
-                        extracted_text.append(text)
-                if extracted_text:
-                    logger.info("Successfully extracted text using pdfplumber")
-    except Exception as e:
-        logger.warning(f"pdfplumber extraction failed: {e}")
-        errors.append(f"pdfplumber: {str(e)}")
-
-    # ---------------------------------------------------------
-    # Attempt 2: pypdf (Best for resilience)
-    # ---------------------------------------------------------
-    if not extracted_text:
-        try:
-            import pypdf
-            pdf_stream.seek(0)
-            reader = pypdf.PdfReader(pdf_stream)
-            pypdf_text = []
-            for page in reader.pages:
-                text = page.extract_text()
-                if text:
-                    pypdf_text.append(text)
-            
-            if pypdf_text:
-                extracted_text = pypdf_text
-                logger.info("Successfully extracted text using pypdf fallback")
-        except Exception as e:
-            logger.warning(f"pypdf extraction failed: {e}")
-            errors.append(f"pypdf: {str(e)}")
-
-    # ---------------------------------------------------------
-    # Attempt 3: pdfminer.six (Deepest extraction)
-    # ---------------------------------------------------------
-    if not extracted_text:
-        try:
-            from pdfminer.high_level import extract_text as extract_text_miner
-            pdf_stream.seek(0)
-            miner_text = extract_text_miner(pdf_stream)
-            if miner_text and len(miner_text.strip()) > 10:
-                extracted_text = [miner_text]
-                logger.info("Successfully extracted text using pdfminer.six fallback")
-        except Exception as e:
-            logger.warning(f"pdfminer extraction failed: {e}")
-            errors.append(f"pdfminer: {str(e)}")
-
-    # ---------------------------------------------------------
-    # Final Validation
-    # ---------------------------------------------------------
-    if not extracted_text:
-        error_details = "; ".join(errors)
-        raise ResumeParseError(
-            f"Could not extract text. Failed all methods: {error_details}. "
-            "Please ensure the file is not encrypted/locked."
-        )
+                        pypdf_text.append(text)
+                
+                if pypdf_text:
+                    extracted_text = pypdf_text
+                    logger.info("Successfully extracted text using pypdf fallback")
+            except Exception as e:
+                logger.warning(f"pypdf extraction failed: {e}")
+                errors.append(f"pypdf: {str(e)}")
     
-    # Join all pages with newlines
-    full_text = "\n\n".join(extracted_text)
+        # ---------------------------------------------------------
+        # Attempt 3: pdfminer.six (Deepest extraction)
+        # ---------------------------------------------------------
+        if not extracted_text:
+            try:
+                from pdfminer.high_level import extract_text as extract_text_miner
+                pdf_stream.seek(0)
+                miner_text = extract_text_miner(pdf_stream)
+                if miner_text and len(miner_text.strip()) > 10:
+                    extracted_text = [miner_text]
+                    logger.info("Successfully extracted text using pdfminer.six fallback")
+            except Exception as e:
+                logger.warning(f"pdfminer extraction failed: {e}")
+                errors.append(f"pdfminer: {str(e)}")
     
-    logger.info(f"Successfully extracted {len(full_text)} characters from PDF")
-    return full_text
+        # ---------------------------------------------------------
+        # Final Validation
+        # ---------------------------------------------------------
+        if not extracted_text:
+            error_details = "; ".join(errors)
+            raise ResumeParseError(
+                f"Could not extract text. Failed all methods: {error_details}. "
+                "Please ensure the file is not encrypted/locked."
+            )
         
-except ResumeParseError:
-    raise
-except Exception as e:
-    logger.error(f"Failed to parse PDF: {e}")
-    raise ResumeParseError(f"Failed to parse PDF: {str(e)}")
+        # Join all pages with newlines
+        full_text = "\n\n".join(extracted_text)
+        
+        logger.info(f"Successfully extracted {len(full_text)} characters from PDF")
+        return full_text
+        
+    except ResumeParseError:
+        raise
+    except Exception as e:
+        logger.error(f"Failed to parse PDF: {e}")
+        raise ResumeParseError(f"Failed to parse PDF: {str(e)}")
 
 
 def get_text_preview(text: str, max_length: int = 500) -> str:

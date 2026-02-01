@@ -1,7 +1,7 @@
 {
   "answers": [
     {
-      "id": "a1661185-97e8-4cf8-bac7-20b8386cc028",
+      "id": "7632bb2c-0676-4b88-98d2-418f88b5c857",
       "category": "work_authorization",
       "question": "What is your work authorization status?",
       "question_variants": [
@@ -9,14 +9,14 @@
         "Do you require visa sponsorship?",
         "What is your work permit status?"
       ],
-      "answer": "I am currently a student and do not have explicit work authorization status mentioned, [EDIT] please provide more context or details to give a precise answer.",
+      "answer": "I am authorized to work in [EDIT: country/region] and do not require any work visa sponsorship.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742141",
-      "updated_at": "2026-02-01T06:17:53.751267"
+      "created_at": "2026-02-01T08:33:32.140381",
+      "updated_at": "2026-02-01T08:33:32.142222"
     },
     {
-      "id": "66407c9c-bf7f-4f88-9d77-e54b96142538",
+      "id": "e5da6c34-2c36-4ba7-a01e-a8f771eff3b1",
       "category": "availability",
       "question": "What is your availability/start date?",
       "question_variants": [
@@ -24,14 +24,14 @@
         "What is your notice period?",
         "How soon can you join?"
       ],
-      "answer": "I am expected to complete my degree by May 2028, and my availability to start work would be after that, [EDIT] please provide more context or details to give a precise start date.",
+      "answer": "I am available to start immediately, but I am currently pursuing my Integrated Master of Technology in Mathematics and Computing at the Indian Institute of Technology (ISM), Dhanbad, and expect to complete my degree in May 2028.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742184",
-      "updated_at": "2026-02-01T06:17:53.751295"
+      "created_at": "2026-02-01T08:33:32.140456",
+      "updated_at": "2026-02-01T08:33:32.142246"
     },
     {
-      "id": "a32e410f-ed94-4743-a43c-51a849ff577f",
+      "id": "e0fbe6d4-b83e-4b3e-97bb-71758b1e87d5",
       "category": "relocation",
       "question": "Are you willing to relocate?",
       "question_variants": [
@@ -39,14 +39,14 @@
         "Are you open to relocation?",
         "Can you relocate to our office location?"
       ],
-      "answer": "I am open to considering relocation opportunities, [EDIT] however, I would need more information about the location and the role to make a definitive decision.",
+      "answer": "I am willing to relocate for the right opportunity, but I would prefer to discuss the specifics of the relocation package and requirements with the hiring manager.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742196",
-      "updated_at": "2026-02-01T06:17:53.751303"
+      "created_at": "2026-02-01T08:33:32.140490",
+      "updated_at": "2026-02-01T08:33:32.142256"
     },
     {
-      "id": "6d7d3ef9-1a5a-4088-85f2-81ae4845fcf4",
+      "id": "9a48362a-e398-41b7-a5c0-c82cba2764cf",
       "category": "salary_expectations",
       "question": "What are your salary expectations?",
       "question_variants": [
@@ -54,14 +54,14 @@
         "What salary range are you looking for?",
         "What are your compensation requirements?"
       ],
-      "answer": "As a student with no prior work experience, I do not have a specific salary expectation, [EDIT] I would consider industry standards and discuss this further based on the role and company.",
+      "answer": "My salary expectations are competitive and based on industry standards, but I am open to discussing the compensation package and benefits with the hiring manager.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742207",
-      "updated_at": "2026-02-01T06:17:53.751308"
+      "created_at": "2026-02-01T08:33:32.140518",
+      "updated_at": "2026-02-01T08:33:32.142263"
     },
     {
-      "id": "d41170e7-a231-4ecb-8dc4-457ac2736d03",
+      "id": "9c8cc004-1a2c-4741-9ccd-d996da9271b7",
       "category": "why_company",
       "question": "Why do you want to work for this company?",
       "question_variants": [
@@ -69,39 +69,39 @@
         "What attracts you to our company?",
         "Why should we hire you?"
       ],
-      "answer": "I am excited about the opportunity to work at [COMPANY_NAME] as a [ROLE] because of the company's [EDIT] mission, values, and impact in the industry, and I believe my skills and education align with the company's goals.",
+      "answer": "[COMPANY_NAME] is a leader in the [EDIT: industry/field] and I am impressed by its commitment to [EDIT: company values/misison]. As a [ROLE] with a strong background in [EDIT: relevant skills/technologies], I believe I would be a valuable addition to the team and contribute to the company's success.",
       "needs_editing": true,
       "is_template": true,
-      "created_at": "2026-02-01T06:17:53.742217",
-      "updated_at": "2026-02-01T06:17:53.751313"
+      "created_at": "2026-02-01T08:33:32.140656",
+      "updated_at": "2026-02-01T08:33:32.142270"
     },
     {
-      "id": "d4db5a3f-ec53-4143-96d5-1418f3358798",
+      "id": "261a1cd9-9c51-4e6f-b070-88d74dae5600",
       "category": "strengths",
       "question": "What are your greatest strengths?",
       "question_variants": [
         "What do you consider your key strengths?",
         "What makes you a good candidate?"
       ],
-      "answer": "My greatest strengths include my strong foundation in mathematics and computing, proficiency in programming languages such as Python and C++, and experience with machine learning algorithms, which I believe would enable me to make valuable contributions to a team.",
+      "answer": "My greatest strengths include my ability to [EDIT: skills/technologies] and my experience in [EDIT: relevant projects/experiences]. I am a strong team player and have excellent communication and problem-solving skills.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742234",
-      "updated_at": "2026-02-01T06:17:53.751318"
+      "created_at": "2026-02-01T08:33:32.140691",
+      "updated_at": "2026-02-01T08:33:32.142277"
     },
     {
-      "id": "1d3582af-af32-4c0a-bb6e-41ca7c34496e",
+      "id": "f4a9302c-8165-4743-bfee-2b99dfc6246e",
       "category": "career_goals",
       "question": "What are your career goals?",
       "question_variants": [
         "Where do you see yourself in 5 years?",
         "What are your long-term career aspirations?"
       ],
-      "answer": "My career goals include applying my technical skills and knowledge to drive innovation and solve complex problems, and I am excited about the opportunity to learn and grow with a company, [EDIT] specifically in the areas of machine learning and artificial intelligence.",
-      "needs_editing": false,
-      "is_template": false,
-      "created_at": "2026-02-01T06:17:53.742246",
-      "updated_at": "2026-02-01T06:17:53.751323"
+      "answer": "My long-term career goal is to become a [EDIT: senior role/title] in a leading [EDIT: industry/field] company, where I can utilize my skills and experience to drive innovation and growth. I am excited about the opportunity to contribute to [COMPANY_NAME]'s success and learn from the team.",
+      "needs_editing": true,
+      "is_template": true,
+      "created_at": "2026-02-01T08:33:32.140721",
+      "updated_at": "2026-02-01T08:33:32.142283"
     }
   ]
 }
