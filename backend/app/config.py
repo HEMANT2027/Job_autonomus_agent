@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
 
     # CORS Settings
-    cors_origins: str = "http://localhost:5173,http://localhost:3000"
+    cors_origins: str = "http://localhost:5173,http://localhost:3000,http://localhost:8000,http://localhost:8001"
 
     # Logging
     log_level: str = "INFO"

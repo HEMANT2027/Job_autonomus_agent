@@ -25,6 +25,7 @@ class SubmitApplicationRequest(BaseModel):
 class StartBatchRequest(BaseModel):
     """Request schema for starting batch processing."""
     student_id: Optional[str] = None
+    limit: Optional[int] = None
 
 @router.post("/assemble", response_model=Dict[str, Any])
 def assemble_package(request: AssembleApplicationRequest):
@@ -71,7 +72,7 @@ async def submit_package(request: SubmitApplicationRequest):
 @router.post("/batch/start", response_model=Dict[str, Any])
 def start_batch(request: StartBatchRequest):
     """Start the autonomous batch application process."""
-    return start_batch_processing(request.student_id)
+    return start_batch_processing(request.student_id, request.limit)
 
 @router.post("/batch/stop", response_model=Dict[str, Any])
 def stop_batch():
@@ -88,8 +89,16 @@ def batch_status():
 @router.get("/queue", response_model=Dict[str, Any])
 def get_queue():
     """Get current apply queue."""
-    from app.services.job_ranker import get_queued_jobs
-    return {"queue": get_queued_jobs()}
+    try:
+        logger.info("Fetching apply queue...")
+        from app.services.job_ranker import get_queued_jobs
+        queue = get_queued_jobs()
+        logger.info(f"Queue fetched: {len(queue)} items")
+        return {"queue": queue}
+    except Exception as e:
+        import traceback
+        logger.error(f"Failed to get queue: {e}\n{traceback.format_exc()}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.delete("/queue/{job_id}", response_model=Dict[str, Any])
 def remove_from_queue(job_id: str):

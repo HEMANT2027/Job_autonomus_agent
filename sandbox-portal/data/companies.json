@@ -170,6 +170,20 @@
         "is_remote": true,
         "posted_date": "2026-02-01"
       }
+    },
+    {
+      "name": "Hemant Pathak",
+      "location": "Sadak ke kinare",
+      "description": "",
+      "requirements": [],
+      "responsibilities": [],
+      "skills_required": [],
+      "job_details": {
+        "status": "Accepting Applications",
+        "salary_range": "",
+        "is_remote": true,
+        "posted_date": "2026-02-01"
+      }
     }
   ]
 }

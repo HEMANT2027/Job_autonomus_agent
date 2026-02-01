@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+// Use relative URL to leverage Vite proxy in development, or VITE_API_URL if provided
+const API_URL = import.meta.env.VITE_API_URL || ''
 const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '30000')
 
 export const apiClient = axios.create({
@@ -239,7 +240,7 @@ export const api = {
     removeFromApplyQueue: (jobId: string) => apiClient.delete(`/api/v1/apply/queue/${jobId}`),
     reorderApplyQueue: (jobIds: string[]) => apiClient.post('/api/v1/apply/queue/reorder', { job_ids: jobIds }),
 
-    startBatchProcessing: (studentId?: string) => apiClient.post('/api/v1/apply/batch/start', { student_id: studentId }),
+    startBatchProcessing: (studentId?: string, limit?: number) => apiClient.post('/api/v1/apply/batch/start', { student_id: studentId, limit }),
     stopBatchProcessing: () => apiClient.post('/api/v1/apply/batch/stop'),
     getBatchStatus: () => apiClient.get<BatchStatus>('/api/v1/apply/batch/status'),
 

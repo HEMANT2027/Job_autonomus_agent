@@ -25,6 +25,7 @@ from app.services.data_store import (
     get_job_by_id,
     load_student_profile
 )
+from app.services.job_ranker import remove_queued_job
 from app.services.apply_policy import check_application_policy
 from app.services.application_assembler import assemble_application_package
 from app.services.auto_submit import submit_application
@@ -51,11 +52,13 @@ class BatchState:
         self.current_status: str = "idle"
         self.logs: List[str] = []
         self.start_time: Optional[str] = None
+        self.limit: Optional[int] = None
 
-    def reset(self):
+    def reset(self, limit: Optional[int] = None):
         self.__init__()
         self.is_running = True
         self.start_time = datetime.utcnow().isoformat()
+        self.limit = limit
 
     def log(self, message: str):
         timestamp = datetime.utcnow().strftime("%H:%M:%S")
@@ -84,17 +87,19 @@ def get_batch_status() -> Dict[str, Any]:
             "current_job_id": _state.current_job_id,
             "current_status": _state.current_status,
             "logs": list(_state.logs), # Copy
-            "start_time": _state.start_time
+            "start_time": _state.start_time,
+            "limit": _state.limit
         }
 
-def start_batch_processing(student_id: Optional[str] = None) -> Dict[str, Any]:
+def start_batch_processing(student_id: Optional[str] = None, limit: Optional[int] = None) -> Dict[str, Any]:
     """Start the background processing thread."""
     with _lock:
         if _state.is_running:
             return {"status": "error", "message": "Batch already running"}
         
-        _state.reset()
-        _state.log("Starting batch process...")
+        _state.reset(limit=limit)
+        limit_msg = f" (Limit: {limit})" if limit else ""
+        _state.log(f"Starting batch process{limit_msg}...")
         
     thread = threading.Thread(target=_worker, args=(student_id,))
     thread.daemon = True
@@ -146,6 +151,13 @@ def _worker(student_id: Optional[str]):
     
     try:
         for job_entry in queue:
+            # Check Limit
+            if _state.limit and processed_count >= _state.limit:
+                with _lock:
+                    _state.log(f"Batch limit of {_state.limit} reached.")
+                    _state.current_status = "limit_reached"
+                break
+
             # Check Stop
             if _state.stop_requested:
                 with _lock:
@@ -187,7 +199,11 @@ def _worker(student_id: Optional[str]):
                     _state.current_status = "Assembling package..."
                 
                 # Sync utility in assembler
-                package = assemble_application_package(job_id) 
+                # Pass a lambda to check for stop request during long operations
+                package = assemble_application_package(
+                    job_id, 
+                    should_stop=lambda: _state.stop_requested
+                ) 
                 
             except Exception as e:
                 with _lock:
@@ -220,6 +236,12 @@ def _worker(student_id: Optional[str]):
             # 7. Rate Limit / Pacing
             # Sleep 5 seconds between apps
             processed_count += 1
+            
+            # Remove from queue (cleanup)
+            remove_queued_job(job_id)
+            with _lock:
+                _state.log(f"Removed {job_id} from queue.")
+
             with _lock:
                 _state.processed_count = processed_count
                 

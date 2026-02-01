@@ -194,8 +194,8 @@ def _discovery_worker():
             except Exception as ex:
                 pass
 
-            # Sleep Interval (fast poll for testing)
-            for _ in range(10):
+            # Sleep Interval (Production: 10 minutes)
+            for _ in range(600):
                 if _stop_event.is_set(): break
                 time.sleep(1)
                 

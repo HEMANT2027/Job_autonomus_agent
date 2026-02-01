@@ -1,336 +1,377 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useToast } from '../context/ToastContext';
+import { useEffect, useState } from 'react';
 import {
-    UserIcon,
+    UserCircleIcon,
+    EnvelopeIcon,
+    PhoneIcon,
+    MapPinIcon,
     BriefcaseIcon,
     AcademicCapIcon,
-    CodeBracketIcon,
-    RocketLaunchIcon,
-    CheckCircleIcon
+    PencilSquareIcon,
+    CheckIcon,
+    XMarkIcon,
 } from '@heroicons/react/24/outline';
-
-// API Base URL
-const API_BASE = '/api/v1/student';
+import { useAppStore } from '../store/useAppStore';
+import api from '../services/api';
 
 interface ProfileData {
-    personal_info?: Record<string, string>;
-    experience?: any[];
-    education?: any[];
-    projects?: any[];
-    skills?: string[];
-    links?: Record<string, string>;
-    preferences?: Record<string, string>;
+    personal_info: {
+        name: string | null;
+        email: string | null;
+        phone: string | null;
+        location: string | null;
+    };
+    education: Array<{
+        degree: string;
+        institution: string;
+        year: string;
+        gpa: string | null;
+    }>;
+    experience: Array<{
+        company: string;
+        role: string;
+        duration: string;
+        responsibilities: string[];
+    }>;
+    skills: string[];
+    links: {
+        github: string | null;
+        linkedin: string | null;
+        portfolio: string | null;
+    };
 }
 
 export default function ProfilePage() {
+    const { profile, fetchInitialData } = useAppStore();
     const [profileData, setProfileData] = useState<ProfileData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
-    const [isSaving, setIsSaving] = useState(false);
-    const { showToast } = useToast();
+    const [error, setError] = useState<string | null>(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editForm, setEditForm] = useState<Partial<ProfileData['personal_info']>>({});
 
-    // Fetch Profile on Mount
     useEffect(() => {
-        fetchProfile();
+        fetchInitialData();
+        loadProfileData();
     }, []);
 
-    const fetchProfile = async () => {
+    const loadProfileData = async () => {
         try {
-            const response = await axios.get(`${API_BASE}/profile`);
+            setIsLoading(true);
+            const response = await api.getProfile();
             if (response.data) {
-                setProfileData(response.data);
+                // Map the API response to our ProfileData structure
+                const data = response.data;
+                setProfileData({
+                    personal_info: {
+                        name: data.name,
+                        email: data.email,
+                        phone: data.phone || null,
+                        location: data.location || null,
+                    },
+                    education: data.education?.map(edu => ({
+                        degree: edu.degree,
+                        institution: edu.institution,
+                        year: edu.end_year?.toString() || '',
+                        gpa: edu.gpa?.toString() || null,
+                    })) || [],
+                    experience: data.experience?.map(exp => ({
+                        company: exp.company,
+                        role: exp.title,
+                        duration: `${exp.start_date || ''} - ${exp.end_date || (exp.current ? 'Present' : '')}`,
+                        responsibilities: exp.description ? [exp.description] : [],
+                    })) || [],
+                    skills: data.skills || [],
+                    links: {
+                        github: data.github_url || null,
+                        linkedin: data.linkedin_url || null,
+                        portfolio: data.portfolio_url || null,
+                    },
+                });
             }
-        } catch (error) {
-            console.error('Failed to fetch profile', error);
-            showToast('Failed to load profile data', 'error');
+        } catch (err: any) {
+            console.error('Failed to load profile:', err);
+            // Don't show error if profile just doesn't exist
+            if (err.response?.status !== 404) {
+                setError('Failed to load profile data.');
+            }
         } finally {
             setIsLoading(false);
         }
     };
 
-    const handleSave = async () => {
-        if (!profileData) return;
-        setIsSaving(true);
-        try {
-            await axios.put(`${API_BASE}/profile`, profileData);
-            showToast('Profile updated successfully!', 'success');
-        } catch (error) {
-            console.error('Failed to save profile', error);
-            showToast('Failed to save profile', 'error');
-        } finally {
-            setIsSaving(false);
+    const handleEditSave = async () => {
+        // In a real app, this would save to the backend
+        if (profileData) {
+            setProfileData({
+                ...profileData,
+                personal_info: {
+                    ...profileData.personal_info,
+                    ...editForm,
+                },
+            });
         }
-    };
-
-    const updateField = (section: keyof ProfileData, value: any) => {
-        setProfileData(prev => prev ? ({ ...prev, [section]: value }) : null);
-    };
-
-    const updateNestedField = (section: keyof ProfileData, key: string, value: string) => {
-        if (!profileData) return;
-        const currentSection = (profileData[section] as Record<string, string>) || {};
-        updateField(section, { ...currentSection, [key]: value });
+        setIsEditing(false);
+        setEditForm({});
     };
 
     if (isLoading) {
         return (
-            <div className="flex h-screen items-center justify-center">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+            <div className="flex items-center justify-center h-96">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
             </div>
         );
     }
 
-    if (!profileData) {
-        return (
-            <div className="text-center py-12">
-                <p className="text-gray-500">No profile data found. Please upload a resume first.</p>
-                <a href="/artifact-pack" className="text-indigo-600 hover:underline mt-2 inline-block">Go to Upload</a>
-            </div>
-        );
-    }
+    const personalInfo = profileData?.personal_info || profile;
+    const displayName = personalInfo?.name || 'Your Name';
+    const displayEmail = personalInfo?.email || 'Not set';
+    const displayPhone = personalInfo?.phone || 'Not set';
+    const displayLocation = personalInfo?.location || 'Not set';
 
     return (
-        <div className="max-w-5xl mx-auto px-4 py-8 space-y-8">
+        <div className="max-w-4xl mx-auto space-y-8">
             {/* Header */}
-            <div className="flex justify-between items-center bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                <div>
-                    <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
-                        <UserIcon className="w-7 h-7 text-indigo-600" />
-                        Student Profile
-                    </h1>
-                    <p className="text-gray-500 mt-1">Manage your resume data and targeting preferences.</p>
-                </div>
-                <button
-                    onClick={handleSave}
-                    disabled={isSaving}
-                    className="flex items-center gap-2 px-6 py-2.5 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors disabled:opacity-50"
-                >
-                    {isSaving ? (
-                        <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent" />
-                    ) : (
-                        <CheckCircleIcon className="w-5 h-5" />
-                    )}
-                    Save Changes
-                </button>
+            <div className="flex items-center justify-between">
+                <h1 className="text-2xl font-bold text-gray-900">My Profile</h1>
+                {!isEditing && (
+                    <button
+                        onClick={() => {
+                            setIsEditing(true);
+                            setEditForm({
+                                name: personalInfo?.name || '',
+                                email: personalInfo?.email || '',
+                                phone: personalInfo?.phone || '',
+                                location: personalInfo?.location || '',
+                            });
+                        }}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                        <PencilSquareIcon className="w-4 h-4" />
+                        Edit Profile
+                    </button>
+                )}
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Left Column: Preferences & Info */}
-                <div className="lg:col-span-1 space-y-6">
-                    {/* Targeting Preferences */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <RocketLaunchIcon className="w-5 h-5 text-indigo-500" />
-                            Targeting
-                        </h2>
+            {error && (
+                <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-red-700">
+                    {error}
+                </div>
+            )}
+
+            {/* Profile Card */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+                {/* Cover / Avatar Section */}
+                <div className="h-32 bg-gradient-to-r from-blue-600 to-indigo-700 relative">
+                    <div className="absolute -bottom-12 left-8">
+                        <div className="w-24 h-24 rounded-full bg-white border-4 border-white shadow-lg flex items-center justify-center text-gray-300">
+                            <UserCircleIcon className="w-16 h-16" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Personal Info */}
+                <div className="pt-16 pb-8 px-8">
+                    {isEditing ? (
                         <div className="space-y-4">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Target Role</label>
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
                                 <input
                                     type="text"
-                                    value={profileData.preferences?.target_role || ''}
-                                    onChange={(e) => updateNestedField('preferences', 'target_role', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
-                                    placeholder="e.g. Backend Engineer"
+                                    value={editForm.name || ''}
+                                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                                 />
                             </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                    <input
+                                        type="email"
+                                        value={editForm.email || ''}
+                                        onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                    <input
+                                        type="tel"
+                                        value={editForm.phone || ''}
+                                        onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                    />
+                                </div>
+                            </div>
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Tone</label>
-                                <select
-                                    value={profileData.preferences?.tone || 'Professional'}
-                                    onChange={(e) => updateNestedField('preferences', 'tone', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
+                                <label className="block text-sm font-medium text-gray-700 mb-1">Location</label>
+                                <input
+                                    type="text"
+                                    value={editForm.location || ''}
+                                    onChange={(e) => setEditForm({ ...editForm, location: e.target.value })}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                                />
+                            </div>
+                            <div className="flex gap-3 pt-4">
+                                <button
+                                    onClick={handleEditSave}
+                                    className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
                                 >
-                                    <option value="Professional">Professional</option>
-                                    <option value="Enthusiastic">Enthusiastic</option>
-                                    <option value="Analytical">Analytical</option>
-                                    <option value="Executive">Executive</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">Key Strengths</label>
-                                <textarea
-                                    value={profileData.preferences?.strengths || ''}
-                                    onChange={(e) => updateNestedField('preferences', 'strengths', e.target.value)}
-                                    rows={3}
-                                    className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
-                                    placeholder="e.g. Python, Leadership"
-                                />
+                                    <CheckIcon className="w-4 h-4" />
+                                    Save Changes
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setIsEditing(false);
+                                        setEditForm({});
+                                    }}
+                                    className="flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+                                >
+                                    <XMarkIcon className="w-4 h-4" />
+                                    Cancel
+                                </button>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Personal Info */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <UserIcon className="w-5 h-5 text-gray-500" />
-                            Personal Info
-                        </h2>
-                        <div className="space-y-4">
-                            {['name', 'email', 'phone', 'location', 'linkedin', 'github'].map((field) => (
-                                <div key={field}>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">{field}</label>
-                                    <input
-                                        type="text"
-                                        value={profileData.personal_info?.[field] || profileData.links?.[field] || ''}
-                                        onChange={(e) => {
-                                            if (['linkedin', 'github', 'portfolio'].includes(field)) {
-                                                updateNestedField('links', field, e.target.value);
-                                            } else {
-                                                updateNestedField('personal_info', field, e.target.value);
-                                            }
-                                        }}
-                                        className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500 text-sm"
-                                    />
+                    ) : (
+                        <>
+                            <h2 className="text-2xl font-bold text-gray-900 mb-1">{displayName}</h2>
+                            <div className="flex flex-wrap gap-4 mt-4 text-gray-600">
+                                <div className="flex items-center gap-2">
+                                    <EnvelopeIcon className="w-4 h-4 text-gray-400" />
+                                    <span className="text-sm">{displayEmail}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Right Column: Experience, Education, Projects */}
-                <div className="lg:col-span-2 space-y-6">
-                    {/* Experience */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <BriefcaseIcon className="w-5 h-5 text-blue-500" />
-                            Experience
-                        </h2>
-                        <div className="space-y-4">
-                            {profileData.experience?.map((exp, idx) => (
-                                <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                                    <div className="grid grid-cols-2 gap-4 mb-2">
-                                        <input
-                                            value={exp.role || ''}
-                                            onChange={(e) => {
-                                                const newExp = [...(profileData.experience || [])];
-                                                newExp[idx] = { ...exp, role: e.target.value };
-                                                updateField('experience', newExp);
-                                            }}
-                                            className="font-medium bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full"
-                                            placeholder="Role"
-                                        />
-                                        <input
-                                            value={exp.company || ''}
-                                            onChange={(e) => {
-                                                const newExp = [...(profileData.experience || [])];
-                                                newExp[idx] = { ...exp, company: e.target.value };
-                                                updateField('experience', newExp);
-                                            }}
-                                            className="text-right text-gray-600 bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full"
-                                            placeholder="Company"
-                                        />
-                                    </div>
-                                    <textarea
-                                        value={Array.isArray(exp.responsibilities) ? exp.responsibilities.join('\n') : exp.responsibilities || ''}
-                                        onChange={(e) => {
-                                            const newExp = [...(profileData.experience || [])];
-                                            newExp[idx] = { ...exp, responsibilities: e.target.value.split('\n') };
-                                            updateField('experience', newExp);
-                                        }}
-                                        rows={3}
-                                        className="w-full text-sm text-gray-600 bg-transparent border rounded p-2 focus:border-indigo-500 focus:outline-none resize-none"
-                                        placeholder="Responsibilities (one per line)"
-                                    />
+                                <div className="flex items-center gap-2">
+                                    <PhoneIcon className="w-4 h-4 text-gray-400" />
+                                    <span className="text-sm">{displayPhone}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Projects */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <CodeBracketIcon className="w-5 h-5 text-green-500" />
-                            Projects
-                        </h2>
-                        <div className="space-y-4">
-                            {profileData.projects?.map((proj, idx) => (
-                                <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-100">
-                                    <input
-                                        value={proj.name || ''}
-                                        onChange={(e) => {
-                                            const newProjs = [...(profileData.projects || [])];
-                                            newProjs[idx] = { ...proj, name: e.target.value };
-                                            updateField('projects', newProjs);
-                                        }}
-                                        className="font-medium bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full mb-2"
-                                        placeholder="Project Name"
-                                    />
-                                    <textarea
-                                        value={proj.description || ''}
-                                        onChange={(e) => {
-                                            const newProjs = [...(profileData.projects || [])];
-                                            newProjs[idx] = { ...proj, description: e.target.value };
-                                            updateField('projects', newProjs);
-                                        }}
-                                        rows={2}
-                                        className="w-full text-sm text-gray-600 bg-transparent border rounded p-2 focus:border-indigo-500 focus:outline-none resize-none"
-                                        placeholder="Description"
-                                    />
+                                <div className="flex items-center gap-2">
+                                    <MapPinIcon className="w-4 h-4 text-gray-400" />
+                                    <span className="text-sm">{displayLocation}</span>
                                 </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Education */}
-                    <div className="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-                            <AcademicCapIcon className="w-5 h-5 text-purple-500" />
-                            Education
-                        </h2>
-                        <div className="space-y-4">
-                            {profileData.education?.map((edu, idx) => (
-                                <div key={idx} className="p-4 bg-gray-50 rounded-lg border border-gray-100 flex justify-between gap-4">
-                                    <div className="flex-1">
-                                        <input
-                                            value={edu.degree || ''}
-                                            onChange={(e) => {
-                                                const newEdu = [...(profileData.education || [])];
-                                                newEdu[idx] = { ...edu, degree: e.target.value };
-                                                updateField('education', newEdu);
-                                            }}
-                                            className="font-medium bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full"
-                                            placeholder="Degree"
-                                        />
-                                        <input
-                                            value={edu.institution || ''}
-                                            onChange={(e) => {
-                                                const newEdu = [...(profileData.education || [])];
-                                                newEdu[idx] = { ...edu, institution: e.target.value };
-                                                updateField('education', newEdu);
-                                            }}
-                                            className="text-sm text-gray-600 bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full mt-1"
-                                            placeholder="Institution"
-                                        />
-                                    </div>
-                                    <div className="w-32 text-right">
-                                        <input
-                                            value={edu.year || ''}
-                                            onChange={(e) => {
-                                                const newEdu = [...(profileData.education || [])];
-                                                newEdu[idx] = { ...edu, year: e.target.value };
-                                                updateField('education', newEdu);
-                                            }}
-                                            className="text-sm text-gray-500 bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full text-right"
-                                            placeholder="Year"
-                                        />
-                                        <input
-                                            value={edu.score || ''}
-                                            onChange={(e) => {
-                                                const newEdu = [...(profileData.education || [])];
-                                                newEdu[idx] = { ...edu, score: e.target.value };
-                                                updateField('education', newEdu);
-                                            }}
-                                            className="text-sm text-gray-400 bg-transparent border-b border-transparent focus:border-indigo-500 focus:outline-none w-full text-right mt-1"
-                                            placeholder="Grade/GPA"
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
+
+            {/* Skills Section */}
+            {profileData?.skills && profileData.skills.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">Skills</h3>
+                    <div className="flex flex-wrap gap-2">
+                        {profileData.skills.map((skill, index) => (
+                            <span
+                                key={index}
+                                className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm font-medium"
+                            >
+                                {skill}
+                            </span>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Education Section */}
+            {profileData?.education && profileData.education.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <AcademicCapIcon className="w-5 h-5 text-gray-400" />
+                        Education
+                    </h3>
+                    <div className="space-y-4">
+                        {profileData.education.map((edu, index) => (
+                            <div key={index} className="border-l-2 border-blue-200 pl-4">
+                                <h4 className="font-semibold text-gray-900">{edu.degree}</h4>
+                                <p className="text-gray-600">{edu.institution}</p>
+                                <p className="text-sm text-gray-500">
+                                    {edu.year}
+                                    {edu.gpa && ` • GPA: ${edu.gpa}`}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Experience Section */}
+            {profileData?.experience && profileData.experience.length > 0 && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center gap-2">
+                        <BriefcaseIcon className="w-5 h-5 text-gray-400" />
+                        Experience
+                    </h3>
+                    <div className="space-y-6">
+                        {profileData.experience.map((exp, index) => (
+                            <div key={index} className="border-l-2 border-purple-200 pl-4">
+                                <h4 className="font-semibold text-gray-900">{exp.role}</h4>
+                                <p className="text-gray-600">{exp.company}</p>
+                                <p className="text-sm text-gray-500 mb-2">{exp.duration}</p>
+                                {exp.responsibilities && exp.responsibilities.length > 0 && (
+                                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                        {exp.responsibilities.slice(0, 3).map((resp, i) => (
+                                            <li key={i}>{resp}</li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
+            {/* Links Section */}
+            {profileData?.links && (profileData.links.github || profileData.links.linkedin || profileData.links.portfolio) && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+                    <h3 className="text-lg font-bold text-gray-900 mb-4">Links</h3>
+                    <div className="flex flex-wrap gap-4">
+                        {profileData.links.github && (
+                            <a
+                                href={profileData.links.github}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-gray-900 text-white rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+                            >
+                                GitHub
+                            </a>
+                        )}
+                        {profileData.links.linkedin && (
+                            <a
+                                href={profileData.links.linkedin}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-blue-700 text-white rounded-lg text-sm font-medium hover:bg-blue-800 transition-colors"
+                            >
+                                LinkedIn
+                            </a>
+                        )}
+                        {profileData.links.portfolio && (
+                            <a
+                                href={profileData.links.portfolio}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700 transition-colors"
+                            >
+                                Portfolio
+                            </a>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {/* Empty State */}
+            {!profileData && !profile && (
+                <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
+                    <UserCircleIcon className="w-16 h-16 mx-auto text-gray-300 mb-4" />
+                    <h3 className="text-lg font-semibold text-gray-900 mb-2">No Profile Data Yet</h3>
+                    <p className="text-gray-500 mb-6">
+                        Upload your resume in the Artifact Pack section to automatically extract your profile information.
+                    </p>
+                    <a
+                        href="/artifact-pack"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                    >
+                        Go to Artifact Pack
+                    </a>
+                </div>
+            )}
         </div>
     );
 }

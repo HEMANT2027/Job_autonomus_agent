@@ -76,9 +76,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Add custom middleware
-app.add_middleware(RequestLoggingMiddleware)
-
 # Register exception handlers
 app.add_exception_handler(AppException, app_exception_handler)
 app.add_exception_handler(HTTPException, http_exception_handler)

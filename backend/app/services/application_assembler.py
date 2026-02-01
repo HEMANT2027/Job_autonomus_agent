@@ -34,12 +34,14 @@ class AssemblerError(Exception):
     """Base exception for application assembly errors."""
     pass
 
-def assemble_application_package(job_id: str, profile_data: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+def assemble_application_package(job_id: str, profile_data: Optional[Dict[str, Any]] = None, should_stop: Optional[callable] = None) -> Dict[str, Any]:
     """
     Assemble all artifacts into a final application package.
     """
     try:
         # 1. Fetch Context
+        if should_stop and should_stop(): raise AssemblerError("Stopped by user")
+        
         job = get_job_by_id(job_id)
         if not job:
             raise AssemblerError(f"Job not found: {job_id}")
@@ -57,22 +59,26 @@ def assemble_application_package(job_id: str, profile_data: Optional[Dict[str, A
         # 2. Generate Components (sequentially for now, could be async)
         
         # Resume
+        if should_stop and should_stop(): raise AssemblerError("Stopped by user")
         logger.info("Tailoring resume...")
         resume = tailor_resume(job_id, profile_data)
         log_audit_event(job_id, "generation", {"type": "resume", "content": resume}, "Resume Tailored")
         
         # Cover Letter
+        if should_stop and should_stop(): raise AssemblerError("Stopped by user")
         logger.info("Generating cover letter...")
         cl_result = generate_cover_letter(job_id, profile_data)
         cover_letter_text = cl_result.get("cover_letter_text", "")
         log_audit_event(job_id, "generation", {"type": "cover_letter", "content": cl_result}, "Cover Letter Generated")
         
         # Evidence Map
+        if should_stop and should_stop(): raise AssemblerError("Stopped by user")
         logger.info("Mapping evidence...")
         evidence_map = map_evidence(job_id, profile_data)
         log_audit_event(job_id, "generation", {"type": "evidence", "content": evidence_map}, "Evidence Mapped")
         
         # Answers (Standard Questions)
+        if should_stop and should_stop(): raise AssemblerError("Stopped by user")
         logger.info("Generating answers...")
         # Get answers for standard categories
         answers_map = generate_answers(profile_data)

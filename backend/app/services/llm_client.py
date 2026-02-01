@@ -21,8 +21,8 @@ GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"
 GROQ_MODEL = "llama-3.1-8b-instant"
 
 # Retry settings
-MAX_RETRIES = 5
-INITIAL_BACKOFF = 5  # seconds
+MAX_RETRIES = 3
+INITIAL_BACKOFF = 2  # seconds
 
 
 class LLMClientError(Exception):

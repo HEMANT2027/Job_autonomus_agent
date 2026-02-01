@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Optional
 import math
 
 from app.services.llm_client import generate_text, LLMClientError
+from app.services.data_store import load_applications
 from app.logging_config import get_logger
 
 logger = get_logger(__name__)
@@ -226,15 +227,23 @@ def add_to_apply_queue(jobs: List[Dict[str, Any]]) -> int:
         queue = _read_apply_queue()
         existing_ids = {item["id"] for item in queue}
         
+        # Deduplication against historical applications
+        applications = load_applications()
+        applied_ids = {app.get("job_id") for app in applications if app.get("job_id")}
+        
         added_count = 0
         for job in jobs:
-            if job["id"] not in existing_ids:
+            # Check if in queue OR already applied
+            if job["id"] not in existing_ids and job["id"] not in applied_ids:
                 job["queued_at"] = str(datetime.now())
                 job["status"] = "queued"
                 queue.append(job)
                 existing_ids.add(job["id"])
                 added_count += 1
                 
+        # Sort queue by match_score descending to keep high priority jobs on top
+        queue.sort(key=lambda x: x.get("match_score", 0), reverse=True)
+
         _write_apply_queue(queue)
         return added_count
 
