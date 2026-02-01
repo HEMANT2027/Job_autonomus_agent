@@ -1,8 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import axios from 'axios';
-
-// API base URL
-const API_BASE = '/api/v1/student';
+import api from '../services/api';
 
 // Step definitions
 const STEPS = [
@@ -16,7 +13,7 @@ const STEPS = [
 
 interface ProfileData {
     education?: any[];
-    experiences?: any[];
+    experience?: any[];
     projects?: any[];
     skills?: string[];
     links?: Record<string, string>;
@@ -139,9 +136,7 @@ export default function ArtifactPackPage() {
             const formData = new FormData();
             formData.append('file', resumeFile);
 
-            const response = await axios.post(`${API_BASE}/upload-resume`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const response = await api.uploadResume(formData);
 
             setResumeId(response.data.id);
             // Reset derived state for new resume
@@ -164,13 +159,10 @@ export default function ArtifactPackPage() {
 
 
     // ========== Step 2: Extract Profile ==========
-    // ... existing extractProfile function ...
     const extractProfile = async (id: string) => {
         setIsLoading(true);
         try {
-            const response = await axios.post(`${API_BASE}/extract-profile`, {
-                resume_id: id
-            });
+            const response = await api.extractProfile(id);
             setProfileData(response.data.profile);
             setCompletedSteps(prev => new Set([...prev, 2]));
         } catch (err: any) {
@@ -208,10 +200,7 @@ export default function ArtifactPackPage() {
         setError(null);
 
         try {
-            const response = await axios.post(`${API_BASE}/generate-bullets`, {
-                profile_data: profileData,
-                save_to_bank: true
-            });
+            const response = await api.generateBullets(profileData);
             setBullets(response.data.bullets);
             setCompletedSteps(prev => new Set([...prev, 4])); // Step 4 complete (generated)
             setCurrentStep(4); // Go to Bullet Bank (Step 4)
@@ -241,10 +230,7 @@ export default function ArtifactPackPage() {
         setError(null);
 
         try {
-            const response = await axios.post(`${API_BASE}/generate-answers`, {
-                profile_data: profileData,
-                save_to_library: true
-            });
+            const response = await api.generateAnswers(profileData);
             // Convert answers object to array
             const answersArray = Object.values(response.data.answers) as Answer[];
             setAnswers(answersArray);
@@ -270,10 +256,7 @@ export default function ArtifactPackPage() {
         setError(null);
 
         try {
-            const response = await axios.post(`${API_BASE}/build-proof-pack`, {
-                profile_data: profileData,
-                save_to_pack: true
-            });
+            const response = await api.buildProofPack(profileData);
             setProofItems(response.data.items);
             setCompletedSteps(prev => new Set([...prev, 6])); // Step 6 complete
             setCurrentStep(6); // Go to Proof Pack (Step 6)
@@ -498,7 +481,7 @@ export default function ArtifactPackPage() {
                     {/* Experience */}
                     <div className="bg-white rounded-lg border p-4">
                         <h3 className="font-semibold text-gray-700 mb-3">Experience</h3>
-                        {profileData.experience?.map((exp, index) => (
+                        {profileData.experience?.map((exp: any, index: number) => (
                             <div key={index} className="mb-3 p-3 bg-gray-50 rounded-lg">
                                 <p className="font-medium">{exp.role} at {exp.company}</p>
                                 <p className="text-sm text-gray-500">{exp.duration}</p>
