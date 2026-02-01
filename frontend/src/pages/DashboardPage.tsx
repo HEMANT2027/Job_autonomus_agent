@@ -8,23 +8,45 @@ import {
     DocumentTextIcon,
     QueueListIcon,
     SparklesIcon,
-    UserCircleIcon
+    UserCircleIcon,
+    XMarkIcon
 } from '@heroicons/react/24/outline'
 import { useAppStore } from '../store/useAppStore'
+import api from '../services/api'
+import { useState } from 'react'
 
 export default function DashboardPage() {
     const {
         profile,
         stats,
+        batchStatus,
+        trackerSummary,
         hasProfile,
         hasAppliedOnce,
         isLoading,
-        fetchInitialData
+        fetchInitialData,
+        refreshBatchStatus
     } = useAppStore()
+
+    const [systemHealthy, setSystemHealthy] = useState<boolean | null>(null)
 
     useEffect(() => {
         fetchInitialData()
+        checkHealth()
+
+        // Refresh batch status every 10s if on dashboard
+        const interval = setInterval(refreshBatchStatus, 10000)
+        return () => clearInterval(interval)
     }, [])
+
+    const checkHealth = async () => {
+        try {
+            const res = await api.health()
+            setSystemHealthy(res.data.status === 'healthy')
+        } catch (err) {
+            setSystemHealthy(false)
+        }
+    }
 
     if (isLoading && !profile) {
         return (
@@ -137,10 +159,7 @@ export default function DashboardPage() {
                     </div>
                     <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">In Queue</p>
-                        <p className="text-3xl font-bold text-blue-600">{stats.pending || 0}</p>
-                        {/* Note: pending in stats might mean 'applied but no response', queue is distinct. 
-                            Ideally we fetch real queue count or store it. For now using placeholder logic or pending.
-                        */}
+                        <p className="text-3xl font-bold text-blue-600">{trackerSummary?.submitted_count || 0}</p>
                     </div>
                     <div className="bg-white p-6 rounded-xl border border-gray-100 shadow-sm">
                         <p className="text-sm text-gray-500 mb-1">Interviews</p>
@@ -193,7 +212,13 @@ export default function DashboardPage() {
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
                     <div className="flex items-center justify-between mb-6">
                         <h3 className="font-bold text-gray-900">System Status</h3>
-                        <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">ONLINE</span>
+                        {systemHealthy === null ? (
+                            <span className="px-2 py-1 bg-gray-100 text-gray-400 text-xs font-bold rounded-full animate-pulse">CHECKING...</span>
+                        ) : systemHealthy ? (
+                            <span className="px-2 py-1 bg-green-100 text-green-700 text-xs font-bold rounded-full">ONLINE</span>
+                        ) : (
+                            <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full">OFFLINE</span>
+                        )}
                     </div>
                     <div className="space-y-4">
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
@@ -201,18 +226,24 @@ export default function DashboardPage() {
                                 <div className="p-2 bg-white rounded shadow-sm text-blue-500">
                                     <SparklesIcon className="w-4 h-4" />
                                 </div>
-                                <span className="text-sm font-medium text-gray-700">AI Agent Ready</span>
+                                <span className="text-sm font-medium text-gray-700">Autonomous Agent</span>
                             </div>
-                            <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                            <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${batchStatus?.is_running ? 'bg-blue-100 text-blue-700 animate-pulse' : 'bg-gray-100 text-gray-500'}`}>
+                                {batchStatus?.is_running ? 'RUNNING' : 'IDLE'}
+                            </span>
                         </div>
                         <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                             <div className="flex items-center gap-3">
                                 <div className="p-2 bg-white rounded shadow-sm text-purple-500">
                                     <BriefcaseIcon className="w-4 h-4" />
                                 </div>
-                                <span className="text-sm font-medium text-gray-700">Sandbox Connected</span>
+                                <span className="text-sm font-medium text-gray-700">Database Connection</span>
                             </div>
-                            <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                            {systemHealthy ? (
+                                <CheckCircleIcon className="w-5 h-5 text-green-500" />
+                            ) : (
+                                <XMarkIcon className="w-5 h-5 text-red-500" />
+                            )}
                         </div>
                     </div>
                 </div>

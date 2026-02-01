@@ -75,8 +75,26 @@ def start_batch(request: StartBatchRequest):
 
 @router.post("/batch/stop", response_model=Dict[str, Any])
 def stop_batch():
-    """Stop the batch application process."""
-    return stop_batch_processing()
+    """
+    Stop the batch application process.
+    ALSO disables Auto Discovery to ensure complete stop.
+    """
+    # 1. Stop Batch Processor
+    batch_res = stop_batch_processing()
+    
+    # 2. Disable Auto Discovery (Global Kill Switch)
+    from app.services.apply_policy import update_policy, get_policy
+    from app.logging_config import get_logger
+    
+    current_policy = get_policy()
+    if current_policy.get("auto_discovery_enabled"):
+        update_policy({"auto_discovery_enabled": False})
+        get_logger(__name__).info("Stop Batch requested: Also disabled Auto Discovery.")
+        
+    return {
+        "batch_status": batch_res,
+        "auto_discovery": "disabled"
+    }
 
 @router.get("/batch/status", response_model=Dict[str, Any])
 def batch_status():
