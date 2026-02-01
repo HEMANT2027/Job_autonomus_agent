@@ -15,8 +15,190 @@ import {
     Trash2,
     Building2,
     Plus,
-    X
+    X,
+    GraduationCap,
+    User,
+    Mail,
+    Phone
 } from 'lucide-react'
+
+// Resume Viewer Component to handle JSON artifacts
+const ResumeViewer = ({ content, candidateName }: { content: string, candidateName?: string }) => {
+    let data;
+    try {
+        data = JSON.parse(content);
+    } catch (e) {
+        // Fallback for Python-style dict strings (e.g. {'key': 'val', 'none': None})
+        try {
+            const sanitized = content
+                .replace(/None/g, 'null')
+                .replace(/True/g, 'true')
+                .replace(/False/g, 'false');
+            data = new Function('return ' + sanitized)();
+        } catch (e2) {
+            data = null;
+        }
+    }
+
+    try {
+        // Basic check to see if it looks like a resume object
+        if (!data || typeof data !== 'object') throw new Error('Not an object');
+
+        return (
+            <div className="bg-white p-8 shadow-sm border border-gray-200 mx-auto max-w-[21cm] min-h-[29.7cm] text-gray-800 font-sans">
+                {/* Header */}
+                <div className="border-b-2 border-gray-800 pb-6 mb-6">
+                    <h1 className="text-4xl font-bold uppercase tracking-tight text-gray-900 mb-2">
+                        {candidateName || data.name || data.fullName || data.candidate_name || data.personal_information?.name || data.header?.name || 'Candidate Name'}
+                    </h1>
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 font-medium">
+                        {data.email && (
+                            <div className="flex items-center gap-1.5">
+                                <Mail size={14} /> {data.email}
+                            </div>
+                        )}
+                        {data.phone && (
+                            <div className="flex items-center gap-1.5">
+                                <Phone size={14} /> {data.phone}
+                            </div>
+                        )}
+                        {data.location && (
+                            <div className="flex items-center gap-1.5">
+                                <MapPin size={14} /> {data.location}
+                            </div>
+                        )}
+                        {data.linkedin && (
+                            <a href={data.linkedin} target="_blank" rel="noreferrer" className="flex items-center gap-1.5 text-blue-600 hover:underline">
+                                <span className="font-bold">in</span> LinkedIn
+                            </a>
+                        )}
+                    </div>
+                </div>
+
+                {/* Summary */}
+                {data.summary && (
+                    <div className="mb-6">
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-2 border-b border-gray-100 pb-1">Professional Summary</h2>
+                        <p className="text-sm leading-relaxed text-gray-700">{data.summary}</p>
+                    </div>
+                )}
+
+                {/* Experience */}
+                {(data.experience || data.work_experience) && (
+                    <div className="mb-6">
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 border-b border-gray-100 pb-1">Experience</h2>
+                        <div className="space-y-4">
+                            {(data.experience || data.work_experience).map((exp: any, i: number) => (
+                                <div key={i}>
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <h3 className="font-bold text-gray-900">{exp.role || exp.position || exp.title}</h3>
+                                        <span className="text-xs font-semibold text-gray-500 bg-gray-50 px-2 py-0.5 rounded">{exp.duration || exp.dates || `${exp.startDate} - ${exp.endDate}`}</span>
+                                    </div>
+                                    <div className="text-sm font-semibold text-sandbox-600 mb-2">{exp.company || exp.organization}</div>
+                                    {Array.isArray(exp.description) ? (
+                                        <ul className="list-disc ml-4 space-y-1">
+                                            {exp.description.map((desc: string, j: number) => (
+                                                <li key={j} className="text-sm text-gray-600 leading-snug pl-1 marker:text-gray-300">{desc}</li>
+                                            ))}
+                                        </ul>
+                                    ) : (
+                                        <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">{exp.description}</p>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Projects */}
+                {data.projects && (
+                    <div className="mb-6">
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 border-b border-gray-100 pb-1">Projects</h2>
+                        <div className="space-y-4">
+                            {data.projects.map((proj: any, i: number) => (
+                                <div key={i}>
+                                    <div className="flex justify-between items-baseline mb-1">
+                                        <h3 className="font-bold text-gray-900">{proj.name}</h3>
+                                        {proj.technologies && (
+                                            <span className="text-xs text-gray-500 italic">
+                                                {Array.isArray(proj.technologies) ? proj.technologies.join(', ') : proj.technologies}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm text-gray-600 leading-relaxed">{proj.description}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Skills */}
+                {data.skills && (
+                    <div className="mb-6">
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 border-b border-gray-100 pb-1">Skills</h2>
+                        <div className="flex flex-wrap gap-2">
+                            {(Array.isArray(data.skills) ? data.skills : data.skills.split(',')).map((skill: string, i: number) => (
+                                <span key={i} className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium border border-gray-200">
+                                    {skill.trim()}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Education */}
+                {data.education && (
+                    <div className="mb-6">
+                        <h2 className="text-sm font-bold uppercase tracking-widest text-gray-500 mb-3 border-b border-gray-100 pb-1">Education</h2>
+                        <div className="space-y-3">
+                            {data.education.map((edu: any, i: number) => (
+                                <div key={i} className="flex justify-between items-start">
+                                    <div>
+                                        <div className="font-bold text-gray-900">{edu.institution || edu.school}</div>
+                                        <div className="text-sm text-gray-600">{edu.degree}</div>
+                                    </div>
+                                    <div className="text-xs font-bold text-gray-500">{edu.year || edu.dates}</div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
+        );
+    } catch (e) {
+        // Fallback for plain text
+        return (
+            <div className="bg-gray-50 rounded-xl p-6 font-mono text-xs text-gray-600 whitespace-pre-wrap border border-gray-200 shadow-inner h-96 overflow-y-auto">
+                {content}
+            </div>
+        );
+    }
+};
+
+const getSkillsFromResume = (content: string): string[] => {
+    if (!content) return [];
+    let data: any;
+    try {
+        data = JSON.parse(content);
+    } catch (e) {
+        try {
+            const sanitized = content
+                .replace(/None/g, 'null')
+                .replace(/True/g, 'true')
+                .replace(/False/g, 'false');
+            data = new Function('return ' + sanitized)();
+        } catch (e2) {
+            return [];
+        }
+    }
+
+    if (!data || typeof data !== 'object') return [];
+
+    if (Array.isArray(data.skills)) return data.skills;
+    if (typeof data.skills === 'string') return data.skills.split(',').map((s: string) => s.trim());
+
+    return [];
+};
 
 const SANDBOX_API = 'http://localhost:8001'
 const API_KEY = 'sandbox_demo_key_2026'
@@ -88,6 +270,7 @@ function App() {
     const [submitting, setSubmitting] = useState(false)
     const [addingCompany, setAddingCompany] = useState(false)
     const [resumeFile, setResumeFile] = useState<string | null>(null)
+    const [expandedSkills, setExpandedSkills] = useState<Record<string, boolean>>({})
 
     const fetchJobs = async (pageToFetch = 1, append = false, currentSearch = searchTerm) => {
         try {
@@ -732,9 +915,10 @@ function App() {
 
                                 <div className="border-t border-gray-100 pt-8">
                                     <h3 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-4">Tailored Resume Artifact</h3>
-                                    <div className="bg-gray-50 rounded-xl p-6 font-mono text-xs text-gray-600 whitespace-pre-wrap border border-gray-200 shadow-inner h-96 overflow-y-auto">
-                                        {selectedApplication.applicant?.resume_text}
-                                    </div>
+                                    <ResumeViewer
+                                        content={selectedApplication.applicant?.resume_text}
+                                        candidateName={selectedApplication.applicant?.applicant_name}
+                                    />
                                 </div>
 
                                 {selectedApplication.applicant?.cover_letter && (
@@ -990,12 +1174,32 @@ function App() {
                                             <div className="mt-4 bg-gray-900 rounded-lg p-3 overflow-hidden">
                                                 <div className="text-[10px] text-sandbox-400 uppercase font-bold tracking-widest mb-2 opacity-50">Transmitted Skills</div>
                                                 <div className="flex flex-wrap gap-1.5">
-                                                    {(app.applicant?.resume_text?.substring(0, 100) || '').split(' ').slice(0, 8).map((word: string, i: number) => (
-                                                        <span key={i} className="text-[10px] text-white/70 bg-white/10 px-1.5 py-0.5 rounded">
-                                                            {word.replace(/[^a-zA-Z]/g, '')}
-                                                        </span>
-                                                    ))}
-                                                    <span className="text-[10px] text-white/30 px-1.5 py-0.5">... [Grounding Verified Artifact]</span>
+                                                    {(() => {
+                                                        const skills = getSkillsFromResume(app.applicant?.resume_text || '');
+                                                        const isExpanded = expandedSkills[app.id] || false;
+
+                                                        if (skills.length > 0) {
+                                                            const displayedSkills = isExpanded ? skills : skills.slice(0, 8);
+                                                            return (
+                                                                <>
+                                                                    {displayedSkills.map((skill, i) => (
+                                                                        <span key={i} className="text-[10px] text-white/70 bg-white/10 px-1.5 py-0.5 rounded">
+                                                                            {skill}
+                                                                        </span>
+                                                                    ))}
+                                                                    {skills.length > 8 && (
+                                                                        <button
+                                                                            onClick={() => setExpandedSkills(prev => ({ ...prev, [app.id]: !isExpanded }))}
+                                                                            className="text-[10px] text-white/50 px-1.5 py-0.5 hover:text-white hover:bg-white/10 rounded transition-colors cursor-pointer"
+                                                                        >
+                                                                            {isExpanded ? 'Show less' : `+${skills.length - 8} more`}
+                                                                        </button>
+                                                                    )}
+                                                                </>
+                                                            );
+                                                        }
+                                                        return <span className="text-[10px] text-gray-500 italic">No explicit skills data detected</span>;
+                                                    })()}
                                                 </div>
                                             </div>
                                         </div>

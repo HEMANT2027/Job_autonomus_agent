@@ -1,11 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
+import api from '../services/api';
 import { Search, MapPin, DollarSign, CheckCircle } from 'lucide-react';
-
-// API Configuration
-const API_BASE = '/api/v1/student';
-const JOBS_API = '/api/jobs';
 
 export default function JobSearchPage() {
     const [profile, setProfile] = useState<any>(null);
@@ -45,7 +41,7 @@ export default function JobSearchPage() {
 
     const fetchPolicy = async () => {
         try {
-            const res = await axios.get('/api/v1/policy/');
+            const res = await api.getPolicy();
             setPolicy(res.data);
             if (res.data.discovery_min_match_score) {
                 setValue('discovery_min_match_score', res.data.discovery_min_match_score);
@@ -57,7 +53,7 @@ export default function JobSearchPage() {
 
     const fetchDiscoveryStatus = async () => {
         try {
-            const res = await axios.get(`${JOBS_API}/discovery/status`);
+            const res = await api.getDiscoveryStatus();
             setDiscoveryStatus(res.data);
         } catch (err) {
             console.error('Failed to load discovery status', err);
@@ -66,7 +62,7 @@ export default function JobSearchPage() {
 
     const fetchQueueCount = async () => {
         try {
-            const res = await axios.get(`${JOBS_API}/queue/stats`);
+            const res = await api.getQueueStats();
             if (res.data && typeof res.data.count === 'number') {
                 setQueueCount(res.data.count);
             }
@@ -79,7 +75,7 @@ export default function JobSearchPage() {
         if (!policy) return;
         try {
             const newVal = !policy.auto_discovery_enabled;
-            await axios.post('/api/v1/policy/set', { auto_discovery_enabled: newVal });
+            await api.updatePolicy({ auto_discovery_enabled: newVal });
             setPolicy((prev: any) => ({ ...prev, auto_discovery_enabled: newVal }));
             fetchDiscoveryStatus(); // Force update status
         } catch (err) {
@@ -91,7 +87,7 @@ export default function JobSearchPage() {
         try {
             const score = parseFloat(val);
             if (!isNaN(score)) {
-                await axios.post('/api/v1/policy/set', { discovery_min_match_score: score });
+                await api.updatePolicy({ discovery_min_match_score: score });
                 setPolicy((prev: any) => ({ ...prev, discovery_min_match_score: score }));
             }
         } catch (err) {
@@ -101,10 +97,9 @@ export default function JobSearchPage() {
 
     const fetchProfile = async () => {
         try {
-            const res = await axios.get(`${API_BASE}/profile`);
+            const res = await api.getProfile();
             if (res.data) {
                 setProfile(res.data);
-                // Pre-fill form values just in case we need them
                 if (res.data.skills) {
                     setValue('required_skills', res.data.skills.join(', '));
                 }
@@ -117,7 +112,7 @@ export default function JobSearchPage() {
     const handleDeleteQueue = async () => {
         if (!confirm('Are you sure you want to delete ALL currently queued jobs? This cannot be undone.')) return;
         try {
-            await axios.delete(`${JOBS_API}/queue`);
+            await api.clearQueue();
             setQueueCount(0);
         } catch (err) {
             console.error('Failed to clear queue', err);
@@ -130,23 +125,19 @@ export default function JobSearchPage() {
         setSearchResults([]);
 
         try {
-            // Use profile data directly since filters are removed
             const skills = profile?.skills || [];
-
-            // 1. Search and store jobs from sandbox
             const searchPayload = {
                 required_skills: skills,
-                preferred_locations: [], // Could default to something or leave empty
+                preferred_locations: [],
                 remote_only: false,
                 visa_sponsorship_required: false,
                 min_salary: null,
             };
 
-            const searchRes = await axios.post(`${JOBS_API}/search`, searchPayload);
+            const searchRes = await api.searchJobs(searchPayload);
 
             if (searchRes.data.success) {
                 setRanking(true);
-                // 2. Rank the jobs
                 const rankPayload = {
                     profile_data: profile || {},
                     remote_only: false,
@@ -156,7 +147,7 @@ export default function JobSearchPage() {
                     auto_queue: false
                 };
 
-                const rankRes = await axios.post(`${JOBS_API}/rank`, rankPayload);
+                const rankRes = await api.rankJobs(rankPayload);
                 setSearchResults(rankRes.data.ranked_jobs);
             }
         } catch (err) {
@@ -170,7 +161,7 @@ export default function JobSearchPage() {
 
     const addToQueue = async (job: any) => {
         try {
-            const res = await axios.post(`${JOBS_API}/queue/${job.id}`);
+            const res = await api.addToQueue(job.id);
             if (res.data.success) {
                 alert(`Successfully added ${job.title} to your application queue!`);
                 setQueueCount(prev => prev + 1);

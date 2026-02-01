@@ -258,6 +258,36 @@ export const api = {
 
     // Audit
     getApplicationAudit: (applicationId: string) => apiClient.get<AuditLog[]>(`/api/v1/audit/application/${applicationId}`),
+
+    // Policy
+    getPolicy: () => apiClient.get('/api/v1/policy/'),
+    updatePolicy: (data: any) => apiClient.post('/api/v1/policy/set', data),
+
+    // Advanced Job Actions (Discovery & Ranking)
+    getDiscoveryStatus: () => apiClient.get('/api/jobs/discovery/status'),
+    getQueueStats: () => apiClient.get<{ count: number }>('/api/jobs/queue/stats'),
+    clearQueue: () => apiClient.delete('/api/jobs/queue'),
+    searchJobs: (payload: any) => apiClient.post('/api/jobs/search', payload),
+    rankJobs: (payload: any) => apiClient.post('/api/jobs/rank', payload),
+    addToQueue: (jobId: string) => apiClient.post(`/api/jobs/queue/${jobId}`),
+
+    // Student / Artifacts
+    uploadResume: (formData: FormData) => apiClient.post('/api/v1/student/upload-resume', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' }
+    }),
+    extractProfile: (resumeId: string) => apiClient.post('/api/v1/student/extract-profile', { resume_id: resumeId }),
+    generateBullets: (profileData: any) => apiClient.post('/api/v1/student/generate-bullets', {
+        profile_data: profileData,
+        save_to_bank: true
+    }),
+    generateAnswers: (profileData: any) => apiClient.post('/api/v1/student/generate-answers', {
+        profile_data: profileData,
+        save_to_library: true
+    }),
+    buildProofPack: (profileData: any) => apiClient.post('/api/v1/student/build-proof-pack', {
+        profile_data: profileData,
+        save_to_pack: true
+    }),
 }
 
 export default api

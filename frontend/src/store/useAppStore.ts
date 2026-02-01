@@ -1,10 +1,12 @@
 
 import { create } from 'zustand'
-import api, { StudentProfile, ApplicationStats } from '../services/api'
+import api, { StudentProfile, ApplicationStats, BatchStatus, TrackerSummary } from '../services/api'
 
 interface AppState {
     profile: StudentProfile | null
     stats: ApplicationStats | null
+    batchStatus: BatchStatus | null
+    trackerSummary: TrackerSummary | null
     isLoading: boolean
     error: string | null
 
@@ -16,30 +18,44 @@ interface AppState {
     // Actions
     fetchInitialData: () => Promise<void>
     setProfile: (profile: StudentProfile | null) => void
+    refreshBatchStatus: () => Promise<void>
 }
 
 export const useAppStore = create<AppState>((set) => ({
     profile: null,
     stats: null,
+    batchStatus: null,
+    trackerSummary: null,
     isLoading: false,
     error: null,
 
     hasProfile: false,
     hasAppliedOnce: false,
-    hasSavedJob: false, // Could be derived from stats or job list
+    hasSavedJob: false,
 
     setProfile: (profile) => set({
         profile,
         hasProfile: !!profile
     }),
 
+    refreshBatchStatus: async () => {
+        try {
+            const res = await api.getBatchStatus()
+            if (res.data) set({ batchStatus: res.data })
+        } catch (err) {
+            console.error('Failed to refresh batch status', err)
+        }
+    },
+
     fetchInitialData: async () => {
         set({ isLoading: true, error: null })
         try {
             // Parallel fetch
-            const [profileRes, statsRes] = await Promise.allSettled([
+            const [profileRes, statsRes, batchRes, trackerRes] = await Promise.allSettled([
                 api.getProfile(),
-                api.getApplicationStats()
+                api.getApplicationStats(),
+                api.getBatchStatus(),
+                api.getTrackerSummary()
             ])
 
             let profile = null
@@ -56,10 +72,22 @@ export const useAppStore = create<AppState>((set) => ({
                 hasAppliedOnce = stats.total > 0
             }
 
+            let batchStatus = null
+            if (batchRes.status === 'fulfilled' && batchRes.value.data) {
+                batchStatus = batchRes.value.data
+            }
+
+            let trackerSummary = null
+            if (trackerRes.status === 'fulfilled' && trackerRes.value.data) {
+                trackerSummary = trackerRes.value.data
+            }
+
             set({
                 profile,
                 hasProfile,
                 stats,
+                batchStatus,
+                trackerSummary,
                 hasAppliedOnce,
                 isLoading: false
             })

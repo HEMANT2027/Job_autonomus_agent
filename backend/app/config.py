@@ -53,5 +53,6 @@ class Settings(BaseSettings):
 
 
 # Create settings instance on module load
+# Create settings instance on module load
 settings = Settings()
 
