@@ -36,6 +36,7 @@ class DiscoveryState:
 _state = DiscoveryState()
 _lock = threading.Lock()
 _stop_event = threading.Event()
+_trigger_event = threading.Event()
 
 # ============================================================
 # Service Control
@@ -78,6 +79,11 @@ def stop_auto_discovery_service():
         _state.last_run_status = "stopped"
     logger.info("Auto discovery service stopping...")
 
+def trigger_immediate_discovery():
+    """Signals the worker to run a discovery cycle immediately."""
+    logger.info("Immediate auto discovery triggered")
+    _trigger_event.set()
+
 # ============================================================
 # Worker Logic
 # ============================================================
@@ -89,6 +95,12 @@ def _discovery_worker():
     
     while not _stop_event.is_set():
         try:
+            # Wait for trigger OR timeout (600s = 10 mins)
+            triggered = _trigger_event.wait(timeout=600)
+            if triggered:
+                _trigger_event.clear()
+                logger.info("Worker: Processing immediate discovery trigger")
+            
             # DEBUG: Log start of loop
             debug_path = Path(__file__).parent.parent.parent / "data/debug_discovery.log"
             with open(debug_path, "a") as f:
@@ -96,7 +108,9 @@ def _discovery_worker():
             
             # 1. Check Policy
             policy = get_policy()
-            if not policy.get("auto_discovery_enabled"):
+            
+            # If triggered (webhook), we bypass the auto_discovery_enabled check
+            if not triggered and not policy.get("auto_discovery_enabled"):
                 with _lock:
                     _state.last_run_status = "paused (policy disabled)"
                 time.sleep(10)  # Sleep briefly
@@ -175,6 +189,12 @@ def _discovery_worker():
                     added = add_to_apply_queue(to_queue)
                     queued_count = added
                     logger.info(f"Auto discovery: Queued {added} jobs (Threshold {threshold})")
+                    
+                    # --- NEW: Global Autonomy Auto-Start ---
+                    if added > 0 and policy.get("global_autonomy_enabled"):
+                        logger.info("Global Autonomy Active: Automatically starting batch processor...")
+                        from app.services.batch_processor import start_batch_processing
+                        start_batch_processing()
                 else:
                     logger.info("Auto discovery: No jobs met the threshold.")
             
@@ -194,10 +214,8 @@ def _discovery_worker():
             except Exception as ex:
                 pass
 
-            # Sleep Interval (Production: 10 minutes)
-            for _ in range(600):
-                if _stop_event.is_set(): break
-                time.sleep(1)
+            # Sleep Interval handled by .wait() at start of loop
+            pass
                 
         except Exception as e:
             logger.error(f"Auto discovery error: {e}")

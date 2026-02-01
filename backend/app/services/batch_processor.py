@@ -88,7 +88,8 @@ def get_batch_status() -> Dict[str, Any]:
             "current_status": _state.current_status,
             "logs": list(_state.logs), # Copy
             "start_time": _state.start_time,
-            "limit": _state.limit
+            "limit": _state.limit,
+            "total_jobs": _state.total_jobs
         }
 
 def start_batch_processing(student_id: Optional[str] = None, limit: Optional[int] = None) -> Dict[str, Any]:

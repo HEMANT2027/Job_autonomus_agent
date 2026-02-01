@@ -39,6 +39,7 @@ DEFAULT_POLICY = {
     "blocked_companies": [],
     "auto_discovery_enabled": False, # Is the autonomous job finder running?
     "discovery_min_match_score": 60, # Only queue jobs above this score
+    "global_autonomy_enabled": False, # Fully autonomous Discovery + Apply loop
     "last_discovery_run": None,
     "updated_at": datetime.utcnow().isoformat()
 }
@@ -108,6 +109,8 @@ def set_policy(updates: Dict[str, Any]) -> Dict[str, Any]:
             current["auto_discovery_enabled"] = bool(updates["auto_discovery_enabled"])
         if "discovery_min_match_score" in updates:
             current["discovery_min_match_score"] = float(updates["discovery_min_match_score"])
+        if "global_autonomy_enabled" in updates:
+            current["global_autonomy_enabled"] = bool(updates["global_autonomy_enabled"])
             
         current["updated_at"] = datetime.utcnow().isoformat()
         

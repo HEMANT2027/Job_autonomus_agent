@@ -9,8 +9,9 @@ import {
     TrendingUp,
     Shield
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import api, { Policy } from '../services/api'; // Import API services
 
 export default function LandingPage() {
     const {
@@ -20,9 +21,36 @@ export default function LandingPage() {
         fetchInitialData
     } = useAppStore();
 
+    const [policy, setPolicy] = useState<Policy | null>(null);
+    const [loadingPolicy, setLoadingPolicy] = useState(false);
+
     useEffect(() => {
         fetchInitialData();
+        loadPolicy();
     }, []);
+
+    const loadPolicy = async () => {
+        try {
+            const res = await api.getPolicy();
+            setPolicy(res.data);
+        } catch (err) {
+            console.error("Failed to load policy", err);
+        }
+    };
+
+    const toggleAutonomy = async () => {
+        if (!policy || loadingPolicy) return;
+        try {
+            setLoadingPolicy(true);
+            const newState = !policy.global_autonomy_enabled;
+            await api.updatePolicy({ global_autonomy_enabled: newState });
+            setPolicy({ ...policy, global_autonomy_enabled: newState });
+        } catch (err) {
+            console.error("Failed to update policy", err);
+        } finally {
+            setLoadingPolicy(false);
+        }
+    };
 
     const steps = [
         {
@@ -41,7 +69,7 @@ export default function LandingPage() {
         },
         {
             icon: <PlayCircle className="w-6 h-6 text-slate-900" />,
-            title: "Auto Apply",
+            title: "Arjun",
             description: "Autonomous batch processing.",
             link: "/apply/queue",
             completed: hasAppliedOnce
@@ -58,6 +86,42 @@ export default function LandingPage() {
                             <span className="w-2 h-2 rounded-full bg-slate-900 animate-pulse"></span>
                             Version 2.0 Now Live
                         </div>
+
+                        {/* Global Autonomy Toggle (Prominent) */}
+                        {policy && (
+                            <div className="mb-12 flex justify-center">
+                                <button
+                                    onClick={toggleAutonomy}
+                                    disabled={loadingPolicy}
+                                    className={`relative group flex items-center gap-4 px-8 py-4 rounded-2xl border-2 transition-all duration-300 ${policy.global_autonomy_enabled
+                                            ? 'bg-indigo-600 border-indigo-500 text-white shadow-xl shadow-indigo-200'
+                                            : 'bg-white border-slate-200 text-slate-500 hover:border-slate-300 hover:bg-slate-50'
+                                        }`}
+                                >
+                                    <div className={`w-14 h-8 flex items-center rounded-full p-1 transition-colors duration-300 ${policy.global_autonomy_enabled ? 'bg-black/20' : 'bg-slate-200'
+                                        }`}>
+                                        <div className={`w-6 h-6 rounded-full shadow-md transform transition-transform duration-300 ${policy.global_autonomy_enabled ? 'translate-x-6 bg-white' : 'translate-x-0 bg-white'
+                                            }`} />
+                                    </div>
+                                    <div className="text-left">
+                                        <div className={`text-xs font-bold uppercase tracking-widest ${policy.global_autonomy_enabled ? 'text-indigo-100' : 'text-slate-400'
+                                            }`}>
+                                            Global Autonomy Mode
+                                        </div>
+                                        <div className={`text-lg font-black ${policy.global_autonomy_enabled ? 'text-white' : 'text-slate-700'
+                                            }`}>
+                                            {policy.global_autonomy_enabled ? 'ACTIVE' : 'INACTIVE'}
+                                        </div>
+                                    </div>
+                                    {policy.global_autonomy_enabled && (
+                                        <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                                            <span className="relative inline-flex rounded-full h-3 w-3 bg-indigo-500"></span>
+                                        </span>
+                                    )}
+                                </button>
+                            </div>
+                        )}
                         <h1 className="text-5xl md:text-8xl font-black text-slate-900 mb-8 leading-[0.9] tracking-tight">
                             Job Hunt <br className="hidden md:block" />
                             <span className="text-slate-400">On Autopilot.</span>

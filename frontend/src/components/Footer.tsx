@@ -12,7 +12,7 @@ export default function Footer() {
                             <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200 shadow-xl shadow-slate-900/10">
                                 <Zap className="w-5 h-5 text-white fill-white" />
                             </div>
-                            <span className="text-2xl font-black text-slate-900 tracking-tight">AutoApply</span>
+                            <span className="text-2xl font-black text-slate-900 tracking-tight">Arjun</span>
                         </Link>
                         <p className="text-slate-500 text-sm max-w-sm leading-relaxed font-medium">
                             Autonomous AI agent that finds and applies to jobs for you. <br />
@@ -71,7 +71,7 @@ export default function Footer() {
                             </a>
                         </div>
                         <p className="text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
-                            &copy; {new Date().getFullYear()} AutoApply AI. All rights reserved.
+                            &copy; {new Date().getFullYear()} Arjun AI. All rights reserved.
                         </p>
                     </div>
                 </div>

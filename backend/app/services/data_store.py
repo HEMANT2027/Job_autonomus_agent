@@ -375,6 +375,10 @@ def get_application_stats() -> Dict[str, int]:
         status = app.get("status", "pending")
         if status in stats:
             stats[status] += 1
+        
+        # Aggregate submitted/active statuses into 'applied' for the dashboard summary
+        if status in ["submitted", "interviewing", "offered", "rejected"]:
+            stats["applied"] += 1
     
     return stats
 

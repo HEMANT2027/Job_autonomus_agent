@@ -2,17 +2,42 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import {
-    CheckCircleIcon,
-    XCircleIcon,
     ArrowPathIcon,
     ArrowDownTrayIcon,
     MagnifyingGlassIcon,
     DocumentTextIcon,
     XMarkIcon,
-    ArrowLeftIcon
+    ArrowLeftIcon,
+    ChatBubbleLeftRightIcon,
+    CalendarDaysIcon
 } from '@heroicons/react/24/outline'
-import api, { TrackerSummary, Application, AuditLog } from '../services/api'
+import { PaperAirplaneIcon } from '@heroicons/react/24/solid'
+import api, { TrackerSummary, Application, AuditLog, SandboxMessage } from '../services/api'
 import { useToast } from '../context/ToastContext'
+
+// Sandbox Feedback Types
+interface SandboxMeeting {
+    id: string
+    date: string
+    time: string
+    duration: number
+    meeting_type: string
+    notes?: string
+}
+
+interface SandboxFeedback {
+    id: string
+    job_id?: string
+    job_title: string
+    company: string
+    status: string
+    submitted_at: string
+    messages: SandboxMessage[]
+    meetings: SandboxMeeting[]
+    applicant?: {
+        applicant_name?: string
+    }
+}
 
 export default function TrackerPage() {
     const [summary, setSummary] = useState<TrackerSummary | null>(null)
@@ -29,10 +54,23 @@ export default function TrackerPage() {
     const [auditLogs, setAuditLogs] = useState<AuditLog[]>([])
     const [loadingAudit, setLoadingAudit] = useState(false)
 
+    // Sandbox Feedback
+    const [sandboxFeedback, setSandboxFeedback] = useState<SandboxFeedback[]>([])
+    const [selectedFeedback, setSelectedFeedback] = useState<SandboxFeedback | null>(null)
+    const [newMessage, setNewMessage] = useState('')
+    const [sendingMessage, setSendingMessage] = useState(false)
+
     const { showToast } = useToast()
 
     useEffect(() => {
         loadData()
+
+        // Start polling for sandbox feedback every 5 seconds
+        const interval = setInterval(() => {
+            loadSandboxFeedback()
+        }, 5000)
+
+        return () => clearInterval(interval)
     }, [])
 
     useEffect(() => {
@@ -44,12 +82,54 @@ export default function TrackerPage() {
             const sumRes = await api.getTrackerSummary()
             setSummary(sumRes.data)
             await loadApplications()
+            await loadSandboxFeedback()
         } catch (err) {
             setError('Failed to load tracker data')
             showToast('Failed to load tracker data', 'error')
             console.error(err)
         } finally {
             setLoading(false)
+        }
+    }
+
+    const loadSandboxFeedback = async () => {
+        try {
+            const res = await api.getSandboxFeedback()
+            const feedbackData = res.data || []
+            setSandboxFeedback(feedbackData)
+
+            // If a chat is open, update its state with the latest messages
+            if (selectedFeedback) {
+                const updated = feedbackData.find((f: SandboxFeedback) => f.id === selectedFeedback.id)
+                if (updated) {
+                    setSelectedFeedback(updated)
+                }
+            }
+
+            if (applications.length > 0 && feedbackData.length > 0) {
+                syncApplicationStatuses(applications, feedbackData)
+            }
+            return feedbackData
+        } catch (err) {
+            console.error('Failed to load sandbox feedback', err)
+            return []
+        }
+    }
+
+    const syncApplicationStatuses = async (apps: Application[], feedbackItems: SandboxFeedback[]) => {
+        for (const app of apps) {
+            const feedback = getSandboxFeedbackForApp(app, feedbackItems)
+            if (feedback && feedback.status && feedback.status !== app.status) {
+                const significantStatuses = ['interviewing', 'accepted', 'rejected']
+                if (significantStatuses.includes(feedback.status)) {
+                    try {
+                        await api.updateApplicationStatus(app.id, feedback.status)
+                        setApplications(prev => prev.map(a => a.id === app.id ? { ...a, status: feedback.status } : a))
+                    } catch (err) {
+                        console.error(`Failed to sync status for ${app.id}`, err)
+                    }
+                }
+            }
         }
     }
 
@@ -67,12 +147,34 @@ export default function TrackerPage() {
         }
     }
 
+    const getSandboxFeedbackForApp = (app: Application, feedbackList: SandboxFeedback[] = sandboxFeedback): SandboxFeedback | undefined => {
+        const sandboxId = app.submission_receipt?.application_id
+        if (sandboxId) {
+            const match = feedbackList.find(fb => fb.id === sandboxId)
+            if (match) return match
+        }
+
+        const jobId = app.submission_receipt?.job_id || app.job_id
+        if (jobId) {
+            const match = feedbackList.find(fb => fb.job_id === jobId)
+            if (match) return match
+        }
+
+        return feedbackList.find(fb => {
+            const fbTitle = fb.job_title?.toLowerCase().trim() || ""
+            const appTitle = app.job_title?.toLowerCase().trim() || ""
+            const fbCompany = fb.company?.toLowerCase().trim() || ""
+            const appCompany = app.company_name?.toLowerCase().trim() || ""
+            return fbTitle === appTitle && fbCompany === appCompany
+        })
+    }
+
     const handleRetry = async (appId: string) => {
         if (!confirm('Retry this application?')) return
         try {
             await api.retryApplication(appId)
             showToast('Application queued for retry', 'success')
-            loadData() // Reload to see status change
+            loadData()
         } catch (err) {
             showToast('Retry failed', 'error')
         }
@@ -87,7 +189,6 @@ export default function TrackerPage() {
             setAuditLogs(res.data)
         } catch (err) {
             console.error('Failed to load audit logs', err)
-            setAuditLogs([])
         } finally {
             setLoadingAudit(false)
         }
@@ -96,6 +197,32 @@ export default function TrackerPage() {
     const closeAudit = () => {
         setSelectedJobId(null)
         setAuditLogs([])
+    }
+
+    const handleSendMessage = async (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!selectedFeedback || !newMessage.trim() || sendingMessage) return
+
+        const sentMsg = newMessage.trim()
+        setSendingMessage(true)
+        try {
+            await api.sendMessageToSandbox(selectedFeedback.id, sentMsg)
+            setNewMessage('')
+            const feedbackData = await loadSandboxFeedback()
+
+            // Explicitly sync the selected feedback from the fresh data
+            const freshFeedback = feedbackData.find(f => f.id === selectedFeedback.id)
+            if (freshFeedback) {
+                setSelectedFeedback(freshFeedback)
+            }
+
+            showToast('Message sent', 'success')
+        } catch (err) {
+            console.error('Failed to send message', err)
+            showToast('Failed to send message', 'error')
+        } finally {
+            setSendingMessage(false)
+        }
     }
 
     const exportCSV = () => {
@@ -171,7 +298,7 @@ export default function TrackerPage() {
                                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                                     <p className="text-sm text-slate-500">Submitted Today</p>
                                     <p className="text-3xl font-bold text-slate-900">
-                                        {summary.recent_activity.filter(a => new Date(a.updated_at).toDateString() === new Date().toDateString()).length}
+                                        {summary.recent_activity.filter(a => a.updated_at && new Date(a.updated_at).toDateString() === new Date().toDateString()).length}
                                     </p>
                                 </div>
                                 <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
@@ -190,7 +317,7 @@ export default function TrackerPage() {
                                         type="text"
                                         placeholder="Search company or role..."
                                         className="pl-10 pr-4 py-2 border border-slate-300 rounded-lg w-full sm:w-64 focus:ring-1 focus:ring-slate-900 focus:border-slate-900 outline-none text-sm transition-all"
-                                        value={companyFilter} // Using companyFilter for search term as per logic
+                                        value={companyFilter}
                                         onChange={(e) => setCompanyFilter(e.target.value)}
                                     />
                                 </div>
@@ -220,7 +347,7 @@ export default function TrackerPage() {
                                             <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Role</th>
                                             <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Status</th>
                                             <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider">Date</th>
-                                            <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                                            <th className="px-6 py-4 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Chat</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-100 bg-white">
@@ -231,47 +358,77 @@ export default function TrackerPage() {
                                                 </td>
                                             </tr>
                                         ) : (
-                                            applications.map((app) => (
-                                                <tr key={app.id} className="hover:bg-slate-50 transition-colors group">
-                                                    <td className="px-6 py-4 font-medium text-slate-900">
-                                                        {app.company_name}
-                                                    </td>
-                                                    <td className="px-6 py-4 text-slate-600">
-                                                        {app.job_title}
-                                                    </td>
-                                                    <td className="px-6 py-4">
-                                                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-bold border ${app.status === 'submitted' ? 'bg-green-100 text-green-800 border-green-200' :
-                                                            app.status === 'failed' ? 'bg-red-100 text-red-800 border-red-200' :
-                                                                'bg-amber-100 text-amber-800 border-amber-200'
-                                                            }`}>
-                                                            {app.status.toUpperCase()}
-                                                        </span>
-                                                    </td>
-                                                    <td className="px-6 py-4 text-sm text-slate-500">
-                                                        {new Date(app.updated_at || Date.now()).toLocaleDateString()}
-                                                    </td>
-                                                    <td className="px-6 py-4 text-right">
-                                                        <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                            <button
-                                                                onClick={() => viewAudit(app.job_id || app.id)}
-                                                                className="text-slate-400 hover:text-slate-900 p-1"
-                                                                title="View Logs"
-                                                            >
-                                                                <DocumentTextIcon className="w-5 h-5" />
-                                                            </button>
-                                                            {app.status === 'failed' && (
+                                            applications.map((app) => {
+                                                const feedback = getSandboxFeedbackForApp(app)
+                                                const recruiterStatus = feedback?.status
+                                                const messageCount = feedback?.messages?.length || 0
+
+                                                const recruiterStatusColors: Record<string, string> = {
+                                                    'pending': 'bg-yellow-100 text-yellow-800',
+                                                    'interviewing': 'bg-purple-100 text-purple-800',
+                                                    'accepted': 'bg-green-100 text-green-800',
+                                                    'rejected': 'bg-red-100 text-red-800',
+                                                    'submitted': 'bg-blue-100 text-blue-800'
+                                                }
+
+                                                return (
+                                                    <tr key={app.id} className="hover:bg-slate-50 transition-colors group">
+                                                        <td className="px-6 py-4 font-medium text-slate-900">{app.company_name}</td>
+                                                        <td className="px-6 py-4 text-slate-600">{app.job_title}</td>
+                                                        <td className="px-6 py-4">
+                                                            <div className="flex flex-col gap-1">
+                                                                {recruiterStatus ? (
+                                                                    <span className={`px-2 py-0.5 text-[8px] font-black uppercase rounded-full w-fit tracking-tighter shadow-sm ${recruiterStatusColors[recruiterStatus] || 'bg-gray-100 text-gray-800'}`}>
+                                                                        {recruiterStatus}
+                                                                    </span>
+                                                                ) : (
+                                                                    <span className={`px-2 py-0.5 text-[8px] font-black uppercase rounded-full w-fit tracking-tighter opacity-50 bg-slate-100 text-slate-500`}>
+                                                                        {app.status}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                        <td className="px-6 py-4 text-sm text-slate-500">
+                                                            {new Date(app.updated_at || Date.now()).toLocaleDateString()}
+                                                        </td>
+                                                        <td className="px-6 py-4 text-right">
+                                                            <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                                {feedback ? (
+                                                                    <button
+                                                                        onClick={() => setSelectedFeedback(feedback)}
+                                                                        className="flex items-center gap-1.5 px-3 py-1 bg-blue-600 text-white hover:bg-blue-700 rounded-lg text-[10px] font-bold transition-all shadow-md active:scale-95 border border-blue-500"
+                                                                        title="Open Chat"
+                                                                    >
+                                                                        <ChatBubbleLeftRightIcon className="w-3.5 h-3.5" />
+                                                                        Chat {messageCount > 0 && <span className="bg-white text-blue-600 rounded-full px-1 min-w-[1rem]">{messageCount}</span>}
+                                                                    </button>
+                                                                ) : (
+                                                                    <span className="text-[10px] text-slate-400 italic mr-2 border border-slate-200 px-2 py-1 rounded">Tracking...</span>
+                                                                )}
+
+                                                                <div className="h-4 w-px bg-slate-200 mx-1"></div>
+
                                                                 <button
-                                                                    onClick={() => handleRetry(app.id)}
-                                                                    className="text-red-400 hover:text-red-600 p-1"
-                                                                    title="Retry Application"
+                                                                    onClick={() => viewAudit(app.job_id || app.id)}
+                                                                    className="text-slate-400 hover:text-slate-900 p-1.5 hover:bg-slate-100 rounded-md transition-colors"
+                                                                    title="View Audit Logs"
                                                                 >
-                                                                    <ArrowPathIcon className="w-5 h-5" />
+                                                                    <DocumentTextIcon className="w-5 h-5" />
                                                                 </button>
-                                                            )}
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            ))
+                                                                {app.status === 'failed' && (
+                                                                    <button
+                                                                        onClick={() => handleRetry(app.id)}
+                                                                        className="text-red-400 hover:text-red-600 p-1.5 hover:bg-red-50 rounded-md transition-colors"
+                                                                        title="Retry Application"
+                                                                    >
+                                                                        <ArrowPathIcon className="w-5 h-5" />
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            })
                                         )}
                                     </tbody>
                                 </table>
@@ -284,16 +441,14 @@ export default function TrackerPage() {
             {/* Audit Log Modal */}
             {selectedJobId && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm">
-                    {/* Modal Overlay */}
                     <div className="absolute inset-0" onClick={closeAudit}></div>
-
-                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden animate-bounce-subtle z-10">
+                    <div className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[85vh] flex flex-col overflow-hidden z-10 animate-bounce-subtle">
                         <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
                             <div>
                                 <h3 className="text-lg font-bold text-slate-900">Application Audit Trail</h3>
                                 <p className="text-xs text-slate-500 mt-1">Tracing execution steps for this job.</p>
                             </div>
-                            <button onClick={closeAudit} className="text-slate-400 hover:text-slate-600 hover:bg-slate-200 p-2 rounded-full transition-colors">
+                            <button onClick={closeAudit} className="text-slate-400 hover:text-slate-600 p-2 rounded-full transition-colors">
                                 <XMarkIcon className="w-6 h-6" />
                             </button>
                         </div>
@@ -333,12 +488,117 @@ export default function TrackerPage() {
                             )}
                         </div>
                         <div className="p-4 border-t border-slate-100 flex justify-end bg-slate-50">
-                            <button
-                                onClick={closeAudit}
-                                className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 hover:border-slate-300 transition-colors text-sm font-medium shadow-sm"
-                            >
+                            <button onClick={closeAudit} className="px-4 py-2 bg-white border border-slate-200 text-slate-700 rounded-lg hover:bg-slate-50 text-sm font-medium shadow-sm">
                                 Close
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Two-Way Chat Modal */}
+            {selectedFeedback && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-md">
+                    <div className="absolute inset-0" onClick={() => setSelectedFeedback(null)}></div>
+                    <div className="inline-block align-bottom bg-white rounded-2xl text-left shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-xl sm:w-full h-[80vh] flex flex-col z-50 overflow-hidden">
+                        {/* Modal Header */}
+                        <div className="px-6 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <div>
+                                <h3 className="text-xl font-black text-slate-900 leading-tight">
+                                    {selectedFeedback.company}
+                                </h3>
+                                <p className="text-xs text-slate-500 font-bold uppercase tracking-widest mt-0.5">
+                                    {selectedFeedback.job_title}
+                                </p>
+                            </div>
+                            <div className="flex items-center gap-3">
+                                <button
+                                    onClick={loadSandboxFeedback}
+                                    className="text-slate-400 hover:text-blue-600 p-2 hover:bg-white rounded-full transition-colors shadow-sm"
+                                    title="Refresh Content"
+                                >
+                                    <ArrowPathIcon className="w-5 h-5" />
+                                </button>
+                                <button onClick={() => setSelectedFeedback(null)} className="text-slate-400 hover:text-red-500 p-2 hover:bg-white rounded-full transition-colors shadow-sm">
+                                    <XMarkIcon className="w-6 h-6" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Chat Content Area */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white custom-scrollbar">
+                            {/* Meeting Notification (if any) */}
+                            {selectedFeedback.meetings?.map((mtg) => (
+                                <div key={mtg.id} className="p-4 rounded-2xl bg-indigo-50 border border-indigo-100 flex items-start gap-4 shadow-sm">
+                                    <div className="bg-indigo-600 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-200">
+                                        <CalendarDaysIcon className="w-6 h-6" />
+                                    </div>
+                                    <div>
+                                        <h4 className="text-sm font-black text-indigo-900 uppercase tracking-tight">Meeting Scheduled</h4>
+                                        <p className="text-xs text-indigo-700 mt-1 font-medium">
+                                            {mtg.meeting_type.replace('_', ' ')}: <b className="text-indigo-900">{mtg.date}</b> at <b className="text-indigo-900">{mtg.time}</b> ({mtg.duration} min)
+                                        </p>
+                                        {mtg.notes && <p className="text-[10px] text-indigo-500 mt-2 bg-white/60 p-3 rounded-lg border border-indigo-50 italic font-serif">"{mtg.notes}"</p>}
+                                    </div>
+                                </div>
+                            ))}
+
+                            {/* Messages */}
+                            {(!selectedFeedback.messages || selectedFeedback.messages.length === 0) ? (
+                                <div className="flex flex-col items-center justify-center h-full opacity-30">
+                                    <ChatBubbleLeftRightIcon className="w-20 h-20 text-slate-300" />
+                                    <p className="mt-4 text-slate-500 font-bold uppercase tracking-widest text-xs">No activity yet</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {selectedFeedback.messages.map((msg) => (
+                                        <div key={msg.id} className={`flex ${msg.sender === 'applicant' ? 'justify-end' : 'justify-start'}`}>
+                                            <div className={`max-w-[85%] rounded-2xl p-4 shadow-sm text-sm ${msg.sender === 'applicant'
+                                                ? 'bg-slate-900 text-white rounded-tr-none'
+                                                : 'bg-slate-100 text-slate-800 rounded-tl-none border border-slate-200'
+                                                }`}>
+                                                <div className="flex flex-col">
+                                                    <p className="font-medium leading-relaxed">{msg.content}</p>
+                                                    <span className={`text-[9px] mt-2 self-end font-bold uppercase tracking-tighter opacity-60 ${msg.sender === 'applicant' ? 'text-slate-300' : 'text-slate-500'}`}>
+                                                        {new Date(msg.sent_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Chat Input */}
+                        <div className="p-6 border-t border-slate-100 bg-slate-50">
+                            <form onSubmit={handleSendMessage} className="flex gap-3">
+                                <input
+                                    type="text"
+                                    placeholder="Reply to the recruiter..."
+                                    className="flex-1 rounded-xl border-slate-200 shadow-sm focus:border-slate-900 focus:ring-slate-900 text-sm py-3 px-5 transition-all outline-none"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    disabled={sendingMessage}
+                                />
+                                <button
+                                    type="submit"
+                                    disabled={!newMessage.trim() || sendingMessage}
+                                    className={`p-3 rounded-xl shadow-xl flex items-center justify-center transition-all ${!newMessage.trim() || sendingMessage
+                                        ? 'bg-slate-200 text-slate-400 cursor-not-allowed shadow-none'
+                                        : 'bg-slate-900 text-white hover:bg-black active:scale-95 shadow-slate-900/20'
+                                        }`}
+                                >
+                                    {sendingMessage ? (
+                                        <ArrowPathIcon className="w-5 h-5 animate-spin" />
+                                    ) : (
+                                        <PaperAirplaneIcon className="w-5 h-5" />
+                                    )}
+                                </button>
+                            </form>
+                            <p className="text-[9px] text-slate-400 text-center mt-3 font-bold uppercase tracking-[0.2em]">
+                                Encrypted Direct Message Link
+                            </p>
                         </div>
                     </div>
                 </div>

@@ -1,7 +1,7 @@
 {
   "answers": [
     {
-      "id": "0abf1f3f-59fd-46af-9501-d8e7575352b4",
+      "id": "90ef963a-b893-4bb2-b5a0-4a3426c63bd7",
       "category": "work_authorization",
       "question": "What is your work authorization status?",
       "question_variants": [
@@ -9,14 +9,14 @@
         "Do you require visa sponsorship?",
         "What is your work permit status?"
       ],
-      "answer": "I am authorized to work in [EDIT] country/region.",
+      "answer": "I am authorized to work in [COUNTRY/REGION].",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T14:22:47.778450",
-      "updated_at": "2026-02-01T14:22:47.788757"
+      "created_at": "2026-02-01T17:07:51.658103",
+      "updated_at": "2026-02-01T17:07:51.660391"
     },
     {
-      "id": "e93a2a20-20c3-44ae-bfb6-7ca0c0bf0aca",
+      "id": "59864919-41e4-4d72-8c59-56a97d9ecd72",
       "category": "availability",
       "question": "What is your availability/start date?",
       "question_variants": [
@@ -24,14 +24,14 @@
         "What is your notice period?",
         "How soon can you join?"
       ],
-      "answer": "I am available to start [EDIT] and am willing to discuss specific start dates.",
+      "answer": "I am available to start immediately.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T14:22:47.779177",
-      "updated_at": "2026-02-01T14:22:47.788802"
+      "created_at": "2026-02-01T17:07:51.658190",
+      "updated_at": "2026-02-01T17:07:51.660414"
     },
     {
-      "id": "8bc4ae5a-6c67-4cb3-b0c2-e9f894d288cc",
+      "id": "68a2ccb3-a0f9-4c73-a593-15b279010b31",
       "category": "relocation",
       "question": "Are you willing to relocate?",
       "question_variants": [
@@ -39,14 +39,14 @@
         "Are you open to relocation?",
         "Can you relocate to our office location?"
       ],
-      "answer": "I am [EDIT] willing to relocate for the right opportunity.",
+      "answer": "I am willing to relocate for the right opportunity.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T14:22:47.779239",
-      "updated_at": "2026-02-01T14:22:47.788817"
+      "created_at": "2026-02-01T17:07:51.658229",
+      "updated_at": "2026-02-01T17:07:51.660422"
     },
     {
-      "id": "ed410c34-3437-4240-81ed-97335c0a301d",
+      "id": "08e082e7-94e8-4337-89a0-854b0ed88f6d",
       "category": "salary_expectations",
       "question": "What are your salary expectations?",
       "question_variants": [
@@ -54,14 +54,14 @@
         "What salary range are you looking for?",
         "What are your compensation requirements?"
       ],
-      "answer": "My salary expectations are [EDIT] competitive with industry standards.",
-      "needs_editing": false,
-      "is_template": false,
-      "created_at": "2026-02-01T14:22:47.779275",
-      "updated_at": "2026-02-01T14:22:47.788828"
+      "answer": "[EDIT] Based on my research, I am expecting a salary range of [RANGE] for a [ROLE] position.",
+      "needs_editing": true,
+      "is_template": true,
+      "created_at": "2026-02-01T17:07:51.658258",
+      "updated_at": "2026-02-01T17:07:51.660429"
     },
     {
-      "id": "0ec56c62-201f-4249-acca-2c8d4ca6a9c3",
+      "id": "a83918a0-c30d-4048-b31c-6c9059f307f4",
       "category": "why_company",
       "question": "Why do you want to work for this company?",
       "question_variants": [
@@ -69,39 +69,39 @@
         "What attracts you to our company?",
         "Why should we hire you?"
       ],
-      "answer": "I am excited about the opportunity to join [COMPANY_NAME] as [ROLE] because [COMPANY_NAME] is a [EDIT] leader in [EDIT] industry/field, and I am drawn to the company's [EDIT] mission/values.",
+      "answer": "[COMPANY_NAME] is a company that I am excited to join because [ROLE] is a [COMPANY_NAME] is a company that I am excited to join because [COMPANY_NAME] aligns with my values and goals, and I am impressed by the company's [COMPANY_NAME] is a company that I am excited to join because [COMPANY_NAME] is a leader in the [INDUSTRY] industry, and I am eager to contribute my skills and experience to the team.",
       "needs_editing": true,
       "is_template": true,
-      "created_at": "2026-02-01T14:22:47.779310",
-      "updated_at": "2026-02-01T14:22:47.788838"
+      "created_at": "2026-02-01T17:07:51.658286",
+      "updated_at": "2026-02-01T17:07:51.660440"
     },
     {
-      "id": "daffac03-2f21-4c8c-9308-d785914673cb",
+      "id": "3bf01d11-1634-4bf3-9dd2-377b43daddec",
       "category": "strengths",
       "question": "What are your greatest strengths?",
       "question_variants": [
         "What do you consider your key strengths?",
         "What makes you a good candidate?"
       ],
-      "answer": "My greatest strengths include [EDIT] strong problem-solving skills, [EDIT] ability to learn quickly, and [EDIT] excellent communication skills.",
+      "answer": "My greatest strengths are my [EDIT] skills in [SKILL1], [SKILL2], and [SKILL3], which have been developed through my [EDIT] experience in [EXPERIENCE1], [EXPERIENCE2], and [EXPERIENCE3].",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T14:22:47.779344",
-      "updated_at": "2026-02-01T14:22:47.788849"
+      "created_at": "2026-02-01T17:07:51.658312",
+      "updated_at": "2026-02-01T17:07:51.660447"
     },
     {
-      "id": "e1ff23e0-e143-4877-84b8-db38265bc5c1",
+      "id": "68664a6c-abec-44d0-a7cc-dfd5fb7f9fc2",
       "category": "career_goals",
       "question": "What are your career goals?",
       "question_variants": [
         "Where do you see yourself in 5 years?",
         "What are your long-term career aspirations?"
       ],
-      "answer": "My long-term career goals include [EDIT] advancing in my current field, [EDIT] transitioning to a new field, or [EDIT] starting my own business.",
-      "needs_editing": false,
-      "is_template": false,
-      "created_at": "2026-02-01T14:22:47.779395",
-      "updated_at": "2026-02-01T14:22:47.788859"
+      "answer": "My career goals are to [EDIT] become a [ROLE] in a [INDUSTRY] company, where I can [EDIT] utilize my skills and experience to make a meaningful contribution and continue to grow and develop as a professional.",
+      "needs_editing": true,
+      "is_template": true,
+      "created_at": "2026-02-01T17:07:51.658339",
+      "updated_at": "2026-02-01T17:07:51.660453"
     }
   ]
 }

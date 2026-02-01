@@ -9,8 +9,7 @@ import {
     ChartBarIcon,
     UserCircleIcon,
     Bars3Icon,
-    XMarkIcon,
-    SparklesIcon
+    XMarkIcon
 } from '@heroicons/react/24/outline';
 
 interface LayoutProps {
@@ -45,10 +44,11 @@ export default function Layout({ children }: LayoutProps) {
                 {/* Brand Header */}
                 <Link to="/" className="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900 box-content hover:bg-slate-800 transition-colors">
                     <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shadow-white/10">
-                            <SparklesIcon className="w-5 h-5 text-slate-900" />
-                        </div>
-                        <span className="text-xl font-bold tracking-tight text-white">AutoApply</span>
+                        <img
+                            src="/logo.png"
+                            alt="Arjun AI"
+                            className="h-10 w-auto object-contain invert brightness-0"
+                        />
                     </div>
                     <button onClick={(e) => { e.preventDefault(); setSidebarOpen(false); }} className="ml-auto md:hidden text-slate-400 hover:text-white transition-colors">
                         <XMarkIcon className="w-6 h-6" />
@@ -116,10 +116,7 @@ export default function Layout({ children }: LayoutProps) {
                         <Bars3Icon className="w-6 h-6" />
                     </button>
                     <span className="font-bold text-slate-900 flex items-center gap-2">
-                        <div className="w-6 h-6 rounded bg-slate-900 flex items-center justify-center">
-                            <SparklesIcon className="w-3.5 h-3.5 text-white" />
-                        </div>
-                        AutoApply
+                        <img src="/logo.png" alt="Logo" className="h-8 w-auto object-contain" />
                     </span>
                     <div className="w-8"></div> {/* Spacer for balance */}
                 </header>

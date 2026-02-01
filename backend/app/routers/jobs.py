@@ -371,6 +371,19 @@ async def rank_jobs(request: JobRankRequest):
         ranked_jobs=top_matches,
         queued_count=queued_count
     )
+    
+    # Check for global autonomy and trigger batch if needed
+    if request.auto_queue and queued_count > 0:
+        from app.services.apply_policy import get_policy
+        policy = get_policy()
+        if policy.get("global_autonomy_enabled", False):
+            # Fire and forget batch start
+            from app.services.batch_processor import start_batch_processing
+            try:
+                start_batch_processing()
+                logger.info("Auto-triggered batch processing after ranking")
+            except Exception as e:
+                logger.error(f"Failed to auto-trigger batch: {e}")
 
 @router.post("/queue/{job_id}")
 async def queue_job_endpoint(job_id: str):

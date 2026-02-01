@@ -57,7 +57,7 @@ def get_tracker_summary() -> Dict[str, Any]:
     failed_count = status_counts.get("failed", 0)
     denom = submitted_count + failed_count
     if denom > 0:
-        success_rate = round((submitted_count / denom) * 100, 1)
+        success_rate = round(submitted_count / denom, 3)
 
     # Recent Activity (Last 5)
     sorted_apps = sorted(apps, key=lambda x: x.get("updated_at", ""), reverse=True)

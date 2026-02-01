@@ -123,6 +123,13 @@ export interface Application {
     tags: string[]
     created_at?: string
     updated_at?: string
+    submission_receipt?: {
+        application_id: string
+        job_id: string
+        status: string
+        submitted_at: string
+        message: string
+    }
 }
 
 export interface ApplicationStats {
@@ -153,6 +160,7 @@ export interface BatchStatus {
     processed_count: number
     success_count: number
     failed_count: number
+    total_jobs: number
     logs: string[]
 }
 
@@ -164,6 +172,13 @@ export interface AuditLog {
     details: any
 }
 
+export interface SandboxMessage {
+    id: string
+    sender: 'recruiter' | 'applicant'
+    content: string
+    sent_at: string
+}
+
 export interface TrackerSummary {
     total_applications: number
     success_rate: number
@@ -171,6 +186,18 @@ export interface TrackerSummary {
     failed_count: number
     status_breakdown: Record<string, number>
     recent_activity: Application[]
+}
+
+export interface Policy {
+    daily_limit: number
+    min_match_score: number
+    blocked_companies: string[]
+    paused: boolean
+    remote_only_enforced: boolean
+    auto_discovery_enabled: boolean
+    discovery_min_match_score: number
+    global_autonomy_enabled: boolean
+    updated_at?: string
 }
 
 // ============================================================
@@ -259,9 +286,15 @@ export const api = {
     // Audit
     getApplicationAudit: (applicationId: string) => apiClient.get<AuditLog[]>(`/api/v1/audit/application/${applicationId}`),
 
+    // Sandbox Recruiter Feedback
+    getSandboxFeedback: () => apiClient.get<any[]>('/api/v1/tracker/sandbox/feedback'),
+    getSandboxFeedbackById: (applicationId: string) => apiClient.get<any>(`/api/v1/tracker/sandbox/feedback/${applicationId}`),
+    sendMessageToSandbox: (applicationId: string, content: string) =>
+        apiClient.post(`/api/v1/tracker/sandbox/feedback/${applicationId}/message`, { content }),
+
     // Policy
-    getPolicy: () => apiClient.get('/api/v1/policy/'),
-    updatePolicy: (data: any) => apiClient.post('/api/v1/policy/set', data),
+    getPolicy: () => apiClient.get<Policy>('/api/v1/policy/'),
+    updatePolicy: (data: Partial<Policy>) => apiClient.post<Policy>('/api/v1/policy/set', data),
 
     // Advanced Job Actions (Discovery & Ranking)
     getDiscoveryStatus: () => apiClient.get('/api/jobs/discovery/status'),

@@ -26,6 +26,7 @@ class PolicyUpdateRequest(BaseModel):
     remote_only_enforced: Optional[bool] = None
     auto_discovery_enabled: Optional[bool] = None
     discovery_min_match_score: Optional[float] = None
+    global_autonomy_enabled: Optional[bool] = None
 
 class PolicyCheckResponse(BaseModel):
     """Response for policy check."""

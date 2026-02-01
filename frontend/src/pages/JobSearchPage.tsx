@@ -21,6 +21,7 @@ export default function JobSearchPage() {
     const [queueCount, setQueueCount] = useState(0);
     const [policy, setPolicy] = useState<any>(null);
     const [discoveryStatus, setDiscoveryStatus] = useState<any>(null);
+    const [appliedCompanies, setAppliedCompanies] = useState<Set<string>>(new Set());
 
     const { setValue } = useForm({
         defaultValues: {
@@ -40,6 +41,7 @@ export default function JobSearchPage() {
         fetchPolicy();
         fetchDiscoveryStatus();
         fetchQueueCount();
+        fetchAppliedCompanies();
 
         // Poll status every 5s
         const interval = setInterval(() => {
@@ -48,6 +50,13 @@ export default function JobSearchPage() {
         }, 5000);
         return () => clearInterval(interval);
     }, []);
+
+    // Auto-load jobs when profile is ready
+    useEffect(() => {
+        if (profile && searchResults.length === 0) {
+            handleSearch();
+        }
+    }, [profile]);
 
     const fetchPolicy = async () => {
         try {
@@ -78,6 +87,19 @@ export default function JobSearchPage() {
             }
         } catch (err) {
             console.error('Failed to load queue count', err);
+        }
+    };
+
+    const fetchAppliedCompanies = async () => {
+        try {
+            const res = await api.getApplications(); // Fetch all applications
+            if (res.data && res.data.applications) {
+                // Normalize company names to lowercase for better matching
+                const companies = new Set(res.data.applications.map((app: any) => app.company_name.toLowerCase()));
+                setAppliedCompanies(companies);
+            }
+        } catch (err) {
+            console.error('Failed to load applied companies', err);
         }
     };
 
@@ -154,7 +176,8 @@ export default function JobSearchPage() {
                     visa_required: false,
                     preferred_locations: [],
                     limit: 50,
-                    auto_queue: false
+                    // If autonomous is ON, then auto-queue these manual results too
+                    auto_queue: policy?.auto_discovery_enabled || false
                 };
 
                 const rankRes = await api.rankJobs(rankPayload);
@@ -166,6 +189,10 @@ export default function JobSearchPage() {
         } finally {
             setLoading(false);
             setRanking(false);
+            // If we auto-queued, refresh the count
+            if (policy?.auto_discovery_enabled) {
+                fetchQueueCount();
+            }
         }
     };
 
@@ -267,7 +294,7 @@ export default function JobSearchPage() {
                 {/* Manual Search Header (Secondary) */}
                 <div className="flex flex-col md:flex-row items-center justify-between gap-4 py-4">
                     <h1 className="text-2xl font-bold text-slate-900">
-                        {searchResults.length > 0 ? `Manual Results (${searchResults.length})` : 'Job Browser'}
+                        {searchResults.length > 0 ? `Manual Results (${searchResults.filter(job => !appliedCompanies.has(job.company.toLowerCase())).length})` : 'Job Browser'}
                     </h1>
 
                     <div className="flex items-center gap-4">
@@ -296,9 +323,12 @@ export default function JobSearchPage() {
                             {loading ? (
                                 ranking ? 'Ranking...' : 'Searching...'
                             ) : (
-                                <>
-                                    <MagnifyingGlassIcon className="w-4 h-4" /> Manual Refresh
-                                </>
+                                <div className="flex flex-col items-center">
+                                    <div className="flex items-center gap-2">
+                                        <MagnifyingGlassIcon className="w-4 h-4" /> Manual Refresh
+                                    </div>
+                                    <span className="text-[10px] opacity-70 font-normal">Source: Sandbox Portal</span>
+                                </div>
                             )}
                         </button>
                     </div>
@@ -336,7 +366,8 @@ export default function JobSearchPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {searchResults
-                            .filter(job => !policy?.auto_discovery_enabled || (job.match_score >= (policy?.discovery_min_match_score || 0)))
+                            .filter(job => job.match_score >= (policy?.discovery_min_match_score || 0))
+                            .filter(job => !appliedCompanies.has(job.company.toLowerCase()))
                             .map((job) => (
                                 <div key={job.id} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:border-slate-400 hover:shadow-md transition-all flex flex-col h-full group">
                                     <div className="flex justify-between items-start mb-4">

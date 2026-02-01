@@ -1480,6 +1480,335 @@
       "is_grounded": false,
       "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
       "saved_at": "2026-02-01T14:22:41.530861"
+    },
+    {
+      "id": "282d7079-9b86-4966-bfbc-c1ca59e2edae",
+      "bullet": "Developed machine learning algorithms from scratch using Python and NumPy.",
+      "source_type": "project",
+      "source_name": "Machine Learning Algorithms from Scratch",
+      "technologies": [
+        "Python",
+        "NumPy"
+      ],
+      "categories": [
+        "data",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T15:19:42.883009",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T15:19:42.888658"
+    },
+    {
+      "id": "92dc6aad-756f-4645-b8d3-aa2656cb4fe1",
+      "bullet": "Designed and implemented a real-time feedback sentiment analysis and alert system using Python, Transformer, LangChain, FastAPI, NTFY, Selenium, and Scikit-learn.",
+      "source_type": "project",
+      "source_name": "Real-time Feedback Sentiment Analysis and Alert System",
+      "technologies": [
+        "Python",
+        "Transformer",
+        "LangChain",
+        "FastAPI",
+        "NTFY",
+        "Selenium",
+        "Scikit-learn"
+      ],
+      "categories": [
+        "backend",
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T15:19:42.883119",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T15:19:42.888681"
+    },
+    {
+      "id": "eb4f8461-4734-4cd8-bb5b-8c00f0b26a77",
+      "bullet": "Built a database GPT using Python, LLaMA-38B, Q-LoRA, Transformers, SQL, SQLAlchemy, and NiceGUI.",
+      "source_type": "project",
+      "source_name": "Database GPT",
+      "technologies": [
+        "Python",
+        "LLaMA-38B",
+        "Q-LoRA",
+        "Transformers",
+        "SQL",
+        "SQLAlchemy",
+        "NiceGUI"
+      ],
+      "categories": [
+        "backend",
+        "frontend",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T15:19:42.883175",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T15:19:42.888688"
+    },
+    {
+      "id": "678997ae-88ef-4370-a490-17b0084a5b89",
+      "bullet": "Maintained a high GPA of 8.84/10.00 while pursuing an Integrated Master of Technology in Mathematics and Computing at Indian Institute of Technology (ISM), Dhanbad.",
+      "source_type": "education",
+      "source_name": "Indian Institute of Technology (ISM), Dhanbad",
+      "technologies": [],
+      "categories": [
+        "frontend",
+        "ml"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T15:19:42.883220",
+      "is_grounded": false,
+      "grounding_warning": "Source 'Indian Institute of Technology (ISM), Dhanbad' not found in profile",
+      "saved_at": "2026-02-01T15:19:42.888693"
+    },
+    {
+      "id": "66410f59-4243-4f10-bbe1-19af0d5840d5",
+      "bullet": "Achieved a high score of 97.34% in 10th and 94.14% in 12th in Secondary & Higher Secondary Education (GBSE) at J.P. Thakkar Higher Secondary School.",
+      "source_type": "education",
+      "source_name": "J.P. Thakkar Higher Secondary School",
+      "technologies": [],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T15:19:42.883262",
+      "is_grounded": false,
+      "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
+      "saved_at": "2026-02-01T15:19:42.888700"
+    },
+    {
+      "id": "49224b6d-02ac-4f55-8a84-06a6f5c513b3",
+      "bullet": "Developed machine learning algorithms from scratch using Python and NumPy.",
+      "source_type": "project",
+      "source_name": "Machine Learning Algorithms from Scratch",
+      "technologies": [
+        "Python",
+        "NumPy"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T16:48:06.374376",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T16:48:06.377844"
+    },
+    {
+      "id": "1e0e4d35-7704-4025-b5ff-14f5a5fecd89",
+      "bullet": "Designed and implemented a real-time feedback sentiment analysis and alert system using Python, Transformer, LangChain, FastAPI, NTFY, Selenium, and Scikit-learn.",
+      "source_type": "project",
+      "source_name": "Real-time Feedback Sentiment Analysis and Alert System",
+      "technologies": [
+        "Python",
+        "Transformer",
+        "LangChain",
+        "FastAPI",
+        "NTFY",
+        "Selenium",
+        "Scikit-learn"
+      ],
+      "categories": [
+        "ml",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T16:48:06.374500",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T16:48:06.377866"
+    },
+    {
+      "id": "50a75174-47e8-406b-b2b8-5806c27700ab",
+      "bullet": "Built a database GPT using Python, LLaMA-38B, Q-LoRA, Transformers, SQL, SQLAlchemy, and NiceGUI.",
+      "source_type": "project",
+      "source_name": "Database GPT",
+      "technologies": [
+        "Python",
+        "LLaMA-38B",
+        "Q-LoRA",
+        "Transformers",
+        "SQL",
+        "SQLAlchemy",
+        "NiceGUI"
+      ],
+      "categories": [
+        "frontend",
+        "backend",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T16:48:06.374576",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T16:48:06.377873"
+    },
+    {
+      "id": "64158e8f-274f-44f1-8208-dab4570bce46",
+      "bullet": "Maintained a high GPA of 8.84/10.00 during Integrated Master of Technology in Mathematics and Computing at Indian Institute of Technology (ISM), Dhanbad.",
+      "source_type": "education",
+      "source_name": "Indian Institute of Technology (ISM), Dhanbad",
+      "technologies": [],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T16:48:06.374633",
+      "is_grounded": false,
+      "grounding_warning": "Source 'Indian Institute of Technology (ISM), Dhanbad' not found in profile",
+      "saved_at": "2026-02-01T16:48:06.377878"
+    },
+    {
+      "id": "d5b92e43-a3fc-464b-9ff2-273351371425",
+      "bullet": "Achieved 97.34% (10th) and 94.14% (12th) scores in Secondary & Higher Secondary Education (GBSE) at J.P. Thakkar Higher Secondary School.",
+      "source_type": "education",
+      "source_name": "J.P. Thakkar Higher Secondary School",
+      "technologies": [],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T16:48:06.374687",
+      "is_grounded": false,
+      "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
+      "saved_at": "2026-02-01T16:48:06.377884"
+    },
+    {
+      "id": "ab4e64e3-8ed5-484b-af34-cd7d18c83877",
+      "bullet": "Developed a custom YOLOv11 model for mapping India's electrical grid infrastructure using Google Cloud APIs and achieving high accuracy.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "Google Cloud APIs",
+        "YOLOv11"
+      ],
+      "categories": [
+        "ml",
+        "backend",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196109",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198882"
+    },
+    {
+      "id": "5015e6e5-7a0e-4a90-a942-eae64e6c77a7",
+      "bullet": "Trained a hybrid segmentation and detection pipeline for spatial analysis and model pole-to-pole connectivity in India's electrical grid infrastructure.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "hybrid segmentation and detection pipelines",
+        "spatial analysis"
+      ],
+      "categories": [
+        "ml",
+        "data",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196229",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198898"
+    },
+    {
+      "id": "ce74694d-7082-49eb-864e-a0575af7aecd",
+      "bullet": "Integrated computer vision techniques for mapping India's electrical grid infrastructure and creating a comprehensive digital twin of the grid topology.",
+      "source_type": "experience",
+      "source_name": "Apparent Energy Solutions Pvt. Ltd.",
+      "technologies": [
+        "computer vision techniques"
+      ],
+      "categories": [
+        "ml",
+        "devops"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196282",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198902"
+    },
+    {
+      "id": "d438c308-9065-4cb9-9c2a-3aaf7e5cb8a0",
+      "bullet": "Achieved over 90% extraction accuracy using MED-SAM 2 for lesion segmentation in AI-assisted medical workflow.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "MED-SAM 2"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T17:07:35.196318",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198906"
+    },
+    {
+      "id": "eca9201f-4db7-4cc6-898b-dacf7659cec5",
+      "bullet": "Deployed inference workflows using AWS SageMaker for low-latency, scalable production serving in AI-assisted medical workflow.",
+      "source_type": "experience",
+      "source_name": "Aeroqube Inc.",
+      "technologies": [
+        "AWS SageMaker"
+      ],
+      "categories": [
+        "ml",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196354",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198908"
+    },
+    {
+      "id": "52830f31-36bc-4b7a-983b-afc15da56b1f",
+      "bullet": "Developed a computer vision pipeline for document understanding using YOLOv10 model and achieving high accuracy in multilingual document layout components.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196391",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198911"
+    },
+    {
+      "id": "9b412b62-0daa-450f-af7a-ce585c352488",
+      "bullet": "Trained and fine-tuned a YOLOv10 model for multilingual document layout components and extracting bounding box coordinates.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196426",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198915"
+    },
+    {
+      "id": "f44afa16-eda3-4614-8790-df8569286a30",
+      "bullet": "Developed a computer vision pipeline for document understanding using YOLOv10 model and achieving high accuracy in downstream OCR and parsing tasks.",
+      "source_type": "experience",
+      "source_name": "Technod8.ai",
+      "technologies": [
+        "YOLOv10"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T17:07:35.196459",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T17:07:35.198917"
     }
   ]
 }

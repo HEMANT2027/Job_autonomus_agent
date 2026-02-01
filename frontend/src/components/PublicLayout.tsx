@@ -1,7 +1,7 @@
 import { ReactNode, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
-import { Menu, X, ArrowRight, Zap } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 
 interface PublicLayoutProps {
     children: ReactNode;
@@ -26,10 +26,11 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 }`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                     <Link to="/" className="flex items-center gap-2.5 group">
-                        <div className="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200 shadow-lg shadow-slate-900/20">
-                            <Zap className="w-5 h-5 text-white fill-white" />
-                        </div>
-                        <span className="text-xl font-bold text-slate-900 tracking-tight">AutoApply</span>
+                        <img
+                            src="/logo.png"
+                            alt="Arjun AI"
+                            className="h-12 w-auto object-contain transform group-hover:scale-105 transition-transform duration-200"
+                        />
                     </Link>
 
                     {/* Desktop Menu */}

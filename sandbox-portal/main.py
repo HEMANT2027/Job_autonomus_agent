@@ -12,8 +12,10 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import random
+import httpx
+import asyncio
 
-from fastapi import FastAPI, HTTPException, Header, Depends
+from fastapi import FastAPI, HTTPException, Header, Depends, Query, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
@@ -135,6 +137,20 @@ class JobsListResponse(BaseModel):
     per_page: int
 
 # ============================================================
+# Backend Notification
+# ============================================================
+
+async def _notify_backend():
+    """Notify the main app that new jobs are available."""
+    try:
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            # Main app is usually on 8000
+            await client.post("http://localhost:8000/api/v1/autonomy/notify-new-jobs")
+            print("Successfully notified backend of new jobs")
+    except Exception as e:
+        print(f"Failed to notify backend: {e}")
+
+# ============================================================
 # Data Persistence
 # ============================================================
 
@@ -237,7 +253,7 @@ async def list_companies():
     return _read_companies()
 
 @app.post("/sandbox/companies", response_model=Company)
-async def add_company(company: Company, api_key: str = Depends(verify_api_key)):
+async def add_company(company: Company, background_tasks: BackgroundTasks, api_key: str = Depends(verify_api_key)):
     """Add a new company to the sandbox."""
     companies = _read_companies()
     
@@ -257,6 +273,59 @@ async def add_company(company: Company, api_key: str = Depends(verify_api_key)):
     
     companies.append(new_company)
     _write_companies(companies)
+    
+    # --- Auto-generate 1-2 jobs for this new company ---
+    try:
+        initial_jobs_count = len(_read_jobs())
+        jobs = _read_jobs()
+        role_types = list(ROLE_TEMPLATES.keys())
+        
+        for _ in range(random.randint(1, 2)):
+            role_type = random.choice(role_types)
+            template = ROLE_TEMPLATES[role_type]
+            
+            title = random.choice(template["titles"])
+            is_remote = company.job_details.is_remote
+            location = "Remote" if is_remote else company.location
+            
+            skills = []
+            skills.extend(random.sample(SKILLS["languages"], 2))
+            if role_type in ["frontend", "fullstack"]:
+                skills.extend(random.sample(SKILLS["frontend"], 2))
+            if role_type in ["backend", "fullstack"]:
+                skills.extend(random.sample(SKILLS["backend"], 2))
+            if role_type == "ml_engineer":
+                skills.extend(random.sample(SKILLS["ml"], 3))
+            skills.extend(random.sample(SKILLS["cloud"], 2))
+            
+            job = {
+                "id": str(uuid.uuid4()),
+                "title": title,
+                "company": company.name,
+                "location": location,
+                "job_type": template["job_type"],
+                "experience_level": template["experience_level"],
+                "salary_range": company.job_details.salary_range,
+                "description": generate_job_description(role_type, company.name, title),
+                "requirements": template["requirements"] + [f"Experience with {random.choice(skills)}"],
+                "responsibilities": RESPONSIBILITIES_TEMPLATES.get(role_type, RESPONSIBILITIES_TEMPLATES["fullstack"]),
+                "skills_required": list(set(skills)),
+                "benefits": random.sample(BENEFITS, 5),
+                "posted_date": datetime.now().strftime("%Y-%m-%d"),
+                "application_deadline": (datetime.now() + timedelta(days=30)).strftime("%Y-%m-%d"),
+                "is_remote": is_remote,
+                "visa_sponsorship": random.random() < 0.4,
+            }
+            jobs.append(job)
+            
+        _write_jobs(jobs)
+        print(f"Auto-generated {len(jobs) - initial_jobs_count} jobs for new company {company.name}")
+        
+    except Exception as e:
+        print(f"Error generating jobs for new company: {e}")
+    
+    # Notify backend that new jobs might be here
+    background_tasks.add_task(_notify_backend)
     
     return new_company
 
@@ -380,9 +449,48 @@ async def apply_to_job(
     )
 
 @app.get("/sandbox/applications")
-async def list_applications(api_key: str = Depends(verify_api_key)):
+async def list_applications(
+    enrich: bool = Query(False, description="Include messages and meetings for each application"),
+    api_key: str = Depends(verify_api_key)
+):
     """List all submitted applications (for testing/demo purposes)."""
-    return _read_applications()
+    applications = _read_applications()
+    
+    if enrich:
+        messages = _read_messages()
+        meetings = _read_meetings()
+        scheduled_msgs = _read_scheduled_messages()
+        
+        for app in applications:
+            app_id = app.get("id")
+            app["messages"] = [m for m in messages if m.get("application_id") == app_id]
+            app["meetings"] = [m for m in meetings if m.get("application_id") == app_id]
+            app["scheduled_messages"] = [m for m in scheduled_msgs if m.get("application_id") == app_id]
+            
+    return applications
+
+@app.get("/sandbox/applications/{application_id}")
+async def get_application(
+    application_id: str,
+    enrich: bool = Query(True, description="Include messages and meetings"),
+    api_key: str = Depends(verify_api_key)
+):
+    """Get a specific application with its messages and meetings."""
+    applications = _read_applications()
+    app = next((a for a in applications if a.get("id") == application_id), None)
+    
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+        
+    if enrich:
+        messages = _read_messages()
+        meetings = _read_meetings()
+        scheduled_msgs = _read_scheduled_messages()
+        app["messages"] = [m for m in messages if m.get("application_id") == application_id]
+        app["meetings"] = [m for m in meetings if m.get("application_id") == application_id]
+        app["scheduled_messages"] = [m for m in scheduled_msgs if m.get("application_id") == application_id]
+        
+    return app
 
 @app.delete("/sandbox/applications/{application_id}")
 async def delete_application(application_id: str, api_key: str = Depends(verify_api_key)):
@@ -396,6 +504,229 @@ async def delete_application(application_id: str, api_key: str = Depends(verify_
         return {"success": True, "message": "Application deleted"}
     
     raise HTTPException(status_code=404, detail="Application not found")
+
+# ============================================================
+# Recruiter Response Features
+# ============================================================
+
+MESSAGES_FILE = DATA_DIR / "messages.json"
+SCHEDULED_MESSAGES_FILE = DATA_DIR / "scheduled_messages.json"
+MEETINGS_FILE = DATA_DIR / "meetings.json"
+
+def _read_scheduled_messages() -> List[Dict[str, Any]]:
+    try:
+        if SCHEDULED_MESSAGES_FILE.exists():
+            with open(SCHEDULED_MESSAGES_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("scheduled_messages", [])
+        return []
+    except Exception:
+        return []
+
+def _write_scheduled_messages(messages: List[Dict[str, Any]]) -> bool:
+    try:
+        _ensure_data_dir()
+        with open(SCHEDULED_MESSAGES_FILE, "w", encoding="utf-8") as f:
+            json.dump({"scheduled_messages": messages}, f, indent=2)
+        return True
+    except Exception:
+        return False
+
+def _read_messages() -> List[Dict[str, Any]]:
+    try:
+        if MESSAGES_FILE.exists():
+            with open(MESSAGES_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("messages", [])
+        return []
+    except Exception:
+        return []
+
+def _write_messages(messages: List[Dict[str, Any]]) -> bool:
+    try:
+        _ensure_data_dir()
+        with open(MESSAGES_FILE, "w", encoding="utf-8") as f:
+            json.dump({"messages": messages}, f, indent=2)
+        return True
+    except Exception:
+        return False
+
+def _read_meetings() -> List[Dict[str, Any]]:
+    try:
+        if MEETINGS_FILE.exists():
+            with open(MEETINGS_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("meetings", [])
+        return []
+    except Exception:
+        return []
+
+def _write_meetings(meetings: List[Dict[str, Any]]) -> bool:
+    try:
+        _ensure_data_dir()
+        with open(MEETINGS_FILE, "w", encoding="utf-8") as f:
+            json.dump({"meetings": meetings}, f, indent=2)
+        return True
+    except Exception:
+        return False
+
+# --- Pydantic Models for Recruiter Features ---
+
+class StatusUpdate(BaseModel):
+    """Update application status."""
+    status: str = Field(..., description="pending, interviewing, accepted, rejected")
+
+class MessageCreate(BaseModel):
+    """Send a message."""
+    sender: str = Field(..., description="recruiter or applicant")
+    content: str
+
+class MessageScheduleCreate(BaseModel):
+    """Schedule a message to be sent later."""
+    content: str
+    scheduled_for: str  # ISO datetime
+
+class MeetingSchedule(BaseModel):
+    """Schedule a meeting."""
+    date: str
+    time: str
+    duration: int = 30  # minutes
+    meeting_type: str = "interview"
+    notes: Optional[str] = None
+
+# --- API Endpoints ---
+
+@app.patch("/sandbox/applications/{application_id}/status")
+async def update_application_status(
+    application_id: str, 
+    status_update: StatusUpdate,
+    api_key: str = Depends(verify_api_key)
+):
+    """Update the status of an application (accept, reject, etc.)."""
+    valid_statuses = ["pending", "interviewing", "accepted", "rejected"]
+    if status_update.status not in valid_statuses:
+        raise HTTPException(status_code=400, detail=f"Invalid status. Must be one of: {valid_statuses}")
+    
+    applications = _read_applications()
+    for app in applications:
+        if app.get("id") == application_id:
+            app["status"] = status_update.status
+            app["status_updated_at"] = datetime.utcnow().isoformat()
+            _write_applications(applications)
+            return {"success": True, "status": status_update.status, "application_id": application_id}
+    
+    raise HTTPException(status_code=404, detail="Application not found")
+
+@app.get("/sandbox/applications/{application_id}/messages")
+async def get_messages(application_id: str, api_key: str = Depends(verify_api_key)):
+    """Get all messages for an application."""
+    messages = _read_messages()
+    app_messages = [m for m in messages if m.get("application_id") == application_id]
+    return {"messages": app_messages}
+
+@app.post("/sandbox/applications/{application_id}/messages")
+async def send_message(
+    application_id: str,
+    message: MessageCreate,
+    api_key: str = Depends(verify_api_key)
+):
+    """Send a message to an applicant."""
+    # Verify application exists
+    applications = _read_applications()
+    if not any(a.get("id") == application_id for a in applications):
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    messages = _read_messages()
+    new_message = {
+        "id": str(uuid.uuid4()),
+        "application_id": application_id,
+        "sender": message.sender,
+        "content": message.content,
+        "sent_at": datetime.utcnow().isoformat(),
+        "read": False
+    }
+    messages.append(new_message)
+    _write_messages(messages)
+    
+    return {"success": True, "message": new_message}
+
+@app.post("/sandbox/applications/{application_id}/messages/schedule")
+async def schedule_message(
+    application_id: str,
+    schedule: MessageScheduleCreate,
+    api_key: str = Depends(verify_api_key)
+):
+    """Schedule a message to be sent to an applicant."""
+    # Verify application exists
+    applications = _read_applications()
+    if not any(a.get("id") == application_id for a in applications):
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    scheduled_msgs = _read_scheduled_messages()
+    new_schedule = {
+        "id": str(uuid.uuid4()),
+        "application_id": application_id,
+        "content": schedule.content,
+        "scheduled_for": schedule.scheduled_for,
+        "created_at": datetime.utcnow().isoformat(),
+        "status": "pending"
+    }
+    scheduled_msgs.append(new_schedule)
+    _write_scheduled_messages(scheduled_msgs)
+    
+    return {"success": True, "scheduled_message": new_schedule}
+
+@app.get("/sandbox/applications/{application_id}/meetings")
+async def get_meetings(application_id: str, api_key: str = Depends(verify_api_key)):
+    """Get all meetings for an application."""
+    meetings = _read_meetings()
+    app_meetings = [m for m in meetings if m.get("application_id") == application_id]
+    return {"meetings": app_meetings}
+
+@app.post("/sandbox/applications/{application_id}/schedule")
+async def schedule_meeting(
+    application_id: str,
+    meeting: MeetingSchedule,
+    api_key: str = Depends(verify_api_key)
+):
+    """Schedule a meeting with an applicant."""
+    # Verify application exists
+    applications = _read_applications()
+    app = next((a for a in applications if a.get("id") == application_id), None)
+    if not app:
+        raise HTTPException(status_code=404, detail="Application not found")
+    
+    meetings = _read_meetings()
+    new_meeting = {
+        "id": str(uuid.uuid4()),
+        "application_id": application_id,
+        "applicant_name": app.get("applicant", {}).get("applicant_name", "Unknown"),
+        "job_title": app.get("job_title", ""),
+        "company": app.get("company", ""),
+        "date": meeting.date,
+        "time": meeting.time,
+        "duration": meeting.duration,
+        "meeting_type": meeting.meeting_type,
+        "notes": meeting.notes,
+        "created_at": datetime.utcnow().isoformat(),
+        "status": "scheduled"
+    }
+    meetings.append(new_meeting)
+    _write_meetings(meetings)
+    
+    # Also update application status to interviewing
+    for a in applications:
+        if a.get("id") == application_id:
+            a["status"] = "interviewing"
+            a["status_updated_at"] = datetime.utcnow().isoformat()
+    _write_applications(applications)
+    
+    return {"success": True, "meeting": new_meeting}
+
+@app.get("/sandbox/meetings")
+async def list_all_meetings(api_key: str = Depends(verify_api_key)):
+    """List all scheduled meetings."""
+    return {"meetings": _read_meetings()}
 
 # ============================================================
 # Seed Data Generation
@@ -702,9 +1033,10 @@ def seed_jobs():
     return len(jobs)
 
 @app.post("/sandbox/seed")
-async def seed_database():
+async def seed_database(background_tasks: BackgroundTasks):
     """Seed the database with sample job postings."""
     count = seed_jobs()
+    background_tasks.add_task(_notify_backend)
     return {"message": f"Successfully seeded {count} job postings"}
 
 # ============================================================
@@ -719,6 +1051,8 @@ async def startup_event():
     if not jobs:
         seed_jobs()
         print(f"Seeded database with {len(_read_jobs())} job postings")
+        # Notify backend on initial seed
+        await _notify_backend()
         
     # Initialize companies if empty
     existing_companies = _read_companies()

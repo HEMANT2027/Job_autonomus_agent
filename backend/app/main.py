@@ -19,6 +19,7 @@ from app.routers import health_router, profile_router, jobs_router, applications
 from app.routers.tracker import router as tracker_router
 from app.routers.verifier import router as verifier_router
 from app.routers.audit import router as audit_router
+from app.routers.autonomy import router as autonomy_router
 
 # Setup logging
 setup_logging()
@@ -93,6 +94,7 @@ app.include_router(apply_router, prefix="/api")
 app.include_router(tracker_router, prefix="/api")
 app.include_router(verifier_router, prefix="/api")
 app.include_router(audit_router, prefix="/api")
+app.include_router(autonomy_router, prefix="/api")
 
 
 @app.get("/")
