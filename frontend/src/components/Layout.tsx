@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
     const location = useLocation();
 
     const navigation = [
-        { name: 'Dashboard', href: '/', icon: HomeIcon },
+        { name: 'Dashboard', href: '/dashboard', icon: HomeIcon },
         { name: 'Search Jobs', href: '/job-search', icon: BriefcaseIcon },
         { name: 'Apply Queue', href: '/apply/queue', icon: QueueListIcon },
         { name: 'Tracker', href: '/tracker', icon: ChartBarIcon },
@@ -43,23 +43,23 @@ export default function Layout({ children }: LayoutProps) {
             <div className={`fixed inset-y-0 left-0 z-50 w-72 bg-slate-900 text-white transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto shadow-2xl md:shadow-none flex flex-col ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
 
                 {/* Brand Header */}
-                <div className="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900 box-content">
+                <Link to="/" className="h-20 flex items-center px-8 border-b border-slate-800 bg-slate-900 box-content hover:bg-slate-800 transition-colors">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-white flex items-center justify-center shadow-lg shadow-white/10">
                             <SparklesIcon className="w-5 h-5 text-slate-900" />
                         </div>
                         <span className="text-xl font-bold tracking-tight text-white">AutoApply</span>
                     </div>
-                    <button onClick={() => setSidebarOpen(false)} className="ml-auto md:hidden text-slate-400 hover:text-white transition-colors">
+                    <button onClick={(e) => { e.preventDefault(); setSidebarOpen(false); }} className="ml-auto md:hidden text-slate-400 hover:text-white transition-colors">
                         <XMarkIcon className="w-6 h-6" />
                     </button>
-                </div>
+                </Link>
 
                 {/* Navigation Links */}
                 <nav className="flex-1 px-4 py-8 space-y-1 overflow-y-auto">
-                    <div className="px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                    <Link to="/" className="block px-4 mb-2 text-xs font-semibold text-slate-500 uppercase tracking-widest hover:text-white transition-colors">
                         Main Menu
-                    </div>
+                    </Link>
                     {navigation.map((item) => {
                         const isActive = location.pathname === item.href;
                         return (
