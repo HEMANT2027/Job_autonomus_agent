@@ -1,8 +1,7 @@
-
 import { ReactNode, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Footer from './Footer';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, Zap } from 'lucide-react';
 
 interface PublicLayoutProps {
     children: ReactNode;
@@ -14,43 +13,45 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrolled(window.scrollY > 20);
+            setScrolled(window.scrollY > 10);
         };
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
-        <div className="min-h-screen flex flex-col bg-white">
+        <div className="min-h-screen flex flex-col bg-white font-sans antialiased text-slate-900 selection:bg-slate-900 selection:text-white">
             {/* Navigation */}
-            <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/80 backdrop-blur-md shadow-sm border-b border-gray-100 py-3' : 'bg-transparent py-5'
+            <nav className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 border-b ${scrolled ? 'bg-white/90 backdrop-blur-xl border-slate-100 py-3' : 'bg-transparent border-transparent py-6'
                 }`}>
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
-                    <Link to="/" className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <span className="text-white font-bold">A</span>
+                    <Link to="/" className="flex items-center gap-2.5 group">
+                        <div className="w-9 h-9 bg-slate-900 rounded-xl flex items-center justify-center transform group-hover:scale-105 transition-transform duration-200 shadow-lg shadow-slate-900/20">
+                            <Zap className="w-5 h-5 text-white fill-white" />
                         </div>
-                        <span className="text-xl font-bold text-gray-900 tracking-tight">AutoApply</span>
+                        <span className="text-xl font-bold text-slate-900 tracking-tight">AutoApply</span>
                     </Link>
 
                     {/* Desktop Menu */}
-                    <div className="hidden md:flex items-center gap-8">
-                        <a href="#features" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Features</a>
-                        <a href="#how-it-works" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">How it Works</a>
-                        <a href="#pricing" className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">Pricing</a>
-                        <Link to="/dashboard" className="text-sm font-medium text-blue-600 hover:text-blue-700">Login</Link>
-                        <Link
-                            to="/dashboard"
-                            className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold hover:bg-blue-700 transition-all shadow-md hover:shadow-lg flex items-center gap-2 group"
-                        >
-                            Get Started
-                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
+                    <div className="hidden md:flex items-center gap-10">
+                        <a href="#features" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">Features</a>
+                        <a href="#how-it-works" className="text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">How it Works</a>
+
+                        <div className="flex items-center gap-4 pl-4 border-l border-slate-200">
+                            <Link to="/dashboard" className="text-sm font-semibold text-slate-900 hover:text-slate-600 transition-colors">Login</Link>
+                            <Link
+                                to="/dashboard"
+                                className="bg-slate-900 text-white px-5 py-2.5 rounded-lg text-sm font-semibold hover:bg-slate-800 transition-all shadow-md hover:shadow-xl flex items-center gap-2 group transform active:scale-95 duration-200"
+                            >
+                                Get Started
+                                <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                            </Link>
+                        </div>
                     </div>
 
                     {/* Mobile Menu Toggle */}
                     <button
-                        className="md:hidden text-gray-600"
+                        className="md:hidden text-slate-900 p-2"
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                     >
                         {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -60,16 +61,16 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
 
             {/* Mobile Menu Overlay */}
             {mobileMenuOpen && (
-                <div className="fixed inset-0 z-40 bg-white pt-24 px-6 md:hidden">
-                    <div className="flex flex-col gap-6 text-lg font-medium text-gray-900 text-center">
-                        <a href="#features" onClick={() => setMobileMenuOpen(false)}>Features</a>
-                        <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)}>How it Works</a>
-                        <a href="#pricing" onClick={() => setMobileMenuOpen(false)}>Pricing</a>
-                        <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>Login</Link>
+                <div className="fixed inset-0 z-40 bg-white pt-28 px-6 md:hidden animate-in fade-in slide-in-from-top-10 duration-200">
+                    <div className="flex flex-col gap-8 text-xl font-medium text-slate-900 text-center">
+                        <a href="#features" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-600">Features</a>
+                        <a href="#how-it-works" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-600">How it Works</a>
+                        <div className="h-px bg-slate-100 w-full my-2"></div>
+                        <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)} className="hover:text-slate-600">Login</Link>
                         <Link
                             to="/dashboard"
                             onClick={() => setMobileMenuOpen(false)}
-                            className="bg-blue-600 text-white px-8 py-4 rounded-xl shadow-lg mt-4"
+                            className="bg-slate-900 text-white px-8 py-4 rounded-xl shadow-xl active:scale-95 transition-transform"
                         >
                             Get Started
                         </Link>
@@ -78,7 +79,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
             )}
 
             {/* Content */}
-            <main className="flex-grow pt-16">
+            <main className="flex-grow pt-24">
                 {children}
             </main>
 
