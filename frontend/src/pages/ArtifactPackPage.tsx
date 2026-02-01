@@ -177,12 +177,15 @@ export default function ArtifactPackPage() {
             console.error('Profile extraction error:', err);
             let msg = 'Failed to extract profile';
             if (err.response) {
+                const data = err.response.data;
+                const backendMsg = data.error?.message || data.detail;
+
                 if (err.response.status === 422) {
-                    msg = `Extraction Failed: ${err.response.data.detail}`;
+                    msg = `Extraction Failed: ${backendMsg || 'Validation error'}`;
                 } else if (err.response.status === 400) {
-                    msg = err.response.data.detail || 'Resume file problem.';
+                    msg = backendMsg || 'Resume file problem.';
                 } else {
-                    msg = `Server Error (${err.response.status}): ${err.response.data.detail || 'Unknown error'}`;
+                    msg = `Server Error (${err.response.status}): ${backendMsg || 'Unknown error'}`;
                 }
             } else if (err.request) {
                 msg = 'Network error. Please check your connection.';

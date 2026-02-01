@@ -12,7 +12,10 @@ import {
     ShieldCheck,
     ArrowRight,
     Upload,
-    Trash2
+    Trash2,
+    Building2,
+    Plus,
+    X
 } from 'lucide-react'
 
 const SANDBOX_API = 'http://localhost:8001'
@@ -55,25 +58,46 @@ interface Application {
     applicant: ApplicationForm
 }
 
+interface Company {
+    name: string
+    location: string
+    description: string
+    requirements: string[]
+    responsibilities: string[]
+    skills_required: string[]
+    job_details: {
+        status: string
+        salary_range: string
+        is_remote: boolean
+        posted_date: string
+    }
+}
+
 function App() {
     const [jobs, setJobs] = useState<Job[]>([])
     const [applications, setApplications] = useState<Application[]>([])
     const [loading, setLoading] = useState(true)
     const [loadingMore, setLoadingMore] = useState(false)
     const [searchTerm, setSearchTerm] = useState('')
-    const [view, setView] = useState<'public' | 'admin' | 'job_detail' | 'apply_form' | 'artifact_detail'>('public')
+    const [companies, setCompanies] = useState<Company[]>([])
+    const [view, setView] = useState<'public' | 'admin' | 'job_detail' | 'apply_form' | 'artifact_detail' | 'companies' | 'add_company'>('public')
     const [selectedJob, setSelectedJob] = useState<Job | null>(null)
     const [selectedApplication, setSelectedApplication] = useState<Application | null>(null)
     const [page, setPage] = useState(1)
     const [hasMore, setHasMore] = useState(true)
     const [submitting, setSubmitting] = useState(false)
+    const [addingCompany, setAddingCompany] = useState(false)
     const [resumeFile, setResumeFile] = useState<string | null>(null)
 
-    const fetchJobs = async (pageToFetch = 1, append = false) => {
+    const fetchJobs = async (pageToFetch = 1, append = false, currentSearch = searchTerm) => {
         try {
             if (append) setLoadingMore(true);
             const res = await axios.get(`${SANDBOX_API}/sandbox/jobs`, {
-                params: { page: pageToFetch, per_page: 20 }
+                params: {
+                    page: pageToFetch,
+                    per_page: 20,
+                    search: currentSearch || undefined
+                }
             })
 
             const newJobs = res.data.jobs;
@@ -100,6 +124,58 @@ function App() {
             setApplications(res.data)
         } catch (err) {
             console.error('Failed to fetch applications', err)
+        }
+    }
+
+    const fetchCompanies = async () => {
+        try {
+            const res = await axios.get(`${SANDBOX_API}/sandbox/companies`)
+            setCompanies(res.data)
+        } catch (err) {
+            console.error('Failed to fetch companies', err)
+        }
+    }
+
+    const handleAddCompany = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const formData = new FormData(e.currentTarget)
+        const name = formData.get('name') as string
+        const location = formData.get('location') as string
+        const description = formData.get('description') as string
+        const requirements = (formData.get('requirements') as string).split(',').map(s => s.trim()).filter(Boolean)
+        const responsibilities = (formData.get('responsibilities') as string).split(',').map(s => s.trim()).filter(Boolean)
+        const skills_required = (formData.get('skills_required') as string).split(',').map(s => s.trim()).filter(Boolean)
+
+        const job_details = {
+            status: formData.get('status') as string,
+            salary_range: formData.get('salary_range') as string,
+            is_remote: formData.get('is_remote') === 'on',
+            posted_date: formData.get('posted_date') as string || new Date().toISOString().split('T')[0]
+        }
+
+        if (!name || !location) return
+
+        try {
+            setAddingCompany(true)
+            await axios.post(`${SANDBOX_API}/sandbox/companies`, {
+                name,
+                location,
+                description,
+                requirements,
+                responsibilities,
+                skills_required,
+                job_details
+            }, {
+                headers: { 'X-API-Key': API_KEY }
+            })
+            await fetchCompanies()
+            alert('Company added successfully!')
+            setView('companies')
+        } catch (err) {
+            console.error('Failed to add company', err)
+            alert('Failed to add company. It might already exist.')
+        } finally {
+            setAddingCompany(false)
         }
     }
 
@@ -163,6 +239,7 @@ function App() {
             setLoading(true)
             await fetchJobs(1, false)
             await fetchApplications()
+            await fetchCompanies()
             setLoading(false)
         }
         init()
@@ -172,10 +249,18 @@ function App() {
         return () => clearInterval(interval)
     }, [])
 
-    const filteredJobs = jobs.filter(job =>
-        job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        job.company.toLowerCase().includes(searchTerm.toLowerCase())
-    )
+    useEffect(() => {
+        const delayDebounceFn = setTimeout(() => {
+            // Only search if we are on the public view
+            if (view === 'public') {
+                fetchJobs(1, false, searchTerm);
+            }
+        }, 500);
+
+        return () => clearTimeout(delayDebounceFn);
+    }, [searchTerm]);
+
+    const filteredJobs = jobs
 
     return (
         <div className="min-h-screen bg-gray-50 flex flex-col font-sans">
@@ -208,6 +293,12 @@ function App() {
                                         {applications.length}
                                     </span>
                                 )}
+                            </button>
+                            <button
+                                onClick={() => setView('companies')}
+                                className={`text-sm font-medium ${view === 'companies' ? 'text-sandbox-600' : 'text-gray-500 hover:text-gray-900'}`}
+                            >
+                                Companies
                             </button>
                         </div>
 
@@ -246,6 +337,19 @@ function App() {
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
+                    </div>
+                </div>
+            )}
+
+            {view === 'companies' && (
+                <div className="bg-sandbox-900 py-12 px-4 shadow-inner">
+                    <div className="max-w-4xl mx-auto text-center">
+                        <h1 className="text-3xl font-extrabold text-white sm:text-4xl">
+                            Partner Companies
+                        </h1>
+                        <p className="mt-3 text-lg text-sandbox-200 max-w-2xl mx-auto">
+                            Manage the list of companies available for job simulation.
+                        </p>
                     </div>
                 </div>
             )}
@@ -642,6 +746,177 @@ function App() {
                                     </div>
                                 )}
                             </div>
+                        </div>
+                    </div>
+                ) : view === 'companies' ? (
+                    <div className="max-w-6xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex justify-between items-center mb-8">
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+                                    <Building2 size={24} className="text-sandbox-600" />
+                                    Job Simulation Companies
+                                </h2>
+                                <p className="text-gray-500 text-sm mt-1">Manage the database of companies available for your autonomous agent.</p>
+                            </div>
+                            <button
+                                onClick={() => setView('add_company')}
+                                className="bg-sandbox-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-sandbox-700 transition-all shadow-md flex items-center gap-2"
+                            >
+                                <Plus size={20} />
+                                Register New Company
+                            </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+                            {companies.map((company, i) => (
+                                <div key={i} className="bg-white p-6 rounded-2xl border border-gray-200 shadow-sm flex items-center gap-5 hover:shadow-md transition-all group">
+                                    <div className="w-14 h-14 bg-gray-50 rounded-xl flex items-center justify-center text-sandbox-600 font-bold text-2xl border border-gray-100 group-hover:bg-sandbox-50 transition-colors">
+                                        {company.name.charAt(0)}
+                                    </div>
+                                    <div className="flex-1">
+                                        <h3 className="font-bold text-gray-900 text-lg">{company.name}</h3>
+                                        <p className="text-sm text-gray-500 flex items-center gap-1.5 mt-0.5">
+                                            <MapPin size={14} className="text-gray-400" />
+                                            {company.location}
+                                        </p>
+                                        <div className="mt-3 flex items-center gap-2">
+                                            <span className="text-[10px] font-bold uppercase tracking-wider bg-gray-100 text-gray-500 px-2 py-0.5 rounded">
+                                                {company.job_details?.status || 'Active'}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                ) : view === 'add_company' ? (
+                    <div className="max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
+                        <div className="flex items-center gap-4 mb-8">
+                            <button
+                                onClick={() => setView('companies')}
+                                className="p-2 hover:bg-gray-100 rounded-lg transition-colors text-gray-500"
+                            >
+                                <ArrowRight size={20} className="rotate-180" />
+                            </button>
+                            <div>
+                                <h2 className="text-2xl font-bold text-gray-900">Register New Company</h2>
+                                <p className="text-gray-500 text-sm">Fill in the details to add a new entity to the simulation pool.</p>
+                            </div>
+                        </div>
+
+                        <div className="bg-white rounded-3xl shadow-xl border border-gray-200 overflow-hidden">
+                            <div className="bg-gray-900 p-8 text-white relative overflow-hidden">
+                                <div className="relative z-10">
+                                    <div className="bg-sandbox-500 w-12 h-12 rounded-xl flex items-center justify-center mb-4 shadow-lg shadow-sandbox-500/20">
+                                        <Plus size={24} className="text-white" />
+                                    </div>
+                                    <h3 className="text-xl font-bold">Company Profile & Mock Posting</h3>
+                                    <p className="text-white/60 text-sm mt-1">This data will be used to generate realistic application targets for testing.</p>
+                                </div>
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-sandbox-600/20 rounded-full blur-3xl -mr-32 -mt-32"></div>
+                            </div>
+
+                            <form onSubmit={handleAddCompany} className="p-8 space-y-8">
+                                <section className="space-y-6">
+                                    <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        的基础信息 <span className="h-px bg-gray-100 flex-1"></span>
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Company Name</label>
+                                            <input
+                                                name="name"
+                                                required
+                                                placeholder="e.g. Acme Innovations"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500 focus:bg-white transition-all"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Primary Location (HQ)</label>
+                                            <input
+                                                name="location"
+                                                required
+                                                placeholder="e.g. San Francisco, CA"
+                                                className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500 focus:bg-white transition-all"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Company Description</label>
+                                        <textarea
+                                            name="description"
+                                            rows={3}
+                                            placeholder="Tell us about the company's mission and culture..."
+                                            className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500 focus:bg-white transition-all resize-none"
+                                        />
+                                    </div>
+                                </section>
+
+                                <section className="space-y-6">
+                                    <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest flex items-center gap-2">
+                                        Mock Job Configuration <span className="h-px bg-gray-100 flex-1"></span>
+                                    </h4>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Industry-Specific Requirements</label>
+                                            <input name="requirements" placeholder="Comma separated: BS Computer Science, 5+ yrs Ruby..." className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500" />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Typical Responsibilities</label>
+                                            <input name="responsibilities" placeholder="Comma separated: Maintain CI/CD, Design databases..." className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500" />
+                                        </div>
+                                        <div className="md:col-span-2">
+                                            <label className="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-2">Tech Stack / Core Skills</label>
+                                            <input name="skills_required" placeholder="Comma separated: React, Tailwind, VPC, AWS S3..." className="w-full bg-gray-50 border border-gray-200 rounded-xl px-5 py-3.5 outline-none focus:ring-2 focus:ring-sandbox-500" />
+                                        </div>
+                                    </div>
+
+                                    <div className="bg-gray-50 rounded-2xl p-6 grid grid-cols-1 md:grid-cols-3 gap-6 border border-gray-100">
+                                        <div>
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Recruiting Status</label>
+                                            <select name="status" className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-sandbox-500 text-sm font-medium">
+                                                <option>Accepting Applications</option>
+                                                <option>Closing Soon</option>
+                                                <option>Paused</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Target Salary Package</label>
+                                            <input name="salary_range" placeholder="e.g. $120,000 - $180,000" className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-sandbox-500 text-sm" />
+                                        </div>
+                                        <div>
+                                            <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block mb-2">Posting Date</label>
+                                            <input type="date" name="posted_date" defaultValue={new Date().toISOString().split('T')[0]} className="w-full bg-white border border-gray-200 rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-sandbox-500 text-sm" />
+                                        </div>
+                                        <div className="flex items-center gap-3 bg-white border border-gray-200 rounded-xl px-4 py-3 md:col-span-3">
+                                            <input type="checkbox" name="is_remote" id="is_remote_separate" defaultChecked className="w-5 h-5 text-sandbox-600 border-gray-300 rounded focus:ring-sandbox-500" />
+                                            <label htmlFor="is_remote_separate" className="text-sm text-gray-700 font-bold">This company supports Remote Work / Distributed teams</label>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <div className="pt-4 flex gap-4">
+                                    <button
+                                        type="button"
+                                        onClick={() => setView('companies')}
+                                        className="flex-1 bg-white border border-gray-200 text-gray-600 py-4 rounded-xl font-bold hover:bg-gray-50 transition-all font-sans"
+                                    >
+                                        Discard
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        disabled={addingCompany}
+                                        className="flex-[2] bg-sandbox-600 text-white py-4 rounded-xl font-bold hover:bg-sandbox-700 transition-all shadow-lg shadow-sandbox-600/20 flex items-center justify-center gap-2 disabled:opacity-50 font-sans"
+                                    >
+                                        {addingCompany ? (
+                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                        ) : (
+                                            <>Confirm Registration <CheckCircle size={20} /></>
+                                        )}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 ) : (

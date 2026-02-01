@@ -1,0 +1,175 @@
+{
+  "companies": [
+    {
+      "name": "Google",
+      "location": "Mountain View, CA"
+    },
+    {
+      "name": "Meta",
+      "location": "Menlo Park, CA"
+    },
+    {
+      "name": "Amazon",
+      "location": "Seattle, WA"
+    },
+    {
+      "name": "Microsoft",
+      "location": "Redmond, WA"
+    },
+    {
+      "name": "Apple",
+      "location": "Cupertino, CA"
+    },
+    {
+      "name": "Netflix",
+      "location": "Los Gatos, CA"
+    },
+    {
+      "name": "Stripe",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Airbnb",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Uber",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Lyft",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Spotify",
+      "location": "New York, NY"
+    },
+    {
+      "name": "Twitter/X",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "LinkedIn",
+      "location": "Sunnyvale, CA"
+    },
+    {
+      "name": "Salesforce",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Adobe",
+      "location": "San Jose, CA"
+    },
+    {
+      "name": "Nvidia",
+      "location": "Santa Clara, CA"
+    },
+    {
+      "name": "Intel",
+      "location": "Santa Clara, CA"
+    },
+    {
+      "name": "Qualcomm",
+      "location": "San Diego, CA"
+    },
+    {
+      "name": "Databricks",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Snowflake",
+      "location": "Bozeman, MT"
+    },
+    {
+      "name": "Palantir",
+      "location": "Denver, CO"
+    },
+    {
+      "name": "Coinbase",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Robinhood",
+      "location": "Menlo Park, CA"
+    },
+    {
+      "name": "Square/Block",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Shopify",
+      "location": "Ottawa, ON (Remote)"
+    },
+    {
+      "name": "Notion",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Figma",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Vercel",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "Supabase",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "OpenAI",
+      "location": "San Francisco, CA"
+    },
+    {
+      "name": "TestCorp",
+      "location": "TestCity"
+    },
+    {
+      "name": "NewCompany",
+      "location": "NewCity"
+    },
+    {
+      "name": "DeepMind-Agent-Test",
+      "location": "London, UK",
+      "description": "Pioneering research in AI.",
+      "requirements": [
+        "PhD in AI",
+        "PyTorch expertise"
+      ],
+      "responsibilities": [
+        "Inventing new algorithms",
+        "Collaborating on AGI"
+      ],
+      "skills_required": [
+        "Python",
+        "Deep Learning"
+      ],
+      "job_details": {
+        "status": "Accepting Applications",
+        "salary_range": "150k - 250k",
+        "is_remote": true,
+        "posted_date": "2026-02-01"
+      }
+    },
+    {
+      "name": "Century Pulp & Paper (Aditya Birla Real Estate Ltd.)",
+      "location": "india",
+      "description": "this is a company of paper and pulp making",
+      "requirements": [
+        "graduate"
+      ],
+      "responsibilities": [
+        "knows coding"
+      ],
+      "skills_required": [
+        "python"
+      ],
+      "job_details": {
+        "status": "Accepting Applications",
+        "salary_range": "12000-18000",
+        "is_remote": true,
+        "posted_date": "2026-02-01"
+      }
+    }
+  ]
+}
