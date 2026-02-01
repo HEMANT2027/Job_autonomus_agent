@@ -53,7 +53,12 @@ Return a JSON array with this structure:
   }
 ]
 
+
 Profile Data:
+{profile_data}
+
+User Preferences:
+{preferences}
 """
 
 
@@ -118,8 +123,18 @@ def generate_bullets_from_profile(profile_data: Dict[str, Any]) -> List[Dict[str
         }
         
         # Call Gemini API via llm_client
+        preferences = profile_data.get("preferences", {})
+        prefs_text = json.dumps(preferences, indent=2) if preferences else "None provided"
+
+        # Use replace() instead of format() to avoid issues with JSON braces in the prompt
+        final_prompt = BULLET_GENERATION_PROMPT.replace(
+            "{profile_data}", json.dumps(profile_for_prompt, indent=2)
+        ).replace(
+            "{preferences}", prefs_text
+        )
+
         response_text = generate_json(
-            prompt=BULLET_GENERATION_PROMPT + json.dumps(profile_for_prompt, indent=2),
+            prompt=final_prompt,
             system_prompt="You are an expert resume writer. Generate achievement bullets that are grounded in facts. Return only valid JSON array.",
             temperature=0.3
         )

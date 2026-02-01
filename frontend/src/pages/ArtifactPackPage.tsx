@@ -8,18 +8,20 @@ const API_BASE = '/api/v1/student';
 const STEPS = [
     { id: 1, name: 'Upload Resume', icon: '📄' },
     { id: 2, name: 'Review Profile', icon: '👤' },
-    { id: 3, name: 'Bullet Bank', icon: '🎯' },
-    { id: 4, name: 'Answer Library', icon: '💬' },
-    { id: 5, name: 'Proof Pack', icon: '🔗' },
+    { id: 3, name: 'Targeting', icon: '🎯' }, // New Step
+    { id: 4, name: 'Bullet Bank', icon: '⚡' }, // Changed Icon for distinction
+    { id: 5, name: 'Answer Library', icon: '💬' },
+    { id: 6, name: 'Proof Pack', icon: '🔗' },
 ];
 
 interface ProfileData {
     education?: any[];
-    experience?: any[];
+    experiences?: any[];
     projects?: any[];
     skills?: string[];
     links?: Record<string, string>;
     personal_info?: Record<string, string>;
+    preferences?: Record<string, string>; // New field for targeting
 }
 
 interface Bullet {
@@ -211,8 +213,8 @@ export default function ArtifactPackPage() {
                 save_to_bank: true
             });
             setBullets(response.data.bullets);
-            setCompletedSteps(prev => new Set([...prev, 3]));
-            setCurrentStep(4);
+            setCompletedSteps(prev => new Set([...prev, 4])); // Step 4 complete (generated)
+            setCurrentStep(4); // Go to Bullet Bank (Step 4)
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Failed to generate bullets');
         } finally {
@@ -246,8 +248,8 @@ export default function ArtifactPackPage() {
             // Convert answers object to array
             const answersArray = Object.values(response.data.answers) as Answer[];
             setAnswers(answersArray);
-            setCompletedSteps(prev => new Set([...prev, 4]));
-            setCurrentStep(5);
+            setCompletedSteps(prev => new Set([...prev, 5])); // Step 5 complete
+            setCurrentStep(5); // Go to Answer Library (Step 5)
         } catch (err: any) {
             console.error('Answer generation failed:', err);
             setError(err.response?.data?.detail || 'Failed to generate answers. Please try again.');
@@ -273,7 +275,8 @@ export default function ArtifactPackPage() {
                 save_to_pack: true
             });
             setProofItems(response.data.items);
-            setCompletedSteps(prev => new Set([...prev, 5]));
+            setCompletedSteps(prev => new Set([...prev, 6])); // Step 6 complete
+            setCurrentStep(6); // Go to Proof Pack (Step 6)
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Failed to build proof pack');
         } finally {
@@ -450,6 +453,33 @@ export default function ArtifactPackPage() {
                         </div>
                     </div>
 
+                    {/* Education */}
+                    <div className="bg-white rounded-lg border p-4">
+                        <h3 className="font-semibold text-gray-700 mb-3">Education</h3>
+                        {profileData.education?.map((edu, index) => (
+                            <div key={index} className="mb-3 p-3 bg-gray-50 rounded-lg">
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <p className="font-medium">{edu.institution}</p>
+                                        <p className="text-sm text-gray-700">{edu.degree}</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-sm text-gray-500">{edu.year}</p>
+                                        {edu.score ? (
+                                            <span className="inline-block px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs mt-1 font-medium">
+                                                {edu.score}
+                                            </span>
+                                        ) : edu.gpa ? (
+                                            <span className="inline-block px-2 py-0.5 bg-green-100 text-green-700 rounded text-xs mt-1 font-medium">
+                                                GPA: {edu.gpa}
+                                            </span>
+                                        ) : null}
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
                     {/* Skills */}
                     <div className="bg-white rounded-lg border p-4">
                         <h3 className="font-semibold text-gray-700 mb-3">Skills</h3>
@@ -502,17 +532,90 @@ export default function ArtifactPackPage() {
                     Back
                 </button>
                 <button
-                    onClick={generateBullets}
+                    onClick={() => setCurrentStep(3)}
                     disabled={!profileData || isLoading}
                     className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                    {isLoading ? 'Generating...' : 'Generate Bullets'}
+                    Next: Targeting Preferences
                 </button>
             </div>
         </div>
     );
 
     const renderStep3 = () => (
+        <div className="space-y-6">
+            <h2 className="text-2xl font-bold text-gray-800">Targeting Preferences</h2>
+            <p className="text-gray-600">Customize how your artifacts are generated.</p>
+
+            <div className="space-y-4">
+                {/* Target Role */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Target Job Role</label>
+                    <input
+                        type="text"
+                        value={profileData?.preferences?.target_role || ''}
+                        onChange={(e) => handleProfileChange('preferences', {
+                            ...profileData?.preferences,
+                            target_role: e.target.value
+                        })}
+                        placeholder="e.g. Senior Backend Engineer"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    />
+                </div>
+
+                {/* Tone */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Preferred Tone</label>
+                    <select
+                        value={profileData?.preferences?.tone || 'Professional'}
+                        onChange={(e) => handleProfileChange('preferences', {
+                            ...profileData?.preferences,
+                            tone: e.target.value
+                        })}
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                    >
+                        <option value="Professional">Professional</option>
+                        <option value="Enthusiastic">Enthusiastic</option>
+                        <option value="Analytical">Analytical</option>
+                        <option value="Executive">Executive</option>
+                    </select>
+                </div>
+
+                {/* Strengths */}
+                <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Key Strengths to Highlight</label>
+                    <textarea
+                        value={profileData?.preferences?.strengths || ''}
+                        onChange={(e) => handleProfileChange('preferences', {
+                            ...profileData?.preferences,
+                            strengths: e.target.value
+                        })}
+                        placeholder="e.g. System Design, Python Optimization, Team Leadership"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-indigo-500"
+                        rows={3}
+                    />
+                </div>
+            </div>
+
+            <div className="flex gap-4">
+                <button
+                    onClick={prevStep}
+                    className="flex-1 py-3 px-6 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-all"
+                >
+                    Back
+                </button>
+                <button
+                    onClick={generateBullets}
+                    disabled={!profileData || isLoading}
+                    className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                    {isLoading ? 'Generating...' : 'Save & Generate Bullets'}
+                </button>
+            </div>
+        </div>
+    );
+
+    const renderStep4 = () => (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">Review Bullet Bank</h2>
             <p className="text-gray-600">Edit or remove achievement bullets. These will be used in your applications.</p>
@@ -566,13 +669,13 @@ export default function ArtifactPackPage() {
                     disabled={!profileData || isLoading}
                     className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                    {isLoading ? 'Generating...' : 'Generate Answers'}
+                    {isLoading ? 'Generating...' : 'Save & Generate Answers'}
                 </button>
             </div>
         </div>
     );
 
-    const renderStep4 = () => (
+    const renderStep5 = () => (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">Review Answer Library</h2>
             <p className="text-gray-600">Edit your answers to common application questions.</p>
@@ -619,13 +722,13 @@ export default function ArtifactPackPage() {
                     disabled={isLoading}
                     className="flex-1 py-3 px-6 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
                 >
-                    {isLoading ? 'Building...' : 'Build Proof Pack'}
+                    {isLoading ? 'Building...' : 'Save & Build Proof Pack'}
                 </button>
             </div>
         </div>
     );
 
-    const renderStep5 = () => (
+    const renderStep6 = () => (
         <div className="space-y-6">
             <h2 className="text-2xl font-bold text-gray-800">Review Proof Pack</h2>
             <p className="text-gray-600">Review and manage your proof of work artifacts.</p>
@@ -727,11 +830,12 @@ export default function ArtifactPackPage() {
                     {currentStep === 3 && renderStep3()}
                     {currentStep === 4 && renderStep4()}
                     {currentStep === 5 && renderStep5()}
+                    {currentStep === 6 && renderStep6()}
                 </div>
 
                 {/* Completion Status */}
                 <div className="mt-6 text-center text-sm text-gray-500">
-                    {completedSteps.size} of 5 steps completed
+                    {completedSteps.size} of {STEPS.length} steps completed
                 </div>
             </div>
         </div>

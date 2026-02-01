@@ -93,6 +93,21 @@ class JobListResponse(BaseModel):
 # API Endpoints
 # ============================================================
 
+@router.get("/queue/stats")
+async def get_queue_stats():
+    """Get current size of the application queue."""
+    from app.services.job_ranker import get_queued_jobs
+    queue = get_queued_jobs()
+    return {"count": len(queue)}
+
+
+@router.delete("/queue")
+async def clear_queue():
+    """Clear all jobs from the application queue."""
+    from app.services.job_ranker import clear_apply_queue
+    success = clear_apply_queue()
+    return {"success": success}
+
 @router.get("")
 async def list_jobs(
     search: Optional[str] = Query(None, description="Search in title and company"),
@@ -377,3 +392,6 @@ async def queue_job_endpoint(job_id: str):
         
     added = add_to_apply_queue([job])
     return {"success": True, "added": added > 0}
+
+
+

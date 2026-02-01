@@ -25,6 +25,7 @@ class Education(BaseModel):
     start_year: Optional[int] = None
     end_year: Optional[int] = None
     gpa: Optional[float] = None
+    score: Optional[str] = None  # Generic score (GPA, Percentage, Grade)
 
 
 class Experience(BaseModel):
@@ -58,6 +59,7 @@ class StudentProfileCreate(BaseModel):
     remote_preference: Optional[str] = None  # remote, hybrid, onsite, any
     expected_salary_min: Optional[int] = None
     expected_salary_max: Optional[int] = None
+    preferences: Optional[Dict[str, str]] = None  # Target role, tone, strengths, etc.
 
 
 class StudentProfileResponse(StudentProfileCreate):
@@ -103,7 +105,8 @@ async def get_profile():
                     "field_of_study": edu.get("field_of_study"),
                     "start_year": edu.get("start_year"),
                     "end_year": edu.get("end_year"),
-                    "gpa": float(str(edu.get("gpa", "0")).split("/")[0]) if edu.get("gpa") else None
+                    "gpa": float(str(edu.get("gpa", "0")).split("/")[0]) if edu.get("gpa") else None,
+                    "score": edu.get("score") or (str(edu.get("gpa")) if edu.get("gpa") else None)
                 }
                 for edu in profile.get("education", [])
             ],
