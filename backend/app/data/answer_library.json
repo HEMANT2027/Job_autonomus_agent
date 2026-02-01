@@ -1,7 +1,7 @@
 {
   "answers": [
     {
-      "id": "58d37437-8153-4ed4-8606-dcc089f1dbe0",
+      "id": "808c218a-88dc-40e6-b57d-91be8ce4f9af",
       "category": "work_authorization",
       "question": "What is your work authorization status?",
       "question_variants": [
@@ -9,14 +9,14 @@
         "Do you require visa sponsorship?",
         "What is your work permit status?"
       ],
-      "answer": "I am authorized to work in [COUNTRY/REGION].",
+      "answer": "I am authorized to work in [EDIT] country/region.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T10:52:28.220865",
-      "updated_at": "2026-02-01T10:52:28.237142"
+      "created_at": "2026-02-01T10:37:46.272530",
+      "updated_at": "2026-02-01T10:37:46.274221"
     },
     {
-      "id": "8730476a-63ae-4eea-bb72-1b4edb67f4bc",
+      "id": "86306feb-9a26-4697-a4a3-bf455ce157cf",
       "category": "availability",
       "question": "What is your availability/start date?",
       "question_variants": [
@@ -27,11 +27,11 @@
       "answer": "I am available to start immediately.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T10:52:28.223659",
-      "updated_at": "2026-02-01T10:52:28.237178"
+      "created_at": "2026-02-01T10:37:46.272596",
+      "updated_at": "2026-02-01T10:37:46.274237"
     },
     {
-      "id": "0dc8b74b-7772-424e-af25-7e0acfe1424b",
+      "id": "a9ca8670-f172-49bd-951a-67fab389bdd6",
       "category": "relocation",
       "question": "Are you willing to relocate?",
       "question_variants": [
@@ -42,11 +42,11 @@
       "answer": "I am willing to relocate for the right opportunity.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T10:52:28.223926",
-      "updated_at": "2026-02-01T10:52:28.237186"
+      "created_at": "2026-02-01T10:37:46.272633",
+      "updated_at": "2026-02-01T10:37:46.274242"
     },
     {
-      "id": "c64c6879-e6f6-4652-9638-c78631534645",
+      "id": "a914e3ad-478e-4ce4-b954-b8bbae04961d",
       "category": "salary_expectations",
       "question": "What are your salary expectations?",
       "question_variants": [
@@ -57,11 +57,11 @@
       "answer": "My salary expectations are competitive and based on industry standards.",
       "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T10:52:28.223973",
-      "updated_at": "2026-02-01T10:52:28.237191"
+      "created_at": "2026-02-01T10:37:46.272667",
+      "updated_at": "2026-02-01T10:37:46.274246"
     },
     {
-      "id": "415d1f1c-52d6-49a0-b856-af77b5e42347",
+      "id": "0c07787b-9883-44c1-ad92-750ab1255e91",
       "category": "why_company",
       "question": "Why do you want to work for this company?",
       "question_variants": [
@@ -69,39 +69,39 @@
         "What attracts you to our company?",
         "Why should we hire you?"
       ],
-      "answer": "[COMPANY_NAME] aligns with my career goals and values, and I am excited about the opportunity to contribute to [ROLE].",
+      "answer": "[COMPANY_NAME] is a leader in [ROLE] and I am excited about the opportunity to contribute to its success.",
       "needs_editing": true,
       "is_template": true,
-      "created_at": "2026-02-01T10:52:28.225302",
-      "updated_at": "2026-02-01T10:52:28.237196"
+      "created_at": "2026-02-01T10:37:46.272700",
+      "updated_at": "2026-02-01T10:37:46.274250"
     },
     {
-      "id": "2eb45d3b-b827-4616-bca4-cdefda6e7bdf",
+      "id": "35f527ff-224d-447d-ae2d-963f76b52ada",
       "category": "strengths",
       "question": "What are your greatest strengths?",
       "question_variants": [
         "What do you consider your key strengths?",
         "What makes you a good candidate?"
       ],
-      "answer": "[EDIT] My greatest strengths include [EDIT] and [EDIT], which I believe are essential for success in the ML Engineer role.",
-      "needs_editing": true,
+      "answer": "My greatest strengths include [EDIT] technical skills, problem-solving abilities, and teamwork experience.",
+      "needs_editing": false,
       "is_template": false,
-      "created_at": "2026-02-01T10:52:28.225345",
-      "updated_at": "2026-02-01T10:52:28.237200"
+      "created_at": "2026-02-01T10:37:46.272732",
+      "updated_at": "2026-02-01T10:37:46.274254"
     },
     {
-      "id": "068fb762-0e4d-4154-bfa3-22f9c4ee1f80",
+      "id": "03daf04c-198a-4efd-9ead-35e46f01b53a",
       "category": "career_goals",
       "question": "What are your career goals?",
       "question_variants": [
         "Where do you see yourself in 5 years?",
         "What are your long-term career aspirations?"
       ],
-      "answer": "[EDIT] My long-term career goals include [EDIT], and I believe this role at [COMPANY_NAME] will provide me with the opportunities and challenges necessary to achieve them.",
-      "needs_editing": true,
-      "is_template": true,
-      "created_at": "2026-02-01T10:52:28.225375",
-      "updated_at": "2026-02-01T10:52:28.237204"
+      "answer": "My long-term career goal is to become a [EDIT] professional in the field of [EDIT] and make significant contributions to [EDIT].",
+      "needs_editing": false,
+      "is_template": false,
+      "created_at": "2026-02-01T10:37:46.272763",
+      "updated_at": "2026-02-01T10:37:46.274257"
     }
   ]
 }

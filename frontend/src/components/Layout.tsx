@@ -27,6 +27,7 @@ export default function Layout({ children }: LayoutProps) {
         { name: 'Apply Queue', href: '/apply/queue', icon: QueueListIcon },
         { name: 'Tracker', href: '/tracker', icon: ChartBarIcon },
         { name: 'Artifact Pack', href: '/artifact-pack', icon: DocumentDuplicateIcon },
+        { name: 'My Profile', href: '/profile', icon: UserCircleIcon },
     ];
 
     return (
@@ -42,7 +43,7 @@ export default function Layout({ children }: LayoutProps) {
             {/* Sidebar */}
             <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-xl transform transition-transform duration-300 ease-in-out md:translate-x-0 md:static md:inset-auto md:shadow-none border-r border-gray-200 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
                 <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
-                    <span className="text-xl font-bold text-blue-600">AutoApply</span>
+                    <NavLink to="/" className="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors">AutoApply</NavLink>
                     <button onClick={() => setSidebarOpen(false)} className="md:hidden text-gray-500">
                         <XMarkIcon className="w-6 h-6" />
                     </button>
@@ -72,17 +73,17 @@ export default function Layout({ children }: LayoutProps) {
                     </nav>
 
                     {/* User Profile Snippet (Bottom) */}
-                    <div className="p-4 border-t border-gray-200">
+                    <NavLink to="/profile" className="block p-4 border-t border-gray-200 hover:bg-gray-50 transition-colors">
                         <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
                                 <UserCircleIcon className="w-6 h-6" />
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-medium text-gray-900 truncate">User</p>
-                                <p className="text-xs text-gray-500 truncate">Pro Plan</p>
+                                <p className="text-sm font-medium text-gray-900 truncate">My Profile</p>
+                                <p className="text-xs text-gray-500 truncate">View & Edit Profile</p>
                             </div>
                         </div>
-                    </div>
+                    </NavLink>
                 </div>
             </div>
 
@@ -93,7 +94,7 @@ export default function Layout({ children }: LayoutProps) {
                     <button onClick={() => setSidebarOpen(true)} className="text-gray-500">
                         <Bars3Icon className="w-6 h-6" />
                     </button>
-                    <span className="font-bold text-gray-900">AutoApply</span>
+                    <NavLink to="/" className="font-bold text-gray-900 hover:text-blue-600 transition-colors">AutoApply</NavLink>
                     <div className="w-6"></div> {/* Spacer */}
                 </header>
 

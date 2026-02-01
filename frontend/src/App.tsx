@@ -5,6 +5,7 @@ import ArtifactPackPage from './pages/ArtifactPackPage'
 import JobSearchPage from './pages/JobSearchPage'
 import ApplyQueuePage from './pages/ApplyQueuePage'
 import TrackerPage from './pages/TrackerPage'
+import ProfilePage from './pages/ProfilePage'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { ToastProvider } from './context/ToastContext'
 
@@ -20,6 +21,7 @@ function App() {
                         <Route path="/job-search" element={<JobSearchPage />} />
                         <Route path="/apply/queue" element={<ApplyQueuePage />} />
                         <Route path="/tracker" element={<TrackerPage />} />
+                        <Route path="/profile" element={<ProfilePage />} />
                     </Routes>
                 </Layout>
             </ToastProvider>
