@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { TrashIcon, ArrowUpIcon, ArrowDownIcon, PlayIcon, StopIcon, Cog6ToothIcon, NoSymbolIcon } from '@heroicons/react/24/outline'
+import { TrashIcon, ArrowUpIcon, ArrowDownIcon, PlayIcon, StopIcon, Cog6ToothIcon, NoSymbolIcon, ChartBarIcon } from '@heroicons/react/24/outline'
 import api, { QueuedJob, BatchStatus } from '../services/api'
 
 export default function ApplyQueuePage() {
@@ -110,7 +110,7 @@ export default function ApplyQueuePage() {
                 {/* Header Card */}
                 <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-4 mb-6 flex items-center justify-between sticky top-8 z-40 backdrop-blur-md bg-white/90">
                     <div className="flex items-center gap-4">
-                        <Link to="/dashboard" className="text-gray-500 hover:text-gray-700 font-medium">← Back</Link>
+                        <Link to="/job-search" className="text-gray-500 hover:text-gray-700 font-medium">← Find Jobs</Link>
                         <h1 className="text-2xl font-bold text-gray-900">Application Queue</h1>
                     </div>
                 </div>
@@ -294,6 +294,17 @@ export default function ApplyQueuePage() {
                     )}
                 </div>
             </main>
+
+            {/* Next Step CTA */}
+            <div className="fixed bottom-8 right-8 z-40 animate-bounce-subtle">
+                <Link
+                    to="/tracker"
+                    className="flex items-center gap-3 px-6 py-4 bg-indigo-600 text-white rounded-full shadow-xl hover:bg-indigo-700 hover:scale-105 transition-all font-bold text-lg"
+                >
+                    Track Progress
+                    <ChartBarIcon className="w-6 h-6" />
+                </Link>
+            </div>
         </div>
     )
 }
