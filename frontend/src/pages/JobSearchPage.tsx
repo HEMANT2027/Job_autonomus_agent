@@ -356,6 +356,19 @@ export default function JobSearchPage() {
                     </div>
                 </div>
             </div>
+
+            {/* Next Step CTA */}
+            {queueCount > 0 && (
+                <div className="fixed bottom-8 right-8 z-40 animate-bounce-subtle">
+                    <button
+                        onClick={() => window.location.href = '/apply/queue'}
+                        className="flex items-center gap-3 px-6 py-4 bg-blue-600 text-white rounded-full shadow-xl hover:bg-blue-700 hover:scale-105 transition-all font-bold text-lg"
+                    >
+                        View Application Queue ({queueCount})
+                        <CheckCircle className="w-6 h-6" />
+                    </button>
+                </div>
+            )}
         </div>
     );
 }

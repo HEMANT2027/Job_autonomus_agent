@@ -339,6 +339,26 @@
           "created_at": "2026-02-01T10:38:36.520394"
         }
       ]
+    },
+    {
+      "id": "25d58aea-d4b2-4e5f-8d4b-726cc2fbfaeb",
+      "profile_id": null,
+      "created_at": "2026-02-01T14:22:52.240552",
+      "items": [
+        {
+          "id": "686534ea-0ffc-4e3f-a50f-aed8615bbcbd",
+          "title": "GitHub Repository",
+          "url": "https://github.com/23je0382-ops",
+          "category": "GitHub Repository",
+          "description": "Vikas Gupta's GitHub repository.",
+          "related_skills": [
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T14:22:52.236234"
+        }
+      ]
     }
   ]
 }
