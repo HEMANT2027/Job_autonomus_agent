@@ -7,7 +7,8 @@ import {
     BriefcaseIcon,
     DocumentTextIcon,
     QueueListIcon,
-    SparklesIcon
+    SparklesIcon,
+    UserCircleIcon
 } from '@heroicons/react/24/outline'
 import { useAppStore } from '../store/useAppStore'
 
@@ -67,15 +68,24 @@ export default function DashboardPage() {
         <div className="space-y-8">
             {/* Hero / Welcome */}
             <div className="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden">
-                <div className="relative z-10">
-                    <h1 className="text-3xl font-bold mb-2">
-                        Welcome back{profile ? `, ${profile.name.split(' ')[0]}` : ''}!
-                    </h1>
-                    <p className="text-blue-100 max-w-2xl text-lg">
-                        {allStepsComplete
-                            ? "Your autonomous job search is running smoothly. Check the tracker for updates."
-                            : "Let's get your autonomous agent set up and running."}
-                    </p>
+                <div className="relative z-10 flex items-start justify-between">
+                    <div>
+                        <h1 className="text-3xl font-bold mb-2">
+                            Welcome back{profile ? `, ${profile.name.split(' ')[0]}` : ''}!
+                        </h1>
+                        <p className="text-blue-100 max-w-2xl text-lg">
+                            {allStepsComplete
+                                ? "Your autonomous job search is running smoothly. Check the tracker for updates."
+                                : "Let's get your autonomous agent set up and running."}
+                        </p>
+                    </div>
+                    <Link
+                        to="/profile"
+                        className="flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors backdrop-blur-sm"
+                    >
+                        <UserCircleIcon className="w-6 h-6" />
+                        <span className="hidden sm:inline font-medium">Profile</span>
+                    </Link>
                 </div>
                 <SparklesIcon className="absolute right-0 top-0 w-64 h-64 text-white opacity-5 transform translate-x-12 -translate-y-12" />
             </div>

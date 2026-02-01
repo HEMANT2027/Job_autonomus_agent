@@ -1193,6 +1193,102 @@
       "created_at": "2026-02-01T08:35:02.251973",
       "is_grounded": true,
       "saved_at": "2026-02-01T08:35:02.253673"
+    },
+    {
+      "id": "79f69420-76b4-407c-8e30-a22bc71d74c8",
+      "bullet": "Developed Machine Learning Algorithms from Scratch using Python and NumPy.",
+      "source_type": "project",
+      "source_name": "Machine Learning Algorithms from Scratch",
+      "technologies": [
+        "Python",
+        "NumPy"
+      ],
+      "categories": [
+        "ml",
+        "data"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:37:34.374910",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:37:34.377451"
+    },
+    {
+      "id": "a1a3b7e2-541d-4f04-bb6e-144673c35b1a",
+      "bullet": "Designed Real-time Feedback Sentiment Analysis and Alert System using Python, Transformer, LangChain, FastAPI, NTFY, Selenium, and Scikit-learn.",
+      "source_type": "project",
+      "source_name": "Real-time Feedback Sentiment Analysis and Alert System",
+      "technologies": [
+        "Python",
+        "Transformer",
+        "LangChain",
+        "FastAPI",
+        "NTFY",
+        "Selenium",
+        "Scikit-learn"
+      ],
+      "categories": [
+        "ml",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:37:34.374985",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:37:34.377484"
+    },
+    {
+      "id": "8e3ec615-7a40-4919-bbb6-b38faf9cd499",
+      "bullet": "Built Database GPT using Python, LLaMA-38B, Q-LoRA, Transformers, SQL, SQLAlchemy, and NiceGUI.",
+      "source_type": "project",
+      "source_name": "Database GPT",
+      "technologies": [
+        "Python",
+        "LLaMA-38B",
+        "Q-LoRA",
+        "Transformers",
+        "SQL",
+        "SQLAlchemy",
+        "NiceGUI"
+      ],
+      "categories": [
+        "data",
+        "frontend",
+        "backend"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:37:34.375035",
+      "is_grounded": true,
+      "saved_at": "2026-02-01T10:37:34.377660"
+    },
+    {
+      "id": "ca469af6-260c-49c5-b69e-b06ecf251e52",
+      "bullet": "Maintained a high GPA of 8.84/10.00 while pursuing Integrated Master of Technology in Mathematics and Computing at Indian Institute of Technology (ISM), Dhanbad.",
+      "source_type": "education",
+      "source_name": "Indian Institute of Technology (ISM), Dhanbad",
+      "technologies": [],
+      "categories": [
+        "ml",
+        "frontend"
+      ],
+      "has_metrics": true,
+      "created_at": "2026-02-01T10:37:34.375069",
+      "is_grounded": false,
+      "grounding_warning": "Source 'Indian Institute of Technology (ISM), Dhanbad' not found in profile",
+      "saved_at": "2026-02-01T10:37:34.377683"
+    },
+    {
+      "id": "39cea45e-a5b4-4287-909f-26e54e2dc99b",
+      "bullet": "Completed Secondary & Higher Secondary Education (GBSE) at J.P. Thakkar Higher Secondary School with a graduation date of Apr 2023.",
+      "source_type": "education",
+      "source_name": "J.P. Thakkar Higher Secondary School",
+      "technologies": [],
+      "categories": [
+        "general"
+      ],
+      "has_metrics": false,
+      "created_at": "2026-02-01T10:37:34.375104",
+      "is_grounded": false,
+      "grounding_warning": "Source 'J.P. Thakkar Higher Secondary School' not found in profile",
+      "saved_at": "2026-02-01T10:37:34.377694"
     }
   ]
 }

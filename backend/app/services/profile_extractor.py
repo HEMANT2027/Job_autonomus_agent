@@ -146,16 +146,18 @@ def validate_extracted_data(data: Dict[str, Any], original_text: str) -> Dict[st
     # Check education entries
     if "education" in data and data["education"]:
         for i, edu in enumerate(data["education"]):
-            if edu.get("institution"):
-                if edu["institution"].lower() not in original_lower:
-                    warnings.append(f"Education[{i}]: Institution '{edu['institution']}' may not be in original text")
+            inst = edu.get("institution")
+            if inst and isinstance(inst, str):
+                if inst.lower() not in original_lower:
+                    warnings.append(f"Education[{i}]: Institution '{inst}' may not be in original text")
     
     # Check experience entries
     if "experience" in data and data["experience"]:
         for i, exp in enumerate(data["experience"]):
-            if exp.get("company"):
-                if exp["company"].lower() not in original_lower:
-                    warnings.append(f"Experience[{i}]: Company '{exp['company']}' may not be in original text")
+            comp = exp.get("company")
+            if comp and isinstance(comp, str):
+                if comp.lower() not in original_lower:
+                    warnings.append(f"Experience[{i}]: Company '{comp}' may not be in original text")
     
     # Check for suspiciously generic skills
     generic_skills = ["problem solving", "communication", "teamwork", "leadership", "time management"]
@@ -178,8 +180,9 @@ def validate_extracted_data(data: Dict[str, Any], original_text: str) -> Dict[st
     if "links" in data:
         links = data["links"]
         for key in ["github", "linkedin", "portfolio"]:
-            if links.get(key):
-                if links[key] not in original_text and "http" not in original_lower:
+            val = links.get(key)
+            if val and isinstance(val, str):
+                if val not in original_text and "http" not in original_lower:
                     warnings.append(f"Links: {key} URL may be hallucinated")
     
     # Add validation metadata

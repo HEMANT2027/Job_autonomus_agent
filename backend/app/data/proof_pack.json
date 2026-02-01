@@ -299,6 +299,46 @@
           "created_at": "2026-02-01T06:31:51.428486"
         }
       ]
+    },
+    {
+      "id": "2797ad41-9ec4-43c2-a6e2-ee933d6bacc3",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:38:12.987138",
+      "items": [
+        {
+          "id": "82aa7934-7003-4ad7-bb5b-b30d3093d933",
+          "title": "GitHub Repository",
+          "url": "https://github.com/23je0382-ops",
+          "category": "GitHub Repository",
+          "description": "Vikas Gupta's GitHub repository containing various projects and contributions.",
+          "related_skills": [
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:38:12.985952"
+        }
+      ]
+    },
+    {
+      "id": "aa6f4a1e-2642-4be6-808a-15fbb07b24cd",
+      "profile_id": null,
+      "created_at": "2026-02-01T10:38:36.523823",
+      "items": [
+        {
+          "id": "143dafc0-596e-4d23-999a-25f62338e365",
+          "title": "GitHub Repository",
+          "url": "https://github.com/23je0382-ops",
+          "category": "GitHub Repository",
+          "description": "Vikas Gupta's GitHub repository containing various projects and contributions.",
+          "related_skills": [
+            "Git",
+            "GitHub"
+          ],
+          "related_project_name": null,
+          "created_at": "2026-02-01T10:38:36.520394"
+        }
+      ]
     }
   ]
 }

@@ -24,6 +24,7 @@ from pydantic import BaseModel, Field
 DATA_DIR = Path(__file__).parent / "data"
 JOBS_FILE = DATA_DIR / "jobs.json"
 APPLICATIONS_FILE = DATA_DIR / "applications.json"
+COMPANIES_FILE = DATA_DIR / "companies.json"
 
 # Valid API keys for authentication
 VALID_API_KEYS = {
@@ -85,6 +86,23 @@ class JobListItem(BaseModel):
     posted_date: str
     is_remote: bool
     skills_required: List[str]
+
+class CompanyJobDetails(BaseModel):
+    """Specific job details for the company."""
+    status: str = "Accepting Applications"
+    salary_range: str = "$100k - $150k"
+    is_remote: bool = True
+    posted_date: str = Field(default_factory=lambda: datetime.now().strftime("%Y-%m-%d"))
+
+class Company(BaseModel):
+    """Expanded Company data model."""
+    name: str
+    location: str
+    description: str = "A forward-thinking technology company."
+    requirements: List[str] = ["Strong problem-solving skills", "Team player"]
+    responsibilities: List[str] = ["Develop high-quality code", "Collaborate with cross-functional teams"]
+    skills_required: List[str] = ["Python", "React"]
+    job_details: CompanyJobDetails = Field(default_factory=CompanyJobDetails)
 
 class ApplicationForm(BaseModel):
     """Application submission form."""
@@ -161,6 +179,25 @@ def _write_applications(applications: List[Dict[str, Any]]) -> bool:
     except Exception:
         return False
 
+def _read_companies() -> List[Dict[str, str]]:
+    try:
+        if COMPANIES_FILE.exists():
+            with open(COMPANIES_FILE, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                return data.get("companies", [])
+        return []
+    except Exception:
+        return []
+
+def _write_companies(companies: List[Dict[str, str]]) -> bool:
+    try:
+        _ensure_data_dir()
+        with open(COMPANIES_FILE, "w", encoding="utf-8") as f:
+            json.dump({"companies": companies}, f, indent=2)
+        return True
+    except Exception:
+        return False
+
 # ============================================================
 # API Key Authentication
 # ============================================================
@@ -188,9 +225,40 @@ async def root():
             "list_jobs": "GET /sandbox/jobs",
             "job_details": "GET /sandbox/jobs/{id}",
             "apply": "POST /sandbox/jobs/{id}/apply (requires X-API-Key)",
+            "list_companies": "GET /sandbox/companies",
+            "add_company": "POST /sandbox/companies (requires X-API-Key)",
         },
         "demo_api_keys": list(VALID_API_KEYS),
     }
+
+@app.get("/sandbox/companies", response_model=List[Company])
+async def list_companies():
+    """List all available companies."""
+    return _read_companies()
+
+@app.post("/sandbox/companies", response_model=Company)
+async def add_company(company: Company, api_key: str = Depends(verify_api_key)):
+    """Add a new company to the sandbox."""
+    companies = _read_companies()
+    
+    # Check if company already exists
+    if any(c["name"].lower() == company.name.lower() for c in companies):
+        raise HTTPException(status_code=400, detail="Company already exists")
+        
+    new_company = {
+        "name": company.name,
+        "location": company.location,
+        "description": company.description,
+        "requirements": company.requirements,
+        "responsibilities": company.responsibilities,
+        "skills_required": company.skills_required,
+        "job_details": company.job_details.model_dump()
+    }
+    
+    companies.append(new_company)
+    _write_companies(companies)
+    
+    return new_company
 
 @app.get("/sandbox/jobs", response_model=JobsListResponse)
 async def list_jobs(
@@ -200,13 +268,23 @@ async def list_jobs(
     experience_level: Optional[str] = None,
     is_remote: Optional[bool] = None,
     skill: Optional[str] = None,
+    search: Optional[str] = None,
 ):
     """
     List all available job postings.
     
-    Supports filtering by job_type, experience_level, is_remote, and skill.
+    Supports filtering by job_type, experience_level, is_remote, skill, and search query.
     """
     jobs = _read_jobs()
+    
+    # Apply search filter
+    if search:
+        search_lower = search.lower()
+        jobs = [
+            j for j in jobs 
+            if search_lower in j.get("title", "").lower() or 
+               search_lower in j.get("company", "").lower()
+        ]
     
     # Apply filters
     if job_type:
@@ -563,8 +641,15 @@ def seed_jobs():
     role_types = list(ROLE_TEMPLATES.keys())
     
     for i in range(55):
-        # Pick random company and role
-        company, default_location = random.choice(COMPANIES)
+        # Pick random company from persisted companies
+        companies = _read_companies()
+        if not companies:
+            companies = [{"name": c[0], "location": c[1]} for c in COMPANIES]
+            
+        company_data = random.choice(companies)
+        company = company_data["name"]
+        default_location = company_data["location"]
+        
         role_type = random.choice(role_types)
         template = ROLE_TEMPLATES[role_type]
         
@@ -634,3 +719,10 @@ async def startup_event():
     if not jobs:
         seed_jobs()
         print(f"Seeded database with {len(_read_jobs())} job postings")
+        
+    # Initialize companies if empty
+    existing_companies = _read_companies()
+    if not existing_companies:
+        initial_companies = [{"name": c[0], "location": c[1]} for c in COMPANIES]
+        _write_companies(initial_companies)
+        print(f"Initialized {len(initial_companies)} companies")
